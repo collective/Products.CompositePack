@@ -1,0 +1,57 @@
+<h1 tal:replace="structure here/manage_page_header" />
+<h1 tal:replace="structure here/manage_tabs" />
+    <!--tal:request replace="structure request" /-->
+<div tal:condition="options/reg_types_info">
+    <h3>Registered types</h3>
+    <p class="form-help">The types for which this layout is registered.</p>
+    <form action="change_register" method="POST">
+    <table>
+        <tr><th>&nbsp;</th><th>Registered</th><th style="align: left;">Default</th></tr>
+        <tal:defaults repeat="type options/reg_types_info">
+        <tr>
+            <input type="hidden" 
+                   tal:attributes="name string:types:list;
+                                   value type/title" />
+            <td class="form-label" tal:content="type/title">Types</td>
+            <td class="form-element">
+                <input type="checkbox" 
+                       checked="checked"
+                       tal:attributes="name string:${type/title}.selected:record" />
+            </td>
+            <td class="form-element">
+                <input type="checkbox"
+                       tal:attributes="name string:${type/title}.default:record;
+                                       checked type/default" />
+                <span tal:condition="type/nodefault" style="color: red;">This type has no default layout.</span>
+            </td>
+        </tr>
+        </tal:defaults>
+    </table>
+    <input type="submit" name="submit" value="Save" />
+    </form>
+</div>
+  
+<div tal:condition="options/unreg_types_info">
+    <h3>Unregistered types</h3>
+    <p class="form-help">Select types for which this layout should be registered.</p>
+    <form action="manage_add_types" method="POST">
+    <table>
+        <tr>
+            <td class="form-label" style="vertical-align: top;">Types</td>
+            <td class="form-element">
+                <select multiple="mutiple" size="5" name="types:list">
+                    <tal:types repeat="type options/unreg_types_info">
+                    <option tal:content="type/title" />
+                    </tal:types>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <input type="submit" name="submit" value="Add" />
+    </form>
+</div>
+
+<div tal:condition="python:not options['unreg_types_info'] and not options['reg_types_info']">
+<p class="form-help" style="color: red;">No types registered as composite.</p>
+</div>
+<h1 tal:replace="structure here/manage_page_footer" />

@@ -36,7 +36,9 @@
                 tal:attributes="src string:${portal_url}/kupudrawers.js"> </script>
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/compopagedrawer.js"> </script>
+        <div class="kupu-librarydrawer-parent">
         <div id="kupu-librarydrawer" class="kupu-drawer">
+        </div>
         </div>
 
         <script type="text/javascript" 

@@ -1,4 +1,4 @@
-// $Id: compopagedrawer.js,v 1.10 2005/03/01 08:07:37 godchap Exp $
+// $Id$
 
 //----------------------------------------------------------------------------
 
@@ -27,7 +27,8 @@ target_path) {
 
     this.save = function() {
         var selxpath = '//resource[@selected]';
-        var selnode = this.xmldata.selectSingleNode(selxpath);
+        var xmldata = this.xmldata||this.shared.xmldata;
+        var selnode = xmldata.selectSingleNode(selxpath);
         if (!selnode) {
             return;
         };

@@ -51,7 +51,7 @@ class Fragments(BaseContentMixin):
         ))
 
     actions=  (
-           {'action':      '''string:$object_url/back_to_composite''',
+           {'action':      '''string:$object_url/../../../design_view''',
             'category':    '''object''',
             'id':          'view',
             'name':        'view',
@@ -79,6 +79,38 @@ class Fragments(BaseContentMixin):
             return schema['content'].get(self, mimetype='text/plain', **kw)
 
         return schema['content'].get(self, **kw)
+
+    def SearchableText(self):
+        """Get text for indexing. Ignore the real mimetype, we want to do the
+        conversion from HTML to plain text.
+        """
+        return ""
+
+    def ContainerSearchableText(self):
+        portal_transforms = getToolByName(self, 'portal_transforms')
+        content = self.getRawContent()
+        stream = portal_transforms.convertTo('text/plain', content, mimetype='text/html')
+        return stream.getData()
+
+    def indexObject(self):
+        '''Titles are never catalogued'''
+        self._v__indexable = True
+
+    def isTemporaryObject(self):
+        return self.portal_factory.isTemporary(self)
+
+    def reindexObject(self, idxs=[]):
+        '''Titles are never catalogued, but container is'''
+        if not self.isTemporaryObject():
+            parent = self.aq_parent.aq_parent.aq_parent
+            parent.reindexObject()
+
+    def unindexObject(self):
+        '''the parent will need reindexing'''
+        # Set a volatile attribute to prevent this object being
+        # indexed.
+        self._v__indexable = False
+        self.reindexObject()
 
     def dereferenceComposite(self):
         """Returns the object referenced by this composite element.

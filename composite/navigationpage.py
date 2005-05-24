@@ -8,7 +8,7 @@
 ##############################################################################
 """Navigation Page :
 
-$Id: navigationpage.py,v 1.4 2005/03/15 14:53:00 duncanb Exp $
+$Id$
 """
 
 from Products.Archetypes.public import BaseSchema
@@ -31,5 +31,17 @@ class NavigationPage(BaseContent):
     factory_type_information={
             'content_icon':'composite.gif',
             }
+
+    def SearchableText(self):
+        """Return text for indexing"""
+        # Want title, description, and all Title and fragment content.
+        # Fragments are converted from HTML to plain text.
+        texts = [self.title, self.description]
+        titles = self.cp_container.titles.objectValues()
+        for o in titles:
+            if hasattr(o, 'ContainerSearchableText'):
+                texts.append(o.ContainerSearchableText())
+
+        return texts
 
 registerType(NavigationPage, PROJECTNAME)

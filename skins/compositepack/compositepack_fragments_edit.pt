@@ -1,0 +1,49 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      i18n:domain="plone">
+
+<body>
+
+<metal:topslot metal:define-macro="topslot">
+   <tal:define define="global kupu_base_override here/aq_parent/aq_parent/aq_parent/aq_parent/absolute_url;" />
+   <style>textarea#content { width:95%; height: 300px; }</style>
+</metal:topslot>
+
+<metal:footer metal:define-macro="body">
+<br />
+<div tal:define="usingkupu python:here.contentUsesKupu('content');
+        plain python:here.get_content_type('content')=='plain';">
+
+<div tal:condition="usingkupu">This content will be filtered when
+saved or displayed. If you wish to avoid filtering, use the 'Suppress
+Kupu' link and select the content type 'Plain Text'.<br />
+
+<a class="context" href="#" tal:attributes="href
+string:${here/absolute_url}/base_edit?kupu.suppress=content">Suppress
+Kupu</a>
+
+</div>
+<div tal:condition="not:usingkupu">Kupu is not currently being used to edit this content.
+<ul>
+
+<li> If the selected content type is 'Plain Text' you may enter raw
+HTML in the edit area and it will not be filtered or changed in any
+way.  </li>
+
+<li> If the selected content type is 'HTML' Kupu will be used next
+time you edit this page and the content may be modified when rendered.
+</li>
+
+<li> The 'edit with kupu' link below will convert the plain text to
+HTML (i.e. tags will display). Use this only if you wish to paste some
+plain text and then convert it to HTML. To start using Kupu without
+converting the text simply change the content type.
+</li>
+</ul>
+</div>
+</div>
+<metal:use-macro use-macro="here/edit_macros/macros/body" />
+</metal:footer>
+
+</body>
+</html>

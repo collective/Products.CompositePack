@@ -9,10 +9,12 @@
 """Composite Titles :
    used to mix titles and composite elements in composite pages
 
-$Id: fragments.py,v 1.1 2005/01/19 10:33:03 duncanb Exp $
+$Id$
 """
 from Products.Archetypes.public import *
 from Products.CompositePack.config import PROJECTNAME
+from AccessControl import ClassSecurityInfo
+from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
 
 COMPOSITE = 'composite'
@@ -23,15 +25,20 @@ class Fragments(BaseContentMixin):
     archetype_name = 'Navigation HTML Fragments'
     global_allow = 0
 
+    security = ClassSecurityInfo()
+
     idfield = MinimalSchema['id'].copy()
     idfield.widget.visible = {'edit':'hidden', 'view':'invisible'}
 
     schema = Schema((
         idfield,
         TextField(
-        'content',
-        widget=TextAreaWidget(label='content',
-                            description=('HTML content'))
+            'content',
+            accessor='getContent',
+            allowable_content_types=('text/html','text/plain'),
+            default_output_type='text/x-html-captioned',
+            widget=RichWidget(label='content',
+            description=('HTML content'))
         ),
         ReferenceField(
         'composite',
@@ -51,6 +58,27 @@ class Fragments(BaseContentMixin):
             'permissions': ('''View''',)},
 
            )
+
+    security.declareProtected(CMFCorePermissions.View, 'getContent')
+    def getContent(self, mimetype=None, **kw):
+        """Content accessor:
+            If mimetype is text/plain, return as is.
+            Otherwise return text/x-html-captioned (to replace embedded uids)
+        """
+        if kw.has_key('schema'):
+            schema = kw['schema']
+        else:
+            schema = self.Schema()
+            kw['schema'] = schema
+
+        current_type = self.get_content_type('content')
+
+        # Avoid converting plain text to html (use it as it is),
+        # but HTML gets converted to remove embedded uids.
+        if (not mimetype) and current_type == 'text/plain':
+            return schema['content'].get(self, mimetype='text/plain', **kw)
+
+        return schema['content'].get(self, **kw)
 
     def dereferenceComposite(self):
         """Returns the object referenced by this composite element.

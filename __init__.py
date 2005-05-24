@@ -8,7 +8,7 @@
 ##############################################################################
 """Product initialization module.
 
-$Id: __init__.py,v 1.11 2005/02/26 16:21:43 godchap Exp $
+$Id$
 """
 
 # Kickstart Install to make sure it works
@@ -24,6 +24,11 @@ from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CompositePage import tool as base_tool
 
 registerDirectory('skins', GLOBALS)
+try:
+    del base_tool._uis['plone'] # So we can refresh the product :(
+except KeyError:
+    pass
+
 base_tool.registerUI('plone', design.PloneUI())
 
 def initialize(context):

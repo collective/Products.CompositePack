@@ -1,4 +1,4 @@
-<div class="viewlet" tal:condition="not:context/content|nothing">[Placeholder for HTML fragment: use edit menu to set content]</div>
-<div class="viewlet" tal:condition="context/content|nothing"
-   tal:content="structure context/content">
+<div class="viewlet" tal:condition="not:context/getContent|nothing">[Placeholder for HTML fragment: use edit menu to set content]</div>
+<div class="viewlet" tal:condition="context/getContent|nothing"
+   tal:content="structure context/getContent">
 </div>

@@ -48,7 +48,7 @@
                             search_prefix string:${portal_url}/kupusearch.xml?resource_type=;
                             link_libraries_uri  string:${lib_prefix}composable;
                             search_links_uri    string:${search_prefix}composable;
-                            link_xsl_uri string:${portal_url}/compopagedrawers/cp_drawer.xsl;
+                            link_xsl_uri string:${portal_url}/kupudrawers/drawer.xsl;
                             compo_page_path compopage/cp_container/getPathFromPortalToParent;"
                 tal:content="string:cp_initdrawer('$link_xsl_uri', '$link_libraries_uri',
                 '$search_links_uri', '$compo_page_path');">

@@ -61,14 +61,10 @@ class Titles(BaseContentMixin):
         """Get text for indexing. Ignore the real mimetype, we want to do the
         conversion from HTML to plain text.
         """
-        print "Title SearchableText"
-        text = self.Title() + '\n' + self.getDescription()
-        print repr(text)
-        return text
+        return self.Title() + '\n' + self.getDescription()
 
     def indexObject(self):
         '''Titles are never catalogued'''
-        print "title indexObject", self.Title()
         self._v__indexable = True
 
     def isTemporaryObject(self):
@@ -76,7 +72,6 @@ class Titles(BaseContentMixin):
 
     def reindexObject(self, idxs=[]):
         '''Titles are never catalogued, but container is'''
-        print "title reindexObject", self.Title()
         if not self.isTemporaryObject():
             parent = self.aq_parent.aq_parent.aq_parent
             parent.reindexObject()
@@ -85,7 +80,6 @@ class Titles(BaseContentMixin):
         '''the parent will need reindexing'''
         # Set a volatile attribute to prevent this object being
         # indexed.
-        print "title unindexObject", self.Title()
         self._v__indexable = False
         self.reindexObject()
 

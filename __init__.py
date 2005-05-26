@@ -18,7 +18,7 @@ del Install
 from Products.Archetypes.public import *
 from Products.Archetypes import listTypes
 from Products.CompositePack.config import *
-from Products.CompositePack import design
+from Products.CompositePack import design, patch
 from Products.CMFCore import utils as cmf_utils
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CompositePage import tool as base_tool
@@ -75,3 +75,4 @@ def initialize(context):
                        product_name = PROJECTNAME,
                        icon=TOOL_ICON
                    ).initialize(context)
+

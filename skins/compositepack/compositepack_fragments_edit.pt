@@ -15,7 +15,7 @@
         plain python:here.get_content_type('content')=='plain';">
 
 <div tal:condition="usingkupu">This content will be filtered when
-saved or displayed. If you wish to avoid filtering, use the 'Suppress
+saved or displayed. To avoid filtering, use the 'Suppress
 Kupu' link and select the content type 'Plain Text'.<br />
 
 <a class="context" href="#" tal:attributes="href

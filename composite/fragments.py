@@ -22,7 +22,7 @@ COMPOSITE = 'composite'
 class Fragments(BaseContentMixin):
 
     meta_type = portal_type = 'CompositePack Fragments'
-    archetype_name = 'Navigation HTML Fragments'
+    archetype_name = 'Navigation Page HTML'
     global_allow = 0
 
     security = ClassSecurityInfo()
@@ -37,8 +37,10 @@ class Fragments(BaseContentMixin):
             accessor='getContent',
             allowable_content_types=('text/html','text/plain'),
             default_output_type='text/x-html-captioned',
-            widget=RichWidget(label='content',
-            description=('HTML content'))
+            widget=RichWidget(
+                label='Text or HTML',
+                description='''Enter some text to be inserted into the containing page.''',
+            )
         ),
         ReferenceField(
         'composite',

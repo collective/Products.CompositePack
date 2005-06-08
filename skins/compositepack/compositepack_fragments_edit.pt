@@ -6,7 +6,14 @@
 
 <metal:topslot metal:define-macro="topslot">
    <tal:define define="global kupu_base_override here/aq_parent/aq_parent/aq_parent/aq_parent/absolute_url;" />
-   <style>textarea#content { width:95%; height: 300px; }</style>
+   <style>textarea#content { width:95%; height: 300px; }
+.forcekupu { display:none; }
+#archetypes-fieldname-content label,
+#archetypes-fieldname-content select,
+#archetypes-fieldname-content .formHelp {
+ display:none;
+}
+</style>
 </metal:topslot>
 
 <metal:footer metal:define-macro="body">
@@ -14,32 +21,21 @@
 <div tal:define="usingkupu python:here.contentUsesKupu('content');
         plain python:here.get_content_type('content')=='plain';">
 
-<div tal:condition="usingkupu">This content will be filtered when
-saved or displayed. To avoid filtering, use the 'Suppress
-Kupu' link and select the content type 'Plain Text'.<br />
+<div tal:condition="usingkupu"><h2>Kupu Text</h2> To insert formatted
+HTML enter the text to be included in this Navigation page into the
+Kupu window below.
 
-<a class="context" href="#" tal:attributes="href
-string:${here/absolute_url}/base_edit?kupu.suppress=content">Suppress
-Kupu</a>
-
+<div tal:condition='not:here/getContent'>
+To insert raw HTML click '
+<a  href="#" tal:attributes="href
+string:${here/absolute_url}/base_edit?kupu.suppress=content">Edit as plain text</a>'.
 </div>
-<div tal:condition="not:usingkupu">Kupu is not currently being used to edit this content.
-<ul>
+</div>
 
-<li> If the selected content type is 'Plain Text' you may enter raw
-HTML in the edit area and it will not be filtered or changed in any
-way.  </li>
+<div tal:condition="not:usingkupu"><h2>Plain Text</h2> Enter HTML into
+the box below. Note that this HTML will not be filtered or changed in
+any way and will always be edited as plain text.
 
-<li> If the selected content type is 'HTML' Kupu will be used next
-time you edit this page and the content may be modified when rendered.
-</li>
-
-<li> The 'edit with kupu' link below will convert the plain text to
-HTML (i.e. tags will display). Use this only if you wish to paste some
-plain text and then convert it to HTML. To start using Kupu without
-converting the text simply change the content type.
-</li>
-</ul>
 </div>
 </div>
 <metal:use-macro use-macro="here/edit_macros/macros/body" />

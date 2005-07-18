@@ -7,10 +7,11 @@
 #
 ##############################################################################
 """
-$Id: packcomposite.py,v 1.20 2005/02/26 16:21:44 godchap Exp $
+$Id$
 """
 from cgi import escape
 
+from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_parent, aq_inner, aq_base
 from ComputedAttribute import ComputedAttribute
@@ -24,8 +25,9 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.CompositePage.composite import Composite, SlotGenerator
 from Products.CompositePage.composite import SlotCollection
-from Products.CompositePage.slot import Slot, getIconURL, formatException
+from Products.CompositePage.slot import Slot, getIconURL, formatException, target_tag
 from Products.CompositePage import perm_names
+from Products.CompositePage.interfaces import ICompositeElement
 
 from Products.CompositePack.config import zmi_dir
 from Products.CompositePack.config import TOOL_ID, PROJECTNAME
@@ -62,6 +64,62 @@ class PackSlot(Slot):
 
     security.declareProtected(AddPortalContent, 'invokeFactory')
     invokeFactory = BaseFolder.invokeFactory.im_func
+
+    security.declareProtected(perm_names.view, "renderGroups")
+    def renderGroups(self, group_size=2, allow_add=True):
+        """Iterates over the items rendering one item for each group.
+        Each group contains an iterator for group_size elements.
+        The last group may be padded out with empty strings.
+        """
+        elements = list(self.renderIterator(allow_add)) + ['']*(group_size-1)
+        eliter = iter(elements)
+        return zip(*[eliter]*group_size)
+
+    security.declareProtected(perm_names.view, "renderIterator")
+    def renderIterator(self, allow_add=True):
+        """Iterates over the items rendering one item for each element.
+        
+        Does minimal decoration of the rendered content.
+        Exactly one yield for each item (including add/edit controls where required).
+        If allow_add there will be one additional item yielded for the final add.
+        """
+        composite = aq_parent(aq_inner(aq_parent(aq_inner(self))))
+        editing = composite.isEditing()
+        items = self.objectItems()
+        if editing:
+            mypath = escape('/'.join(self.getPhysicalPath()))
+            myid = self.getId()
+            if hasattr(self, 'portal_url'):
+                icon_base_url = self.portal_url()
+            elif hasattr(self, 'REQUEST'):
+                icon_base_url = self.REQUEST['BASEPATH1']
+            else:
+                icon_base_url = '/'
+
+        for index, (name, obj) in enumerate(items):
+
+            try:
+                assert ICompositeElement.isImplementedBy(obj), (
+                    "Not a composite element: %s" % repr(obj))
+                text = obj.renderInline()
+            except ConflictError:
+                # Ugly ZODB requirement: don't catch ConflictErrors
+                raise
+            except:
+                text = formatException(self, editing)
+
+            if editing:
+                if allow_add:
+                    add = target_tag % (myid, index, mypath, index)
+                else:
+                    add = ''
+                yield add + self._render_editing(obj, text, icon_base_url)
+            else:
+                yield text
+
+        if editing and allow_add:
+            index = len(items)
+            yield target_tag % (myid, index, mypath, index)
 
     def _render_editing(self, obj, text, icon_base_url):
         path = escape('/'.join(obj.getPhysicalPath()))

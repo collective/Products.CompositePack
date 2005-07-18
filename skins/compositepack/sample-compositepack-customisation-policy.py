@@ -38,6 +38,7 @@ LAYOUTS = [
     ('two_columns', 'Two columns', 'two_columns', True),
     ('three_columns', 'Three columns', 'three_columns', False),
     ('four_columns', 'Four columns', 'four_columns', False),
+    ('table_slots', 'Table Layout', 'table_slots', False),
 ]
 
 ct = getToolByName(context, 'composite_tool')

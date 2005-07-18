@@ -8,7 +8,7 @@
 ##############################################################################
 """Plone UI for Composite Page design view.
 
-$Id: design.py,v 1.10 2004/10/29 11:16:44 godchap Exp $
+$Id$
 """
 import os
 import re
@@ -23,7 +23,7 @@ from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 _plone = os.path.join(os.path.dirname(__file__), 'plone')
 
 
-start_of_contentmenu_search = re.compile("(<li[^>]*action(Plural|Singular)[^>]*)", re.IGNORECASE).search
+start_of_contentmenu_search = re.compile("(<li[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
 
 class PloneUI(CommonUI):
     """Page design UI meant to fit Plone.

@@ -8,21 +8,24 @@
 ##############################################################################
 """Composable Document:
 
-$Id: ATCompositeDocument.py,v 1.1 2005/02/26 16:21:44 godchap Exp $
+$Id$
 """
 
 from Products.Archetypes.public import BaseSchema
-from Products.ATContentTypes.types.ATDocument import ATDocument
 
+from Products.CompositePack.config import HAS_ATCT
 from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.public import registerType
 
-class ATCompositeDocument(ATDocument):
-    """A basic, Archetypes-based Composite Page
-    """
-    meta_type = portal_type = 'Composite Document'
-    archetype_name = 'Composite Document'
+if HAS_ATCT:
+    from Products.ATContentTypes.types.ATDocument import ATDocument
 
-    right_slots = ['here/document_sidebar_view/macros/empty']
+    class ATCompositeDocument(ATDocument):
+	"""A basic, Archetypes-based Composite Page
+	"""
+	meta_type = portal_type = 'Composite Document'
+	archetype_name = 'Composite Document'
 
-registerType(ATCompositeDocument, PROJECTNAME)
+	right_slots = ['here/document_sidebar_view/macros/empty']
+
+    registerType(ATCompositeDocument, PROJECTNAME)

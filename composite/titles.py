@@ -72,7 +72,7 @@ class Titles(BaseContentMixin):
 
     def reindexObject(self, idxs=[]):
         '''Titles are never catalogued, but container is'''
-        if not self.isTemporaryObject():
+	if not self.isTemporaryObject():
             parent = self.aq_parent.aq_parent.aq_parent
             parent.reindexObject()
 

@@ -10,6 +10,7 @@
 
 $Id$
 """
+from Acquisition import aq_base
 
 from Products.Archetypes.public import BaseSchema
 
@@ -37,10 +38,11 @@ class NavigationPage(BaseContent):
         # Want title, description, and all Title and fragment content.
         # Fragments are converted from HTML to plain text.
         texts = [self.title, self.description]
-        titles = self.cp_container.titles.objectValues()
-        for o in titles:
-            if hasattr(o, 'ContainerSearchableText'):
-                texts.append(o.ContainerSearchableText())
+        if getattr(aq_base(self.cp_container), 'titles', None) is not None:
+	    titles = self.cp_container.titles.objectValues()
+	    for o in titles:
+		if hasattr(o, 'ContainerSearchableText'):
+		    texts.append(o.ContainerSearchableText())
 
         return texts
 

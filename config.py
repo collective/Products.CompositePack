@@ -8,10 +8,23 @@
 ##############################################################################
 """Product configuration : constants
 
-$Id: config.py,v 1.14 2005/02/26 16:21:43 godchap Exp $
+$Id$
 """
 import os
 import Globals
+
+try:
+    from Products import ATContentTypes
+    HAS_ATCT = True
+except ImportError:
+    HAS_ATCT = False
+
+try:
+    from Products.CMFPlone.migrations import v2_1
+except ImportError:
+    PLONE21 = 0
+else:
+    PLONE21 = 1
 
 PROJECTNAME = 'CompositePack'
 ADD_CONTENT_PERMISSION = 'Add CompositePack content'
@@ -30,7 +43,7 @@ COMPOSABLE = 'composable'
 VIEWLETS = 'viewlets'
 LAYOUTS = 'layouts'
 
-INSTALL_DEMO_TYPES = 1 ##Install the demo types
+INSTALL_DEMO_TYPES = 0 ##Install the demo types
 
 zmi_dir = os.path.join(Globals.package_home(globals()),'www')
 

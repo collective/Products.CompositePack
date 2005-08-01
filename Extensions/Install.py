@@ -8,7 +8,7 @@
 ##############################################################################
 """CMF/Plone install
 
-$Id: Install.py,v 1.17 2005/02/26 16:21:43 godchap Exp $
+$Id$
 """
 
 from cStringIO import StringIO
@@ -18,9 +18,12 @@ from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
 from Products.CompositePack.config import COMPOSABLE, ATCT_TYPES
 from Products.CompositePack.config import MIGRATED_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
+from Products.CompositePack.config import HAS_ATCT
+from Products.CompositePack.config import PLONE21
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
-from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
+if HAS_ATCT and not PLONE21:
+    from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
 KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
@@ -73,10 +76,13 @@ def install_tool(self, out):
         tool.registerAsComposite('Composable Document')
     tool.registerAsComposite('Navigation Page')
 
-    if isSwitchedToATCT(self):
-        tool.registerAsComposable(MIGRATED_ATCT_TYPES)
-    else:
-        tool.registerAsComposable(ATCT_TYPES)
+    if PLONE21:
+	tool.registerAsComposable(MIGRATED_ATCT_TYPES)
+    elif HAS_ATCT:
+        if isSwitchedToATCT(self):
+	    tool.registerAsComposable(MIGRATED_ATCT_TYPES)
+	else:
+	    tool.registerAsComposable(ATCT_TYPES)
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
     
@@ -127,15 +133,16 @@ def install_tool(self, out):
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
                             'fragment_viewlet')
-    if isSwitchedToATCT(self):
-        IMAGE_TYPE = 'Image'
+    if PLONE21 or HAS_ATCT and isSwitchedToATCT(self):
+	IMAGE_TYPE = 'Image'
     else:
-        IMAGE_TYPE = 'ATImage'
-    tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
-                                        'link_viewlet',
-                                        'image_title_viewlet',
-                                        'image_caption_viewlet'],
-                            'image_viewlet')
+	IMAGE_TYPE = 'ATImage'
+    if PLONE21 or HAS_ATCT:
+	tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
+					    'link_viewlet',
+					    'image_title_viewlet',
+					    'image_caption_viewlet'],
+				'image_viewlet')
     out.write("CompositePack Tool Installed\n")
 
 def uninstall_tool(self, out):
@@ -190,7 +197,8 @@ def installDependencies(self, out):
     if not qi.isProductInstalled('kupu'):
         qi.installProduct('kupu')
         print >>out, 'Installing kupu'
-    if not qi.isProductInstalled('ATContentTypes'):
+    if HAS_ATCT and not qi.isProductInstalled('ATContentTypes'):
+
         qi.installProduct('ATContentTypes')
         print >>out, 'Installing ATContentTypes'
     

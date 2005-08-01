@@ -14,11 +14,14 @@ below how to register them).
 Products required 
 ================= 
 
-CompositePage 0.2 http://hathawaymix.org/Software/CompositePage/CompositePage-0.2.tar.gz 
+CompositePage 0.2 
+    http://hathawaymix.org/Software/CompositePage/CompositePage-0.2.tar.gz 
 
-kupu svn co http://codespeak.net/svn/kupu/trunk 
+kupu 1.2.1 or later
+    http://kupu.oscom.org/midcom-serveattachmentguid-6b4584286e6cd5bbf2f82f0a83ead0e2/kupu-1.2.1.tar.gz
 
-Archetypes at least 1.3
+Archetypes 1.3.3
+    http://sourceforge.net/project/showfiles.php?group_id=75272&package_id=75683&release_id=322541
 
 Design view 
 =========== 

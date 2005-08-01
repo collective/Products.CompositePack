@@ -68,7 +68,7 @@ Navigation Page has a default layout :
 A few content types are registered as composables.
 Instances of those types are addable to composite types through the design view.
 >>> tool.getRegisteredComposables()
-['(Default Setup)', 'ATDocument', 'ATImage', 'CompositePack Fragments', 'CompositePack Titles']
+['(Default Setup)', 'ATDocument', 'ATEvent', 'ATFile', 'ATImage', 'ATLink', 'ATNewsItem', 'ATTopic', 'CompositePack Fragments', 'CompositePack Titles']
 
 Viewlets are registered for composables :
 >>> vl = tool.getRegisteredViewletsForType('ATImage')

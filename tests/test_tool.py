@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: test_tool.py,v 1.4 2005/02/22 19:05:54 godchap Exp $
+$Id$
 """
 
 import os, sys
@@ -51,8 +51,8 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
     def afterSetUp(self):
         CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE_1)
-        ct.registerAsComposable(TEST_TYPE_2)
+        #ct.registerAsComposable(TEST_TYPE_1)
+        #ct.registerAsComposable(TEST_TYPE_2)
         ct.registerAsComposable(TEST_TYPE_3)
         self.v0 = ct.registerViewlet(V0, V0_TITLE, V0)
         self.v1 = ct.registerViewlet(V1, V1_TITLE, V1)

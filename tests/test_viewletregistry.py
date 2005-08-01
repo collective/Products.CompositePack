@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: test_viewletregistry.py,v 1.7 2005/02/22 19:05:55 godchap Exp $
+$Id$
 """
 
 import os, sys
@@ -38,6 +38,9 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
     def afterSetUp(self):
         CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
         self.kupu_tool = getToolByName(self.portal, KUPU_TOOL_ID)
+        ct = self.composite_tool
+        ct.unregisterAsComposable(TEST_TYPE)
+        ct.unregisterAsComposable(TEST_TYPE_2)
 
     def testGetDefaultWhenNoDefault(self):
         ct = self.composite_tool

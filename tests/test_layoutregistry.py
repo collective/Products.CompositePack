@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: test_layoutregistry.py,v 1.11 2005/02/22 19:05:53 godchap Exp $
+$Id$
 """
 
 
@@ -28,6 +28,12 @@ TEST_TYPE_2 = 'ATEvent'
 TEST_TYPES = (TEST_TYPE, TEST_TYPE_2)
 
 class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):
+
+    def afterSetUp(self):
+        CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        ct = self.composite_tool
+        ct.unregisterAsComposite(TEST_TYPE)
+        ct.unregisterAsComposite(TEST_TYPE_2)
 
     def testRegisterType(self):
         ct = self.composite_tool

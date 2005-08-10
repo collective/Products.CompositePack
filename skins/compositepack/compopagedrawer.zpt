@@ -26,14 +26,19 @@
         string:${portal_url}/kupuplone.css"
               rel="stylesheet" type="text/css" />
 
+      <tal:test condition="not:exists:portal/portal_javascripts">
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/sarissa.js"> </script>
+        <script type="text/javascript"
+                tal:condition="portal/sarissa_ieemu_xpath.js"
+                tal:attributes="src string:${portal_url}/sarissa_ieemu_xpath.js"> </script>
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/kupuhelpers.js"> </script>
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/kupubasetools.js"> </script>
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/kupudrawers.js"> </script>
+      </tal:test>
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/compopagedrawer.js"> </script>
         <div class="kupu-librarydrawer-parent">

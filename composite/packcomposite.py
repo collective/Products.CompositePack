@@ -213,8 +213,12 @@ class PackComposite(Composite, BaseFolderMixin):
     def __init__(self, id='cp_container'):
         BaseFolderMixin.__init__(self, id)
 
-    def manage_afterAdd(self, item, container):
-        BaseFolderMixin.manage_afterAdd(self, item, container)
+    def _setPortalTypeName(self, pt):
+        ret = BaseFolderMixin._setPortalTypeName(self, pt)
+        self.initializeSlots()
+        return ret
+
+    def initializeSlots(self):
         if getattr(aq_base(self), 'filled_slots', None) is None:
             f = PackSlotCollection('filled_slots')
             self._setObject(f.getId(), f)
@@ -223,6 +227,7 @@ class PackComposite(Composite, BaseFolderMixin):
             f = PackTitleCollection('titles')
             self._setObject(f.getId(), f)
 
+    manage_afterAdd = BaseFolderMixin.manage_afterAdd
     manage_beforeDelete = BaseFolderMixin.manage_beforeDelete
     manage_afterClone = BaseFolderMixin.manage_afterClone
     _notifyOfCopyTo = BaseFolderMixin._notifyOfCopyTo
@@ -288,13 +293,14 @@ class PackComposite(Composite, BaseFolderMixin):
 
     security.declareProtected(perm_names.view, 'getTemplatePath')
     def getTemplatePath(self):
-        self.setTemplatePath()
+        """Get the template path"""
         field = self.getField('template_path')
         path = field.get(self)
-        return field.get(self)
+        return path
 
     security.declareProtected(CPpermissions.DesignCompo, 'setTemplatePath')
     def setTemplatePath(self, value=None):
+        """Set the template path"""
         # Ignore passed in value. Get the template
         # path from the layout selected.
         layout_id = self.getLayout()
@@ -317,6 +323,12 @@ InitializeClass(PackComposite)
 registerType(PackComposite, PROJECTNAME)
 
 # methods monkeypatched ClassGen
+
+def _setPortalTypeName(self, pt):
+    ret = self.__cp__setPortalTypeName__(pt)
+    self.cp_container.initializeSlots()
+    return ret
+_setPortalTypeName.__cp_method__ = True
 
 def manage_afterAdd(self, item, container):
     if getattr(aq_base(self), 'cp_container', None) is None:
@@ -393,7 +405,8 @@ manage_composite_contents = PageTemplateFile('compositeContents.pt',
         zmi_dir)
 manage_composite_contents.__cp_method__ = True
 
-methods = {'manage_afterAdd':manage_afterAdd,
+methods = {'_setPortalTypeName':_setPortalTypeName,
+           'manage_afterAdd':manage_afterAdd,
            'manage_beforeDelete':manage_beforeDelete,
            'manage_afterClone':manage_afterClone,
            'design_view':design_view,

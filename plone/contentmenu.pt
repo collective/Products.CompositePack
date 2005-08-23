@@ -1,49 +1,34 @@
-<tal:layouts define="composite nocall:options/composite;
-                     tool nocall:options/tool;
-                     layouts python:tool.getRegisteredLayoutsForType(composite.parent.portal_type);
-                     currentLayout python:tool.getLayoutById(composite.getLayout())">
-    <li tal:condition="python: len(layouts)<=1"
-        class="actionSingular">
-        <tal:state i18n:domain="compopack" i18n:translate="label_layout">Layout:</tal:state>
-        <span tal:content="currentLayout/title"
-              i18n:translate="">
-        Current layout
-        </span>
-    </li>
+<li tal:define="composite nocall:options/composite;
+                tool nocall:options/tool;
+                layouts python:tool.getRegisteredLayoutsForType(composite.parent.portal_type);
+                currentLayout python:tool.getLayoutById(composite.getLayout())">
+    <dl class="actionMenu" id="layoutMenu">
+
+        <dt class="actionMenuHeader">
+            <a>
+                <tal:layout i18n:domain="compopack" i18n:translate="label_layout">Layout:</tal:layout>
+                <span tal:content="currentLayout/title"
+                      i18n:translate="">
+                Current layout
+                </span>
+            </a>
+        </dt>
 
 
-    <li class="actionPlural" tal:condition="python:len(layouts)>1">
+        <dd class="actionMenuContent" tal:condition="python:len(layouts)>1">
+          <ul>
+            <tal:block repeat="layout layouts">
+              <li tal:condition="python:layout != currentLayout">
+                <a href="#"
+                   i18n:translate=""
+                   tal:content="layout/title"
+                   tal:attributes="href
+                   string:${composite/absolute_url}/changeLayout?layout_id=${layout/getId}">Layout Item</a>
+              </li>
+            </tal:block>
+          </ul>
+        </dd>
 
-    <div class="menuPosition">
-      <ul class="actionMenu"
-          id="layoutMenu"
-          onmouseover="menuMouseover(event)">
-        <tal:block repeat="layout layouts">
-          <li tal:condition="python:layout != currentLayout">
-            <a href="#"
-               onMouseUp="if (activeButton != null) resetButton(activeButton);"
-               i18n:translate=""
-               tal:content="layout/title"
-               tal:attributes="href
-               string:${composite/absolute_url}/changeLayout?layout_id=${layout/getId}">File Menu Item 1</a>
-          </li>
-        </tal:block>
-      </ul>
-
-      <a href="#"
-         onclick="return buttonClick(event, 'layoutMenu');"
-         onmouseover="buttonMouseover(event, 'layoutMenu');">
-
-        <span i18n:domain="compopack" 
-              i18n:translate="label_layout">Layout:</span>
-
-        <span tal:content="currentLayout/title"
-              i18n:translate="">
-          Current layout
-        </span>
-      </a>
-    </div>
-
-  </li>
-</tal:layouts>
+    </dl>
+</li>
 

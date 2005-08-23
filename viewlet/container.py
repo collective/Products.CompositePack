@@ -33,6 +33,14 @@ class ViewletContainer(BaseFolderMixin, UniqueObject):
         return BaseFolderMixin.all_meta_types(
             self, interfaces=(IViewlet,))
 
+    def indexObject(self):
+        '''viewlet container is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''viewlet container is never catalogued'''
+        pass
+
 registerType(ViewletContainer, PROJECTNAME)
 
 class LayoutContainer(BaseFolderMixin, UniqueObject):
@@ -53,5 +61,13 @@ class LayoutContainer(BaseFolderMixin, UniqueObject):
     def all_meta_types(self):
         return BaseFolderMixin.all_meta_types(
             self, interfaces=(ILayout,))
+
+    def indexObject(self):
+        '''layout container is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''layout container is never catalogued'''
+        pass
 
 registerType(LayoutContainer, PROJECTNAME)

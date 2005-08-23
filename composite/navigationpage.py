@@ -44,6 +44,6 @@ class NavigationPage(BaseContent):
 		if hasattr(o, 'ContainerSearchableText'):
 		    texts.append(o.ContainerSearchableText())
 
-        return texts
+        return " ".join(texts)
 
 registerType(NavigationPage, PROJECTNAME)

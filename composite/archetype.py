@@ -139,4 +139,12 @@ class Element(BaseContentMixin):
         # No tool found, so no inline templates are known.
         return ()
 
+    def indexObject(self):
+        '''element is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''element is never catalogued'''
+        pass
+
 registerType(Element, PROJECTNAME)

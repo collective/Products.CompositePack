@@ -55,6 +55,14 @@ class SkinMethod(BaseContentMixin, Item):
         portal = purl.getPortalObject()
         return portal.restrictedTraverse(self.getSkinMethod())
 
+    def indexObject(self):
+        '''skin method is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''skin method is never catalogued'''
+        pass
+
 class Viewlet(SkinMethod, PropertyManager.PropertyManager):
 
     _properties=({'id':'title', 'type': 'string','mode':'wd'},)

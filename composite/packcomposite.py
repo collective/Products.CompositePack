@@ -319,6 +319,14 @@ class PackComposite(Composite, BaseFolderMixin):
                    for o in composite_tool.layouts.objectValues()]
         return DisplayList(layouts)
 
+    def indexObject(self):
+        '''composite container is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''composite container is never catalogued'''
+        pass
+
 InitializeClass(PackComposite)
 registerType(PackComposite, PROJECTNAME)
 

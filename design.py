@@ -13,17 +13,25 @@ $Id$
 import os
 import re
 import Globals
+
 from AccessControl import ClassSecurityInfo
 from Acquisition import aq_base, aq_inner, aq_parent
+
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
+from Products.CMFCore.FSDTMLMethod import FSDTMLMethod
+
 from Products.CompositePage.designuis import CommonUI
 from Products.CompositePage.rawfile import RawFile
-from Products.CMFCore.FSDTMLMethod import FSDTMLMethod
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
+from Products.CompositePack.config import PLONE21
 
 _plone = os.path.join(os.path.dirname(__file__), 'plone')
 
-
-start_of_contentmenu_search = re.compile("(<li[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
+if PLONE21:
+    start_of_contentmenu_search = re.compile("(<li>[^<]*<dl[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
+else:
+    start_of_contentmenu_search = re.compile("(<li[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
 
 class PloneUI(CommonUI):
     """Page design UI meant to fit Plone.
@@ -51,7 +59,10 @@ class PloneUI(CommonUI):
     top_templates = CommonUI.top_templates + (
         PageTemplateFile('top.pt', _plone),)
     bottom_templates = (PageTemplateFile('bottom.pt', _plone),)
-    contentmenu_templates = (PageTemplateFile('contentmenu.pt', _plone),)
+    if not PLONE21:
+        contentmenu_templates = (PageTemplateFile('contentmenu_plone20.pt', _plone),)
+    else:
+        contentmenu_templates = (PageTemplateFile('contentmenu.pt', _plone),)
 
     security.declarePublic("getFragments")
     def getFragments(self, composite):

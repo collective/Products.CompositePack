@@ -8,7 +8,7 @@
 ##############################################################################
 """Viewlet and layout interfaces.
 
-$Id: __init__.py,v 1.3 2004/08/25 17:02:03 godchap Exp $
+$Id$
 """
 from Interface import Interface
 from Interface.Attribute import Attribute

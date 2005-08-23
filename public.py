@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: public.py,v 1.2 2004/08/18 15:23:01 godchap Exp $
+$Id$
 """
 try:
     from Products.CompositePack.ClassGen import registerType

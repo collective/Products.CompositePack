@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: ViewletRegistry.py,v 1.5 2005/02/01 11:39:36 godchap Exp $
+$Id$
 """
 
 from Globals import PersistentMapping, Persistent

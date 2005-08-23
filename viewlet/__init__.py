@@ -11,7 +11,7 @@
    this method is used to display a composite element.
 
 
-$Id: __init__.py,v 1.13 2005/02/01 11:39:38 godchap Exp $
+$Id$
 """
 from AccessControl import ClassSecurityInfo
 from OFS.ObjectManager import BeforeDeleteException
@@ -54,6 +54,14 @@ class SkinMethod(BaseContentMixin, Item):
         purl = getToolByName(self, 'portal_url')
         portal = purl.getPortalObject()
         return portal.restrictedTraverse(self.getSkinMethod())
+
+    def indexObject(self):
+        '''skin method is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''skin method is never catalogued'''
+        pass
 
 class Viewlet(SkinMethod, PropertyManager.PropertyManager):
 

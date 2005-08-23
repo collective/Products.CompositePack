@@ -208,6 +208,12 @@ def install(self):
 
     installDependencies(self, out)
     installTypes(self, out, listTypes(PROJECTNAME), PROJECTNAME)
+    archetype_tool = getToolByName(self, 'archetype_tool')
+    archetype_tool.setCatalogsByType('CompositePack Viewlet', ())   
+    archetype_tool.setCatalogsByType('CompositePack Viewlet Container', ())   
+    archetype_tool.setCatalogsByType('CompositePack Element', ())   
+    archetype_tool.setCatalogsByType('CompositePack Layout', ())   
+    archetype_tool.setCatalogsByType('CompositePack Layout Container', ())   
     install_subskin(self, out, GLOBALS)
     install_tool(self, out)
     install_customisation(self, out)

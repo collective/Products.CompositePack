@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: CPpermissions.py,v 1.3 2004/09/30 18:08:37 dreamcatcher Exp $
+$Id$
 """
 from Products.CMFCore.CMFCorePermissions import setDefaultRoles
 

@@ -8,7 +8,7 @@
 ##############################################################################
 """Composite Element : this has an archetypes reference.
 
-$Id: archetype.py,v 1.11 2004/10/28 15:15:38 godchap Exp $
+$Id$
 """
 
 from Products.Archetypes.public import *
@@ -138,5 +138,13 @@ class Element(BaseContentMixin):
             return [(i['id'], i['title']) for i in viewlets]
         # No tool found, so no inline templates are known.
         return ()
+
+    def indexObject(self):
+        '''element is never catalogued'''
+        pass
+
+    def unindexObject(self):
+        '''element is never catalogued'''
+        pass
 
 registerType(Element, PROJECTNAME)

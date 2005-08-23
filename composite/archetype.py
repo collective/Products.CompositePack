@@ -8,7 +8,7 @@
 ##############################################################################
 """Composite Element : this has an archetypes reference.
 
-$Id: archetype.py,v 1.11 2004/10/28 15:15:38 godchap Exp $
+$Id$
 """
 
 from Products.Archetypes.public import *

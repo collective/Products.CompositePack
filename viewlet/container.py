@@ -8,7 +8,7 @@
 ##############################################################################
 """Folder containing viewlets.
 
-$Id: container.py,v 1.6 2004/11/02 14:01:37 godchap Exp $
+$Id$
 """
 from Products.Archetypes.public import *
 from Products.CompositePack.config import PROJECTNAME

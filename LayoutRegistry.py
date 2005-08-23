@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: LayoutRegistry.py,v 1.7 2005/02/01 11:39:35 godchap Exp $
+$Id$
 """
 
 from Globals import PersistentMapping, Persistent

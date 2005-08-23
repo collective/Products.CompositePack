@@ -10,7 +10,7 @@
    registration of layouts and viewlets
    mapping of content types and viewlets
 
-$Id: tool.py,v 1.26 2005/02/28 15:33:10 godchap Exp $
+$Id$
 """
 from types import TupleType, ListType
 

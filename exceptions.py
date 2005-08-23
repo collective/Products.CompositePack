@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: exceptions.py,v 1.2 2004/08/18 15:23:01 godchap Exp $
+$Id$
 """
 
 from Products.CompositePage.interfaces import CompositeError

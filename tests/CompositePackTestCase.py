@@ -7,7 +7,7 @@
 #
 ##############################################################################
 """
-$Id: CompositePackTestCase.py,v 1.2 2005/02/26 16:21:44 godchap Exp $
+$Id$
 """
 # Load fixture
 from Products.PloneTestCase import PloneTestCase

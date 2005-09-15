@@ -37,7 +37,8 @@ from Products.CompositePack.exceptions import CompositePackError
 from Products.Archetypes.public import *
 from Products.Archetypes.utils import shasattr
 
-edit_template = PageTemplateFile('edit_tag.pt', _plone)
+plone_edit_template = PageTemplateFile('edit_tag.pt', _plone)
+plone_add_target_template = PageTemplateFile('target_tag.pt', _plone)
 
 actions = ({'id': 'view',
             'name': 'View',
@@ -121,6 +122,22 @@ class PackSlot(Slot):
             index = len(items)
             yield target_tag % (myid, index, mypath, index)
 
+    def _render_add_target(self, slot_id, index, path, obj_id=''):
+        template = plone_add_target_template.__of__(self)
+        if index==0:
+            target_id = "%s_cp_top" % slot_id
+        else:
+            target_id = "%s_%s" % (slot_id, obj_id)
+        result = template(slot_id=self.getId(),
+                             slot_path=path,
+                             index=index, target_id=target_id)
+        return result
+
+    def getTargetAfterViewlet(self, obj):
+        index = self.getObjectPosition(obj.getId())
+        path = escape('/'.join(self.getPhysicalPath()))
+        return self._render_add_target(self.getId(), index+1, path, obj.getId())
+
     def _render_editing(self, obj, text, icon_base_url):
         path = escape('/'.join(obj.getPhysicalPath()))
         icon = ""
@@ -158,8 +175,8 @@ class PackSlot(Slot):
             allowed_viewlets_titles = allowed_viewlets_titles.encode('utf8')
         except:
             text = formatException(self, editing=1)
-        my_edit_template = edit_template.__of__(self)
-        result = my_edit_template(source_path=path,
+        template = plone_edit_template.__of__(self)
+        result = template(source_path=path,
                              icon=icon,
                              title=title,
                              allowed_viewlets_ids=allowed_viewlets_ids,
@@ -169,6 +186,17 @@ class PackSlot(Slot):
                              text=text)
         return result
 
+    def getEditingViewlet(self, obj):
+        if hasattr(self, 'portal_url'):
+            icon_base_url = self.portal_url()
+        elif hasattr(self, 'REQUEST'):
+            icon_base_url = self.REQUEST['BASEPATH1']
+        else:
+            icon_base_url = '/'
+        text = obj.renderInline()
+        return self._render_editing(obj, text, icon_base_url)
+
+        
 InitializeClass(PackSlot)
 
 class PackSlotCollection(SlotCollection):

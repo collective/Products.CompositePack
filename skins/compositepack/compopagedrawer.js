@@ -25,6 +25,12 @@ target_path) {
         this.target_index = target_index;
     };
 
+    this.setTarget_ajax = function(target_path, target_index, target_id) {
+        this.target_path = target_path;
+        this.target_index = target_index;
+        this.target_id = target_id;
+    };
+
     this.save = function() {
         var selxpath = '//resource[@selected]';
         var xmldata = this.xmldata||this.shared.xmldata;
@@ -40,6 +46,27 @@ target_path) {
         window.document.location = uri + '/createCompoElement?compopage_path=' +
             this.compopagepath + '&target_path=' + this.target_path +
             '&target_index=' + this.target_index;
+    };
+
+    this.save_ajax = function() {
+        var selxpath = '//resource[@selected]';
+        var xmldata = this.xmldata||this.shared.xmldata;
+        var selnode = xmldata.selectSingleNode(selxpath);
+        if (!selnode) {
+            return;
+        };
+
+        var uri = selnode.selectSingleNode('uri/text()').nodeValue;
+        uri = uri.strip();  // needs kupuhelpers.js
+
+        this.hide();
+        url = this.compopagepath + '/cp_container/addContent';
+        params = "target_path=" + this.target_path;
+        params = params + "&target_index=" + this.target_index;
+        params = params + "&compopage_path=" + this.compopagepath;
+        params = params + "&target_id=" + this.target_id;
+        params = params + "&uri=" + uri;
+        Azax.notifyServerWithParams(url, params);
     };
 
     this.setPosition = function(e){
@@ -108,6 +135,18 @@ function CompoDrawerTool() {
         drawer.setPosition(e);
         this.current_drawer = drawer;
     };
+    
+    this.openDrawerWithTarget_ajax = function(id, e, target_path, target_index, target_id) {
+        if (this.current_drawer) {
+            this.closeDrawer();
+            };
+        var drawer = this.drawers[id];
+        drawer.setTarget_ajax(target_path, target_index, target_id);
+        drawer.save = drawer.save_ajax;
+        drawer.createContent();
+        drawer.setPosition(e);
+        this.current_drawer = drawer;
+    };
 };
 
 CompoDrawerTool.prototype = new DrawerTool;
@@ -129,6 +168,9 @@ function fakeEditor() {
             throw "Browser not supported!";
         }
     };    
+
+    this.resumeEditing = function() {
+    }
 };
 
 function cp_initdrawer(link_xsl_uri, link_libraries_uri, search_links_uri, compopagepath) {
@@ -147,6 +189,10 @@ function cp_initdrawer(link_xsl_uri, link_libraries_uri, search_links_uri, compo
 
 function draweropen(e, target_path, target_index) {
                     drawertool.openDrawerWithTarget('selectdrawer', e, target_path, target_index); 
+};
+
+function draweropen_ajax(e, target_path, target_index, target_id) {
+                    drawertool.openDrawerWithTarget_ajax('selectdrawer', e, target_path, target_index, target_id); 
 };
 
 

@@ -13,6 +13,14 @@ function plone_add(e, target) {
   draweropen(e, target_path, target_index);
 }
 
+function plone_add_ajax(e, target) {
+  // Note that target_index is also available.
+  var target_path = target.getAttribute("target_path");
+  var target_index = target.getAttribute("target_index");
+  var target_id = target.getAttribute("id");
+  draweropen_ajax(e, target_path, target_index, target_id);
+}
+
 function plone_add_title(target) {
   // Note that target_index is also available.
   var form = document.forms.modify_composites;
@@ -25,6 +33,38 @@ function plone_add_title(target) {
   url = url + "&compopage_path=" + compopage_path;
   url = url + "&title=" + title;
   window.document.location = url;
+}
+
+function plone_add_ajax_title(target) {
+  // Note that target_index is also available.
+  var form = document.forms.modify_composites;
+  var compopage_path = form.elements.composite_path.value;
+  var title = prompt('Input the title value', 'a title');
+  var target_path = target.getAttribute("target_path");
+  var target_index = target.getAttribute("target_index");
+  var id = target.getAttribute("id");
+  url = compopage_path + '/cp_container/addTitle';
+  params = "target_path=" + target_path;
+  params = params + "&target_index=" + target_index;
+  params = params + "&compopage_path=" + compopage_path;
+  params = params + "&title=" + title;
+  params = params + "&target_id=" + id;
+  Azax.notifyServerWithParams(url, params);
+}
+
+function plone_add_ajax_fragment(target) {
+  // Note that target_index is also available.
+  var form = document.forms.modify_composites;
+  var compopage_path = form.elements.composite_path.value;
+  var target_path = target.getAttribute("target_path");
+  var target_index = target.getAttribute("target_index");
+  var id = target.getAttribute("id");
+  url = compopage_path + '/cp_container/addFragment';
+  params = "target_path=" + target_path;
+  params = params + "&target_index=" + target_index;
+  params = params + "&compopage_path=" + compopage_path;
+  params = params + "&target_id=" + id;
+  Azax.notifyServerWithParams(url, params);
 }
 
 function plone_add_fragment(target) {
@@ -114,6 +154,12 @@ function plone_setup_viewlet_menu_item(menuItem, current_id, viewlet_id, viewlet
       node = document.createTextNode(viewlet_title);
       menuItem.appendChild(node);
       pd_setupContextMenuItem(menuItem);
+}
+
+function plone_updateAfterAdd(results)
+{
+  plone_setUpSlotElement(results[0]);
+  plone_setUpSlotTarget(results[2]);
 }
 
 function plone_setUpSlotElement(node) {

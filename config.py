@@ -20,7 +20,7 @@ except ImportError:
     HAS_ATCT = False
 
 try:
-    from Products.CMFPlone.migrations import v2_1
+    from Products.CMFPlone.migrations.v2_1 import rcs
 except ImportError:
     PLONE21 = 0
 else:

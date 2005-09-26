@@ -36,6 +36,7 @@ from Products.CompositePack import CPpermissions
 from Products.CompositePack.exceptions import CompositePackError
 from Products.Archetypes.public import *
 from Products.Archetypes.utils import shasattr
+from Products.Archetypes import transaction_note
 
 plone_edit_template = PageTemplateFile('edit_tag.pt', _plone)
 plone_add_target_template = PageTemplateFile('target_tag.pt', _plone)
@@ -308,6 +309,9 @@ class PackComposite(Composite, BaseFolderMixin):
             # An invalid layout has been passed. Set to default
             # layout.
             layout_id = self.getDefaultLayout().id
+            transaction_note("Select default layout")
+        else:
+            transaction_note("Select '%s' layout" % layout.title_or_id())
         field = self.getField('layout')
         field.set(self, layout_id)
         self.setTemplatePath()

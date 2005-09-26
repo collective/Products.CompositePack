@@ -111,6 +111,10 @@ img.slot-element-grip {
     background-color: &dtml-contentViewBackgroundColor;;
 }
 
+.actionPlural .menuPosition {
+        z-index: 1;
+}
+
 .slot_target_highlighted .menuPosition,
 .slot_target .menuPosition,
 .slot_element_highlighted .menuPosition,

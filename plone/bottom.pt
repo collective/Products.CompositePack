@@ -1,6 +1,6 @@
 <!-- plone/bottom.pt -->
 <tal:i18n i18n:domain="compopack"
-        tal:define="haveAzax python:False; XXX string:Fix this;">
+        tal:define="haveAzax options/composite/cp_container/haveAzax;">
 
 <div class="htc_box" />
 

@@ -12,6 +12,7 @@ $Id$
 """
 import os
 import Globals
+import warnings
 
 try:
     from Products import ATContentTypes
@@ -22,9 +23,18 @@ except ImportError:
 try:
     from Products.CMFPlone.migrations.v2_1 import rcs
 except ImportError:
-    PLONE21 = 0
+    PLONE21 = False
 else:
-    PLONE21 = 1
+    PLONE21 = True
+
+try:
+    from Products.azax import AzaxResponse
+    from Products import Five
+except ImportError:
+    warnings.warn('CompositePack performance impaired: Five and Azax recommended', DeprecationWarning)
+    HAVEAZAX = False
+else:
+    HAVEAZAX = True
 
 PROJECTNAME = 'CompositePack'
 ADD_CONTENT_PERMISSION = 'Add CompositePack content'

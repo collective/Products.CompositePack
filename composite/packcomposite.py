@@ -30,7 +30,7 @@ from Products.CompositePage import perm_names
 from Products.CompositePage.interfaces import ICompositeElement
 
 from Products.CompositePack.config import zmi_dir
-from Products.CompositePack.config import TOOL_ID, PROJECTNAME
+from Products.CompositePack.config import TOOL_ID, PROJECTNAME, HAVEAZAX
 from Products.CompositePack.design import _plone
 from Products.CompositePack import CPpermissions
 from Products.CompositePack.exceptions import CompositePackError
@@ -343,6 +343,10 @@ class PackComposite(Composite, BaseFolderMixin):
         template_id = path.split('/')[-1]
         field = self.getField('template_path')
         field.set(self, template_id)
+
+    security.declareProtected(perm_names.view, "haveAzax")
+    def haveAzax(self):
+        return HAVEAZAX
 
     security.declarePrivate('_availableLayouts')
     def _availableLayouts(self):

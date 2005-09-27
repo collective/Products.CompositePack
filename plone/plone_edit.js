@@ -215,7 +215,7 @@ function setup_pack_slot_target(node) {
     div.className = "menuPosition";
     var link = document.createElement("a");
     link.setAttribute("href", "#");
-    var child = document.createTextNode(header_title);
+    var child = document.createTextNode(header_title.replace(' ', '\xa0'));
     link.appendChild(child);
     div.appendChild(link);
     li.appendChild(div);

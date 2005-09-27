@@ -118,7 +118,9 @@ img.slot-element-grip {
 .slot_target_highlighted .menuPosition,
 .slot_target .menuPosition,
 .slot_element_highlighted .menuPosition,
-.slot_element .menuPosition {
+.slot_element .menuPosition,
+.slot_element .contentActions li,
+.slot_element_highlighted .contentActions li {
     position: relative;
 }
 

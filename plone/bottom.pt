@@ -1,5 +1,6 @@
 <!-- plone/bottom.pt -->
-<tal:i18n i18n:domain="compopack">
+<tal:i18n i18n:domain="compopack"
+        tal:define="haveAzax python:False; XXX string:Fix this;">
 
 <div class="htc_box" />
 
@@ -38,7 +39,8 @@
      class="context-menu-item"
      onmouseup="plone_add(event, pd_selected_item)"
      filter="pd_selected_item">Content</div>
-<div i18n:translate="" 
+<div i18n:translate=""
+     tal:condition="haveAzax|nothing"
      class="context-menu-item"
      onmouseup="plone_add_ajax(event, pd_selected_item)"
      filter="pd_selected_item">Ajax Content</div>
@@ -49,6 +51,7 @@
      filter="pd_selected_item">Title</div>
 <!--GC remove-->
 <div class="context-menu-item" 
+     tal:condition="haveAzax|nothing"
      onmouseup="plone_add_ajax_title(pd_selected_item)"
      filter="pd_selected_item">Ajax Title</div>
 <div i18n:translate="label_html"
@@ -58,6 +61,7 @@
      filter="pd_selected_item">HTML</div>
 <!--GC remove-->
 <div class="context-menu-item" 
+     tal:condition="haveAzax|nothing"
      onmouseup="plone_add_ajax_fragment(pd_selected_item)"
      filter="pd_selected_item">Ajax HTML</div>
 <div class="separator"></div>

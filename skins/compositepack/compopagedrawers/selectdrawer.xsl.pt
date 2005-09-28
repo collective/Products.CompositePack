@@ -26,6 +26,7 @@ $Id$
     />
 
   <xsl:template match="resource|collection" mode="properties">
+     <xsl:variable name="ext" select="substring(icon, string-length(icon)-13)" />
      <table>
        <tr>
          <td>
@@ -33,6 +34,25 @@ $Id$
            <xsl:value-of select="title" />
          </td>
        </tr>
+        <xsl:choose>
+            <xsl:when test="$ext='image_icon.gif'">
+              <tr>
+               <td>
+                <img src="{uri}" title="{title}" height="120" alt="{title}" />
+               </td>
+              </tr>
+            </xsl:when>
+            <xsl:when test="preview">
+                <tr>
+                    <td>
+                        <strong i18n:translate="imagedrawer_upload_preview_label">Preview</strong>
+                        <br/>
+                        <img src="{preview}" title="{title}" height="{height}"
+                            width="{width}" alt="{title}"/>
+                    </td>
+                </tr>
+            </xsl:when>
+        </xsl:choose>
        <tr>
          <td>
            <strong>Description</strong><br />

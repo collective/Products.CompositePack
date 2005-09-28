@@ -115,6 +115,9 @@ img.slot-element-grip {
         z-index: 1;
 }
 
+#kupu-librarydrawer {
+        z-index: 5;
+}
 .slot_target_highlighted .menuPosition,
 .slot_target .menuPosition,
 .slot_element_highlighted .menuPosition,

@@ -407,6 +407,7 @@ _notifyOfCopyTo.__cp_method__ = True
 def design_view(self):
     """design view for Plone
     """
+    self.REQUEST.set('compositepack_design_view', True)
     return self.cp_container.design(ui='plone')
 design_view.__cp_method__ = True
 

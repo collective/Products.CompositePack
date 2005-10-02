@@ -323,7 +323,7 @@ class PackComposite(Composite, BaseFolderMixin):
         '''composite container is never catalogued'''
         pass
 
-    def reindexObject(self):
+    def reindexObject(self, idxs=[]):
         '''composite container is never catalogued'''
         pass
 

@@ -16,14 +16,12 @@ from Products.Archetypes.public import listTypes
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
 from Products.CompositePack.config import COMPOSABLE, ATCT_TYPES
-from Products.CompositePack.config import MIGRATED_ATCT_TYPES
+from Products.CompositePack.config import IMAGE_TYPE
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
 from Products.CompositePack.config import HAS_ATCT
 from Products.CompositePack.config import PLONE21
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
-if HAS_ATCT and not PLONE21:
-    from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
 KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
@@ -76,13 +74,8 @@ def install_tool(self, out):
         tool.registerAsComposite('Composable Document')
     tool.registerAsComposite('Navigation Page')
 
-    if PLONE21:
-	tool.registerAsComposable(MIGRATED_ATCT_TYPES)
-    elif HAS_ATCT:
-        if isSwitchedToATCT(self):
-	    tool.registerAsComposable(MIGRATED_ATCT_TYPES)
-	else:
-	    tool.registerAsComposable(ATCT_TYPES)
+    if HAS_ATCT:
+        tool.registerAsComposable(ATCT_TYPES)
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
     
@@ -133,16 +126,12 @@ def install_tool(self, out):
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
                             'fragment_viewlet')
-    if PLONE21 or HAS_ATCT and isSwitchedToATCT(self):
-	IMAGE_TYPE = 'Image'
-    else:
-	IMAGE_TYPE = 'ATImage'
-    if PLONE21 or HAS_ATCT:
-	tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
-					    'link_viewlet',
-					    'image_title_viewlet',
-					    'image_caption_viewlet'],
-				'image_viewlet')
+    if HAS_ATCT:
+       tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
+                                            'link_viewlet',
+                                            'image_title_viewlet',
+                                            'image_caption_viewlet'],
+                                            'image_viewlet')
     out.write("CompositePack Tool Installed\n")
 
 def setup_portal_factory(self, out):

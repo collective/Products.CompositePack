@@ -23,9 +23,12 @@ from Products.CompositePack.tests import CompositePackTestCase
 from Products.CompositePack.ViewletRegistry import DEFAULT
 from Products.CompositePack.exceptions import CompositePackError
 
-TEST_TYPE_1 = 'ATFile'
-TEST_TYPE_2 = 'ATEvent'
-TEST_TYPE_3 = 'ATFavorite'
+from Products.CompositePack.config import FILE_TYPE
+from Products.CompositePack.config import EVENT_TYPE
+from Products.CompositePack.config import FAVORITE_TYPE
+TEST_TYPE_1 = FILE_TYPE
+TEST_TYPE_2 = EVENT_TYPE
+TEST_TYPE_3 = FAVORITE_TYPE
 
 V0D = 'V0D'
 V0D_TITLE = 'V0D_TITLE'

@@ -227,6 +227,10 @@ class PackComposite(Composite, BaseFolderMixin):
             f = PackTitleCollection('titles')
             self._setObject(f.getId(), f)
 
+    def generateSlots(self):
+        if self.getTemplatePath():
+            Composite.generateSlots(self)
+
     manage_afterAdd = BaseFolderMixin.manage_afterAdd
     manage_beforeDelete = BaseFolderMixin.manage_beforeDelete
     manage_afterClone = BaseFolderMixin.manage_afterClone

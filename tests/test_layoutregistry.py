@@ -23,8 +23,11 @@ from Products.CompositePack.tests import CompositePackTestCase
 
 from Products.CompositePack.exceptions import CompositePackError
 
-TEST_TYPE = 'ATFile'
-TEST_TYPE_2 = 'ATEvent'
+from Products.CompositePack.config import FILE_TYPE
+from Products.CompositePack.config import EVENT_TYPE
+TEST_TYPE = FILE_TYPE
+TEST_TYPE_2 = EVENT_TYPE
+
 TEST_TYPES = (TEST_TYPE, TEST_TYPE_2)
 
 class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):

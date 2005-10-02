@@ -59,6 +59,10 @@ class SkinMethod(BaseContentMixin, Item):
         '''skin method is never catalogued'''
         pass
 
+    def reindexObject(self):
+        '''skin method is never catalogued'''
+        pass
+
     def unindexObject(self):
         '''skin method is never catalogued'''
         pass

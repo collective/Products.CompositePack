@@ -37,6 +37,10 @@ class ViewletContainer(BaseFolderMixin, UniqueObject):
         '''viewlet container is never catalogued'''
         pass
 
+    def reindexObject(self):
+        '''viewlet container is never catalogued'''
+        pass
+
     def unindexObject(self):
         '''viewlet container is never catalogued'''
         pass
@@ -63,6 +67,10 @@ class LayoutContainer(BaseFolderMixin, UniqueObject):
             self, interfaces=(ILayout,))
 
     def indexObject(self):
+        '''layout container is never catalogued'''
+        pass
+
+    def reindexObject(self):
         '''layout container is never catalogued'''
         pass
 

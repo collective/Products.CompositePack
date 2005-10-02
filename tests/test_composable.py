@@ -47,13 +47,6 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
     def beforeTearDown(self):
         CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
 
-    def test_navigation_page(self):
-        before = len(self.ct())
-        self.portal.invokeFactory('Navigation Page', 'page')
-        page = self.portal._getOb('page')
-        # 2 = page, filled_slots
-        self.assertEquals(len(self.ct()), before+2)
-
     def test_navigation_page_rename(self):
         targets = []
         for i in range(0, 4):

@@ -23,6 +23,10 @@ from Products.CMFCore import utils as cmf_utils
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CompositePage import tool as base_tool
 
+from Products.CMFPlone import MigrationTool
+
+from Products.CompositePack.ConfigurationMethods import GeneralSetup
+
 registerDirectory('skins', GLOBALS)
 try:
     del base_tool._uis['plone'] # So we can refresh the product :(
@@ -76,3 +80,4 @@ def initialize(context):
                        icon=TOOL_ICON
                    ).initialize(context)
 
+    MigrationTool.registerSetupWidget(GeneralSetup)

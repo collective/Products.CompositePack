@@ -143,6 +143,10 @@ class Element(BaseContentMixin):
         '''element is never catalogued'''
         pass
 
+    def reindexObject(self):
+        '''element is never catalogued'''
+        pass
+
     def unindexObject(self):
         '''element is never catalogued'''
         pass

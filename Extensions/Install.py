@@ -145,6 +145,22 @@ def install_tool(self, out):
 				'image_viewlet')
     out.write("CompositePack Tool Installed\n")
 
+def setup_portal_factory(self, out):
+    factory = getToolByName(self, 'portal_factory')
+    types = factory.getFactoryTypes().keys()
+    if 'Navigation Page' not in types:
+        out.write('Navigation Page setup in portal_factory\n')
+        types.append('Navigation Page')
+        factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
+    if 'Navigation Titles' not in types:
+        out.write('Navigation Titles setup in portal_factory\n')
+        types.append('Navigation Titles')
+        factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
+    if 'Navigation Page HTML' not in types:
+        out.write('Navigation Page HTML setup in portal_factory\n')
+        types.append('Navigation Page HTML')
+        factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
+
 def uninstall_tool(self, out):
     if hasattr(self, TOOL_ID):
         out.write("CompositePack Tool not removed\n")
@@ -218,6 +234,8 @@ def install(self):
     install_tool(self, out)
     install_customisation(self, out)
     install_fixuids(self, out)
+    if PLONE21:
+        setup_portal_factory(self, out)
 
     out.write("Successfully installed %s.\n" % PROJECTNAME)
     return out.getvalue()

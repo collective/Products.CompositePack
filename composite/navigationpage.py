@@ -23,6 +23,9 @@ class NavigationPage(BaseContent):
     """
     meta_type = portal_type = 'Navigation Page'
     archetype_name = 'Navigation Page'
+    
+    _at_rename_after_creation = True
+    
     schema = BaseSchema.copy()
     # Move the description field into the edit view.
     schema['description'].isMetadata = False

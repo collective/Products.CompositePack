@@ -23,6 +23,8 @@ class Titles(BaseContentMixin):
     archetype_name = 'Navigation Titles'
     global_allow = 0
 
+    _at_rename_after_creation = True
+    
     idfield = MinimalSchema['id'].copy()
     idfield.widget.visible = {'edit':'hidden', 'view':'invisible'}
 

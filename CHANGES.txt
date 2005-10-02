@@ -1,4 +1,5 @@
-
+* setup portal factory and id calculated from title for Plone 2.1
+  [gotcha]
  
 * register cleanIndexes setup widget in portal_migration to remove wrongly
   indexed software.

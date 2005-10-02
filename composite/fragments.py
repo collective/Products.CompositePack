@@ -25,6 +25,8 @@ class Fragments(BaseContentMixin):
     archetype_name = 'Navigation Page HTML'
     global_allow = 0
 
+    _at_rename_after_creation = True
+
     security = ClassSecurityInfo()
 
     idfield = MinimalSchema['id'].copy()

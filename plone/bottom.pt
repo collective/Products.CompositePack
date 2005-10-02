@@ -39,6 +39,7 @@
      class="context-menu-item"
      onmouseup="plone_add(event, pd_selected_item)"
      filter="pd_selected_item">Content</div>
+<!--GC remove-->
 <div i18n:translate=""
      tal:condition="haveAzax|nothing"
      class="context-menu-item"

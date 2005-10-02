@@ -11,8 +11,8 @@ class PackView(BrowserView):
     def createCompositeElement(self, destination, target_index):
         factory = destination.manage_addProduct['CompositePack'].manage_addElement
 
-        new_id = self.context.generateUniqueId()
-        new_id = ''.join(new_id.split('.'))
+        new_id = self.context.generateUniqueIdForCSS()
+#        new_id = ''.join(new_id.split('.'))
         new_id = factory(id=new_id)
         destination.moveObjectToPosition(new_id, int(target_index))
         new_el = getattr(destination, new_id)

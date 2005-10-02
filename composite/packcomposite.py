@@ -266,6 +266,12 @@ class PackComposite(Composite, BaseFolderMixin):
         return aq_parent(aq_inner(self))
     parent = ComputedAttribute(parent, 1)
 
+
+    def generateUniqueIdForCSS(self):
+        new_id = self.generateUniqueId()
+        new_id = ''.join(new_id.split('.'))
+        return new_id
+
     security.declareProtected(perm_names.view, "getPathFromPortalToParent")
     def getPathFromPortalToParent(self):
         purl = getToolByName(self, 'portal_url')

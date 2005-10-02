@@ -6,12 +6,14 @@ portal = context.portal_url.getPortalObject()
 destination = portal.restrictedTraverse(target_path)
 factory = destination.manage_addProduct['CompositePack'].manage_addElement
 
-new_id = context.generateUniqueId()
+compo = portal.restrictedTraverse(compopage_path)
+#new_id = context.generateUniqueId()
+new_id = compo.cp_container.generateUniqueIdForCSS()
 new_id = factory(id=new_id)
 destination.moveObjectToPosition(new_id, int(target_index))
 new_el = getattr(destination, new_id)
 
-compo = portal.restrictedTraverse(compopage_path)
+#compo = portal.restrictedTraverse(compopage_path)
 
 factory = compo.cp_container.titles.manage_addProduct['CompositePack'].manage_addFragments
 new_id = context.generateUniqueId()

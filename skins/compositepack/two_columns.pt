@@ -5,10 +5,21 @@
 
 <tal:template_id metal:fill-slot="head_slot"
     define="request_url request/URL;
-            global template_id python:request_url.split('/')[-1]"
-    content="nothing">
+            global template_id python:request_url.split('/')[-1]" >
 
-redefine template_id is needed to fix "design" tab highlight
+    <script type="text/javascript"
+      tal:attributes="src string:${context/absolute_url}/cp_container/++resource++sarissa.js;"
+      src="++resource++sarissa.js">
+    </script>
+    <script type="text/javascript"
+      tal:attributes="src string:${context/absolute_url}/cp_container/++resource++cssQuery.js;"
+      src="++resource++cssQuery.js">
+    </script>
+    <script type="text/javascript"
+      tal:attributes="src string:${context/absolute_url}/cp_container/++resource++azax.js;"
+      src="++resource++azax.js">
+    </script>
+    <tal:comment replace="nothing">redefine template_id is needed to fix "design" tab highlight</tal:comment>
 </tal:template_id>
 
 <metal:cssslot fill-slot="css_slot">

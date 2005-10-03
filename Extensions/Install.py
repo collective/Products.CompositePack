@@ -15,8 +15,9 @@ from cStringIO import StringIO
 from Products.Archetypes.public import listTypes
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
-from Products.CompositePack.config import COMPOSABLE, ATCT_TYPES
-from Products.CompositePack.config import IMAGE_TYPE
+from Products.CompositePack.config import COMPOSABLE
+from Products.CompositePack.config import get_COMPOSABLES_ATCT
+from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
 from Products.CompositePack.config import HAS_ATCT
 from Products.CompositePack.config import PLONE21
@@ -75,7 +76,7 @@ def install_tool(self, out):
     tool.registerAsComposite('Navigation Page')
 
     if HAS_ATCT:
-        tool.registerAsComposable(ATCT_TYPES)
+        tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
     
@@ -127,6 +128,7 @@ def install_tool(self, out):
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
                             'fragment_viewlet')
     if HAS_ATCT:
+       IMAGE_TYPE = get_ATCT_TYPES(self)['Image']
        tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
                                             'link_viewlet',
                                             'image_title_viewlet',

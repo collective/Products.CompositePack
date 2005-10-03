@@ -38,6 +38,8 @@ from cPickle import load, dump
 from Acquisition import aq_base, aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
 
+from Products.CompositePack.config import get_ATCT_TYPES
+
 class CompositePackTestCase(PloneTestCase.PloneTestCase):
 
     def afterSetUp(self):
@@ -49,6 +51,9 @@ class CompositePackTestCase(PloneTestCase.PloneTestCase):
         self.qi.installProduct('kupu')
         self.qi.installProduct('CompositePack')
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
+        self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
+        self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
+        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
 
     def beforeTearDown(self):
         self.composite_tool.clearLayoutRegistry()

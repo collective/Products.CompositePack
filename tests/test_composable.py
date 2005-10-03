@@ -20,6 +20,8 @@ from Testing import ZopeTestCase
 
 from Products.CompositePack.tests import CompositePackTestCase
 
+from Products.CompositePack.config import PLONE21
+
 
 from cStringIO import StringIO
 from cPickle import load, dump
@@ -58,6 +60,7 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
 
         # Change to two slots layout
         page.cp_container.setLayout('two_slots')
+        page.cp_container.getLayout()
         page.cp_container.generateSlots()
         slots = page.cp_container.filled_slots
         self.failUnless('first' in slots.objectIds())
@@ -151,11 +154,10 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         slots.second.invokeFactory('CompositePack Element',
                                    '3', target=[targets[3].UID()])
 
-        # portal_catalog should get +6, uid+8, references +4
-        # portal_catalog gets ??
+        # portal_catalog should get +0, uid+8, references+4
         # uid_catalog gets the four elements and the four references
         # reference_catalog gets the four references
-        expected = [before[0]+6, before[1]+8, before[2]+4]
+        expected = [before[0], before[1]+8, before[2]+4]
         got = [len(cat()) for cat in cats]
         self.assertEquals(got, expected)
 
@@ -170,16 +172,19 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         new_obj = load(out)
         public._setObject('private', new_obj)
 
-        # Should have no change from previous counts, except
-        # for portal_catalog which gets +7, the 6 contained
-        # in private plus private itself
-        expected = [expected[0]+7, expected[1], expected[2]]
+        # Should have no change from previous counts
+        # except for private and page
+        expected = [expected[0]+2, expected[1], expected[2]]
         got = [len(cat()) for cat in cats]
         self.assertEquals(got, expected)
 
         # Finally, the public catalogs should have
-        # uid+10, references+4
-        pexpected = [pbefore[0]+10, pbefore[1]+4]
+        if PLONE21:
+            # uid+11 (private has also a UID), references+4
+            pexpected = [pbefore[0]+11, pbefore[1]+4]
+        else:
+            # uid+10, references+4
+            pexpected = [pbefore[0]+10, pbefore[1]+4]
         pgot = [len(cat()) for cat in pcats]
         self.assertEquals(pgot, pexpected)
 

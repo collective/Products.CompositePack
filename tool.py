@@ -419,11 +419,11 @@ class CompositeTool(Folder, BaseTool):
     def registerViewlet(self, id, description, skin_method):
         from Products.CompositePack import viewlet
         viewlets = getattr(self, VIEWLETS)
-        viewlet.addViewlet(viewlets,
-                           id=id,
-                           title=description,
-                           skin_method=skin_method)
-        return getattr(viewlets, id)
+        viewlet.addViewlet(viewlets, id=id)
+        result = getattr(viewlets, id)
+        result.setTitle(description)
+        result.setSkinMethod(skin_method)
+        return result
 
     security.declareProtected( ManagePortal, 'unregisterViewlet' )
     def unregisterViewlet(self, id):
@@ -534,11 +534,11 @@ class CompositeTool(Folder, BaseTool):
     def registerLayout(self, id, description, skin_method):
         from Products.CompositePack import viewlet
         layouts = getattr(self, LAYOUTS)
-        viewlet.addLayout(layouts,
-                           id=id,
-                           title=description,
-                           skin_method=skin_method)
-        return getattr(layouts, id)
+        viewlet.addLayout(layouts, id=id)
+        result = getattr(layouts, id)
+        result.setTitle(description)
+        result.setSkinMethod(skin_method)
+        return result
 
     security.declareProtected( ManagePortal, 'unregisterLayout' )
     def unregisterLayout(self, id):

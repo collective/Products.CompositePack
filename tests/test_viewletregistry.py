@@ -29,145 +29,141 @@ KUPU_TOOL_ID = PloneKupuLibraryTool.id
 from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.exceptions import CompositePackError
 
-from Products.CompositePack.config import FILE_TYPE
-from Products.CompositePack.config import EVENT_TYPE
-TEST_TYPE = FILE_TYPE
-TEST_TYPE_2 = EVENT_TYPE
-
-TEST_TYPES = (TEST_TYPE, TEST_TYPE_2)
-
 class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
 
     def afterSetUp(self):
         CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        self.TEST_TYPE = self.FILE_TYPE
+        self.TEST_TYPE_2 = self.EVENT_TYPE
+        self.TEST_TYPES = (self.TEST_TYPE, self.TEST_TYPE_2)
         self.kupu_tool = getToolByName(self.portal, KUPU_TOOL_ID)
         ct = self.composite_tool
-        ct.unregisterAsComposable(TEST_TYPE)
-        ct.unregisterAsComposable(TEST_TYPE_2)
+        ct.unregisterAsComposable(self.TEST_TYPE)
+        ct.unregisterAsComposable(self.TEST_TYPE_2)
 
     def testGetDefaultWhenNoDefault(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
-        self.assertEquals(ct.getDefaultViewletForType(TEST_TYPE), ct.getDefaultViewletForDefaultSetup())
+        ct.registerAsComposable(self.TEST_TYPE)
+        self.assertEquals(ct.getDefaultViewletForType(self.TEST_TYPE), ct.getDefaultViewletForDefaultSetup())
 
     def testRegisterType(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
-        self.failUnless(ct.isComposable(TEST_TYPE))
-        self.failUnless(TEST_TYPE in ct.getRegisteredComposables())
-        self.failUnless(TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
+        ct.registerAsComposable(self.TEST_TYPE)
+        self.failUnless(ct.isComposable(self.TEST_TYPE))
+        self.failUnless(self.TEST_TYPE in ct.getRegisteredComposables())
+        self.failUnless(self.TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
 
     def testUnregisterType(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
-        ct.unregisterAsComposable(TEST_TYPE)
-        self.failIf(ct.isComposable(TEST_TYPE))
-        self.failIf(TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
+        ct.registerAsComposable(self.TEST_TYPE)
+        ct.unregisterAsComposable(self.TEST_TYPE)
+        self.failIf(ct.isComposable(self.TEST_TYPE))
+        self.failIf(self.TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
         
     def testRegisterTypes(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPES)
-        for test_type in TEST_TYPES:
+        ct.registerAsComposable(self.TEST_TYPES)
+        for test_type in self.TEST_TYPES:
             self.failUnless(ct.isComposable(test_type))
             self.failUnless(test_type in ct.getRegisteredComposables())
             self.failUnless(test_type in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
 
     def testUnregisterTypes(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPES)
-        ct.unregisterAsComposable(TEST_TYPES)
-        for test_type in TEST_TYPES:
+        ct.registerAsComposable(self.TEST_TYPES)
+        ct.unregisterAsComposable(self.TEST_TYPES)
+        for test_type in self.TEST_TYPES:
             self.failIf(ct.isComposable(test_type))
             self.failIf(test_type in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
         
     def testRegisterTypeTwice(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
-        self.assertRaises(CompositePackError, ct.registerAsComposable, TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
+        self.assertRaises(CompositePackError, ct.registerAsComposable, self.TEST_TYPE)
 
     def testRegisterViewlet(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
         self.assertEquals(viewlet, ct.getViewletById('test_viewlet'))
 
     def testUnregisterViewlet(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
         ct.unregisterViewlet('test_viewlet')
         self.assertEquals(None, ct.getViewletById('test_viewlet'))
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
+        viewlet.registerForType(self.TEST_TYPE)
         ct.unregisterViewlet('test_viewlet')
-        self.failIf('test_viewlet' in [viewlet.getId() for viewlet in ct.getRegisteredViewletsForType(TEST_TYPE)])
+        self.failIf('test_viewlet' in [viewlet.getId() for viewlet in ct.getRegisteredViewletsForType(self.TEST_TYPE)])
 
     def testRegisterViewletForType(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
-        self.failUnless(viewlet in ct.getRegisteredViewletsForType(TEST_TYPE))
+        viewlet.registerForType(self.TEST_TYPE)
+        self.failUnless(viewlet in ct.getRegisteredViewletsForType(self.TEST_TYPE))
         #first viewlet is setup as default
-        self.failUnless(viewlet.isDefaultForType(TEST_TYPE))
+        self.failUnless(viewlet.isDefaultForType(self.TEST_TYPE))
         #it can be registered twice !
-        viewlet.registerForType(TEST_TYPE)
-        self.failUnless(viewlet.isRegisteredForType(TEST_TYPE))
-        self.failUnless(viewlet in ct.getRegisteredViewletsForType(TEST_TYPE))
+        viewlet.registerForType(self.TEST_TYPE)
+        self.failUnless(viewlet.isRegisteredForType(self.TEST_TYPE))
+        self.failUnless(viewlet in ct.getRegisteredViewletsForType(self.TEST_TYPE))
 
     def testUnregisterViewletForType(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
-        self.assertRaises(CompositePackError, viewlet.unregisterForType, TEST_TYPE)
-        viewlet.unregisterForType(TEST_TYPE, force=True)
-        self.failIf(viewlet.isRegisteredForType(TEST_TYPE))
-        self.failIf(viewlet in ct.getRegisteredViewletsForType(TEST_TYPE))
+        viewlet.registerForType(self.TEST_TYPE)
+        self.assertRaises(CompositePackError, viewlet.unregisterForType, self.TEST_TYPE)
+        viewlet.unregisterForType(self.TEST_TYPE, force=True)
+        self.failIf(viewlet.isRegisteredForType(self.TEST_TYPE))
+        self.failIf(viewlet in ct.getRegisteredViewletsForType(self.TEST_TYPE))
 
     def testRegisterDefaultViewlet(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
-        viewlet.setDefaultForType(TEST_TYPE)
-        self.assertEquals(viewlet, ct.getDefaultViewletForType(TEST_TYPE))
-        self.failUnless(viewlet.isDefaultForType(TEST_TYPE))
+        viewlet.registerForType(self.TEST_TYPE)
+        viewlet.setDefaultForType(self.TEST_TYPE)
+        self.assertEquals(viewlet, ct.getDefaultViewletForType(self.TEST_TYPE))
+        self.failUnless(viewlet.isDefaultForType(self.TEST_TYPE))
 
     def testUnRegisterDefaultViewlet(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
-        viewlet.setDefaultForType(TEST_TYPE)
-        self.assertRaises(CompositePackError, viewlet.unregisterForType, TEST_TYPE)
+        viewlet.registerForType(self.TEST_TYPE)
+        viewlet.setDefaultForType(self.TEST_TYPE)
+        self.assertRaises(CompositePackError, viewlet.unregisterForType, self.TEST_TYPE)
 
     def testClearDefaultViewlet(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
-        viewlet.setDefaultForType(TEST_TYPE)
-        viewlet.clearDefaultForType(TEST_TYPE)
-        self.assertRaises(CompositePackError, ct.getDefaultViewletForType, TEST_TYPE)
-        self.failUnless(ct.noDefaultViewletForType(TEST_TYPE))
+        viewlet.registerForType(self.TEST_TYPE)
+        viewlet.setDefaultForType(self.TEST_TYPE)
+        viewlet.clearDefaultForType(self.TEST_TYPE)
+        self.assertRaises(CompositePackError, ct.getDefaultViewletForType, self.TEST_TYPE)
+        self.failUnless(ct.noDefaultViewletForType(self.TEST_TYPE))
 
     def testForceUnRegisterDefaultViewlet(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        viewlet.registerForType(TEST_TYPE)
-        viewlet.setDefaultForType(TEST_TYPE)
-        viewlet.unregisterForType(TEST_TYPE, force=True)
-        self.assertRaises(CompositePackError, ct.getDefaultViewletForType, TEST_TYPE)
+        viewlet.registerForType(self.TEST_TYPE)
+        viewlet.setDefaultForType(self.TEST_TYPE)
+        viewlet.unregisterForType(self.TEST_TYPE, force=True)
+        self.assertRaises(CompositePackError, ct.getDefaultViewletForType, self.TEST_TYPE)
 
     def testDefaultViewletNotRegistered(self):
         ct = self.composite_tool
-        ct.registerAsComposable(TEST_TYPE)
+        ct.registerAsComposable(self.TEST_TYPE)
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
         viewlet.registerForDefaultSetup()
         viewlet.setDefaultForDefaultSetup()
-        self.assertEquals(ct.getDefaultViewletForType(TEST_TYPE), ct.getDefaultViewletForDefaultSetup())
+        self.assertEquals(ct.getDefaultViewletForType(self.TEST_TYPE), ct.getDefaultViewletForDefaultSetup())
 
     def testRegisterViewletForDefaultSetup(self):
         ct = self.composite_tool

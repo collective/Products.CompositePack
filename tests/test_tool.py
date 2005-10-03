@@ -23,12 +23,7 @@ from Products.CompositePack.tests import CompositePackTestCase
 from Products.CompositePack.ViewletRegistry import DEFAULT
 from Products.CompositePack.exceptions import CompositePackError
 
-from Products.CompositePack.config import FILE_TYPE
-from Products.CompositePack.config import EVENT_TYPE
-from Products.CompositePack.config import FAVORITE_TYPE
-TEST_TYPE_1 = FILE_TYPE
-TEST_TYPE_2 = EVENT_TYPE
-TEST_TYPE_3 = FAVORITE_TYPE
+from Products.CompositePack.config import get_ATCT_TYPES
 
 V0D = 'V0D'
 V0D_TITLE = 'V0D_TITLE'
@@ -53,10 +48,11 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
 
     def afterSetUp(self):
         CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        self.TEST_TYPE_1 = self.EVENT_TYPE
+        self.TEST_TYPE_2 = self.FILE_TYPE
+        self.TEST_TYPE_3 = self.FAVORITE_TYPE
         ct = self.composite_tool
-        #ct.registerAsComposable(TEST_TYPE_1)
-        #ct.registerAsComposable(TEST_TYPE_2)
-        ct.registerAsComposable(TEST_TYPE_3)
+        ct.registerAsComposable(self.TEST_TYPE_3)
         self.v0 = ct.registerViewlet(V0, V0_TITLE, V0)
         self.v1 = ct.registerViewlet(V1, V1_TITLE, V1)
         self.v2 = ct.registerViewlet(V2, V2_TITLE, V2)
@@ -70,8 +66,8 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
     def testRegisterForType1(self):
         ct = self.composite_tool
         ct.setDefaultViewlets([V0, V00, V0D], V0D) 
-        ct.setViewletsForType(TEST_TYPE_1, [V1, V11, V1D], V1D) 
-        ct.setViewletsForType(TEST_TYPE_2, [V2, V22, V2D], V2D) 
+        ct.setViewletsForType(self.TEST_TYPE_1, [V1, V11, V1D], V1D) 
+        ct.setViewletsForType(self.TEST_TYPE_2, [V2, V22, V2D], V2D) 
         RES1 =  {'default': {'id': V1D,
                              'title': V1D_TITLE,
                              'viewlet': self.v1d},
@@ -99,17 +95,16 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
                               {'id': V00,
                                'title': V00_TITLE,
                                'viewlet': self.v00}]}
-
-        self.assertEquals(RES1, ct.getViewletsForType(TEST_TYPE_1))
-        self.assertEquals(RES2, ct.getViewletsForType(TEST_TYPE_2))
-        self.assertEquals(RES0, ct.getViewletsForType(TEST_TYPE_3))
+        self.assertEquals(RES1, ct.getViewletsForType(self.TEST_TYPE_1))
+        self.assertEquals(RES2, ct.getViewletsForType(self.TEST_TYPE_2))
+        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_3))
 
     def testRegisterForType2(self):
         ct = self.composite_tool
         ct.setDefaultViewlets([V0, V00, V0D], V0D) 
-        ct.setViewletsForType(TEST_TYPE_1, [V1, V11, V0D], DEFAULT) 
-        ct.setViewletsForType(TEST_TYPE_2, (DEFAULT,), V0D) 
-        ct.setViewletsForType(TEST_TYPE_3, (DEFAULT,), DEFAULT) 
+        ct.setViewletsForType(self.TEST_TYPE_1, [V1, V11, V0D], DEFAULT) 
+        ct.setViewletsForType(self.TEST_TYPE_2, (DEFAULT,), V0D) 
+        ct.setViewletsForType(self.TEST_TYPE_3, (DEFAULT,), DEFAULT) 
         RES1 =  {'default': {'id': V0D,
                              'title': V0D_TITLE,
                              'viewlet': self.v0d},
@@ -129,16 +124,16 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
                                'title': V00_TITLE,
                                'viewlet': self.v00}]}
 
-        self.assertEquals(RES1, ct.getViewletsForType(TEST_TYPE_1))
-        self.assertEquals(RES0, ct.getViewletsForType(TEST_TYPE_2))
-        self.assertEquals(RES0, ct.getViewletsForType(TEST_TYPE_3))
+        self.assertEquals(RES1, ct.getViewletsForType(self.TEST_TYPE_1))
+        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_2))
+        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_3))
 
     def testRegisterForType3(self):
         ct = self.composite_tool
         ct.setDefaultViewlets([V0, V0D], V0D) 
-        ct.setViewletsForType(TEST_TYPE_1, [V1, V11, V0D], DEFAULT) 
-        ct.setViewletsForType(TEST_TYPE_2, (DEFAULT,), V0D) 
-        ct.setViewletsForType(TEST_TYPE_3, (DEFAULT,), DEFAULT) 
+        ct.setViewletsForType(self.TEST_TYPE_1, [V1, V11, V0D], DEFAULT) 
+        ct.setViewletsForType(self.TEST_TYPE_2, (DEFAULT,), V0D) 
+        ct.setViewletsForType(self.TEST_TYPE_3, (DEFAULT,), DEFAULT) 
         RES1 =  {'default': {'id': V0D,
                              'title': V0D_TITLE,
                              'viewlet': self.v0d},
@@ -155,9 +150,9 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
                                'title': V0_TITLE,
                                'viewlet': self.v0}]}
 
-        self.assertEquals(RES1, ct.getViewletsForType(TEST_TYPE_1))
-        self.assertEquals(RES0, ct.getViewletsForType(TEST_TYPE_2))
-        self.assertEquals(RES0, ct.getViewletsForType(TEST_TYPE_3))
+        self.assertEquals(RES1, ct.getViewletsForType(self.TEST_TYPE_1))
+        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_2))
+        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_3))
         
         # check that changing default setup does propagate to types using default setup
         ct.setDefaultViewlets([V0, V00, V0D], V0D) 
@@ -170,13 +165,13 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
                               {'id': V00,
                                'title': V00_TITLE,
                                'viewlet': self.v00}]}
-        self.assertEquals(RES0AFTER, ct.getViewletsForType(TEST_TYPE_2))
-        self.assertEquals(RES0AFTER, ct.getViewletsForType(TEST_TYPE_3))
+        self.assertEquals(RES0AFTER, ct.getViewletsForType(self.TEST_TYPE_2))
+        self.assertEquals(RES0AFTER, ct.getViewletsForType(self.TEST_TYPE_3))
 
     def testRegisterForType4(self):
         ct = self.composite_tool
         ct.setDefaultViewlets([V0, V00, V0D], V0D) 
-        ct.setViewletsForType(TEST_TYPE_2, (DEFAULT,), V00) 
+        ct.setViewletsForType(self.TEST_TYPE_2, (DEFAULT,), V00) 
         RES0 =  {'default': {'id': V00,
                              'title': V00_TITLE,
                              'viewlet': self.v00},
@@ -186,11 +181,11 @@ class ToolTest(CompositePackTestCase.CompositePackTestCase):
                               {'id': V0D,
                                'title': V0D_TITLE,
                                'viewlet': self.v0d}]}
-        self.assertEquals(RES0, ct.getViewletsForType(TEST_TYPE_2))
+        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_2))
         
         # check that changing default setup does propagate to types using default setup
         ct.setDefaultViewlets([V0, V0D], V0D) 
-        self.assertRaises(CompositePackError, ct.getDefaultViewletForType, TEST_TYPE_2)
+        self.assertRaises(CompositePackError, ct.getDefaultViewletForType, self.TEST_TYPE_2)
 
 def test_suite():
     import unittest

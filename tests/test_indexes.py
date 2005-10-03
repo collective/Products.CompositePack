@@ -19,8 +19,6 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase
 
 from Products.CompositePack.tests import CompositePackTestCase
-from Products.CompositePack.config import FILE_TYPE
-
 
 from Products.CMFCore.utils import getToolByName
 
@@ -37,9 +35,9 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
 
     def test_no_container_indexed(self):
         #check catalog works ok
-        before = len(self.ct(portal_type=FILE_TYPE))
-        self.folder.invokeFactory(FILE_TYPE, 'test_file')
-        self.assertEqual(before+1, len(self.ct(portal_type=FILE_TYPE)))
+        before = len(self.ct(portal_type=self.FILE_TYPE))
+        self.folder.invokeFactory(self.FILE_TYPE, 'test_file')
+        self.assertEqual(before+1, len(self.ct(portal_type=self.FILE_TYPE)))
         #check none of the software (viewlets, layouts,...) has been indexed
         self.failIf(len(self.ct(portal_type="CompositePack Layout Container")))
         self.failIf(len(self.ct(portal_type="CompositePack Viewlet Container")))

@@ -13,14 +13,11 @@ $Id$
 import os
 import Globals
 
-print "\n\n\n\n"
 try:
     from Products import ATContentTypes
     HAS_ATCT = True
 except ImportError:
     HAS_ATCT = False
-if HAS_ATCT:
-    print "with ATCT"
     
 try:
     from Products.CMFPlone.migrations.v2_1 import rcs
@@ -28,45 +25,36 @@ except ImportError:
     PLONE21 = False
 else:
     PLONE21 = True
-if PLONE21:
-    print "Plone 2.1"
 
 if HAS_ATCT and not PLONE21:
     from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
-print "\n\n\n\n"
+def get_ATCT_TYPES(self):
+    result = {}
+    if PLONE21:
+        result["Document"] = "Document"
+        result["Image"] = "Image"
+        result["File"] = "File"
+        result["Event"] = "Event"
+        result["NewsItem"] = "News Item"
+        result["Topic"] = "Topic"
+        result["Link"] = "Link"
+        result["Favorite"] = "Favorite"
+    elif HAS_ATCT and not isSwitchedToATCT(self):
+        result["Document"] = "ATDocument"
+        result["Image"] = "ATImage"
+        result["File"] = "ATFile"
+        result["Event"] = "ATEvent"
+        result["NewsItem"] = "ATNewsItem"
+        result["Topic"] = "ATTopic"
+        result["Link"] = "ATLink"
+        result["Favorite"] = "ATFavorite"
+    return result
 
-if PLONE21:
-    DOCUMENT_TYPE = "Document"
-    IMAGE_TYPE = "Image"
-    FILE_TYPE = "File"
-    EVENT_TYPE = "Event"
-    NEWS_TYPE = "News Item"
-    TOPIC_TYPE = "Topic"
-    LINK_TYPE = "Link"
-    FAVORITE_TYPE = "Favorite"
-elif HAS_ATCT:
-    if isSwitchedToATCT():
-        DOCUMENT_TYPE = "Document"
-        IMAGE_TYPE = "Image"
-        FILE_TYPE = "File"
-        EVENT_TYPE = "Event"
-        NEWS_TYPE = "News Item"
-        TOPIC_TYPE = "Topic"
-        LINK_TYPE = "Link"
-        FAVORITE_TYPE = "Favorite"
-    else:    
-        DOCUMENT_TYPE = "ATDocument"
-        IMAGE_TYPE = "ATImage"
-        FILE_TYPE = "ATFile"
-        EVENT_TYPE = "ATEvent"
-        NEWS_TYPE = "ATNewsItem"
-        TOPIC_TYPE = "ATTopic"
-        LINK_TYPE = "ATLink"
-        FAVORITE_TYPE = "ATFavorite"
-
-ATCT_TYPES = [DOCUMENT_TYPE, LINK_TYPE, EVENT_TYPE, TOPIC_TYPE, 
-              IMAGE_TYPE, FILE_TYPE, NEWS_TYPE]
+def get_COMPOSABLES_ATCT(self):
+    result = get_ATCT_TYPES(self)
+    del result["Favorite"]
+    return result.values()
 
 PROJECTNAME = 'CompositePack'
 ADD_CONTENT_PERMISSION = 'Add CompositePack content'

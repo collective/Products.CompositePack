@@ -49,6 +49,15 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
     def beforeTearDown(self):
         CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
 
+    def test_utf8SearchableText(self):
+        # verify that change in SearchablText
+        self.portal.invokeFactory('Navigation Page', 'nav')
+        nav = self.portal.nav
+        utf8Txt = 'UTF8 ÅÄÖ'
+        nav.setTitle( utf8Txt)
+        nav.setDescription( 'description' )
+        self.failUnlessEqual( nav.SearchableText(), utf8Txt+' description')
+        
     def test_navigation_page_rename(self):
         targets = []
         for i in range(0, 4):

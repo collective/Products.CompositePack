@@ -40,12 +40,12 @@ class NavigationPage(BaseContent):
         """Return text for indexing"""
         # Want title, description, and all Title and fragment content.
         # Fragments are converted from HTML to plain text.
-        texts = [self.title, self.description]
+        texts = [self.Title(), self.Description()]
         if getattr(aq_base(self.cp_container), 'titles', None) is not None:
-	    titles = self.cp_container.titles.objectValues()
-	    for o in titles:
-		if hasattr(o, 'ContainerSearchableText'):
-		    texts.append(o.ContainerSearchableText())
+            titles = self.cp_container.titles.objectValues()
+            for o in titles:
+        	      if hasattr(o, 'ContainerSearchableText'):
+        		    texts.append(o.ContainerSearchableText())
 
         return " ".join(texts)
 

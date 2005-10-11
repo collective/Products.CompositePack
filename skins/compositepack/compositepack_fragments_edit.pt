@@ -13,6 +13,9 @@
 #archetypes-fieldname-content .formHelp {
  display:none;
 }
+#kupu-editor-content select.kupu-tb-styles {
+  display: inline;
+}
 </style>
 </metal:topslot>
 

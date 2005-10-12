@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<styles>
-  <style>
-    <selector>.addTitle</selector>
-    <event>click</event>
-    <action>addTitle</action>
-  </style>
-</styles>

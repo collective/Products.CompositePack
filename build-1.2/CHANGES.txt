@@ -1,0 +1,4 @@
+* fix SearchableText at creation time
+
+* fix package so that it can load when ATContentTypes is not installed
+

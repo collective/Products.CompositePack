@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+XSL transformation from Kupu Library XML to HTML for the select library
+drawer.
+
+$Id$
+-->
+
+<!-- 
+
+  Depends on kupu 
+
+  Compatible with ngo-stable revision 5414 
+
+-->
+
+<xsl:stylesheet
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+  xmlns="http://www.w3.org/1999/xhtml"  version="1.0">
+
+  <xsl:import
+    href="drawer.xsl"
+    tal:attributes="href context/kupudrawers/drawer.xsl/absolute_url"
+    />
+
+  <xsl:template match="resource|collection" mode="properties">
+     <xsl:variable name="ext" select="substring(icon, string-length(icon)-13)" />
+     <table>
+       <tr>
+         <td>
+           <strong>Title</strong><br />
+           <xsl:value-of select="title" />
+         </td>
+       </tr>
+        <xsl:choose>
+            <xsl:when test="$ext='image_icon.gif'">
+              <tr>
+               <td>
+                <img src="{uri}" title="{title}" height="120" alt="{title}" />
+               </td>
+              </tr>
+            </xsl:when>
+            <xsl:when test="preview">
+                <tr>
+                    <td>
+                        <strong i18n:translate="imagedrawer_upload_preview_label">Preview</strong>
+                        <br/>
+                        <img src="{preview}" title="{title}" height="{height}"
+                            width="{width}" alt="{title}"/>
+                    </td>
+                </tr>
+            </xsl:when>
+        </xsl:choose>
+       <tr>
+         <td>
+           <strong>Description</strong><br />
+           <xsl:value-of select="description" />
+         </td>
+       </tr>
+     </table>
+  </xsl:template>
+  <xsl:template name="drawer-title">Select content</xsl:template>
+</xsl:stylesheet>

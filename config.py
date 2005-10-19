@@ -18,7 +18,7 @@ try:
     HAS_ATCT = True
 except ImportError:
     HAS_ATCT = False
-    
+
 try:
     from Products.CMFPlone.migrations.v2_1 import rcs
 except ImportError:
@@ -27,7 +27,19 @@ else:
     PLONE21 = True
 
 if HAS_ATCT and not PLONE21:
-    from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
+    try:
+        from Products.ATContentTypes.ATNewsItem import ATNewsItem
+    except ImportError:
+        from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
+    def isSwitchedToATCT(portal):
+        pt = getToolByName(portal, 'portal_types')
+        news = pt.getTypeInfo('News Item')
+        if news.Metatype() == ATNewsItem.meta_type:
+            return 1
+        else:
+            return 0
+
+            
 
 def get_ATCT_TYPES(self):
     result = {}

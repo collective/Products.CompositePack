@@ -45,7 +45,7 @@ if HAS_ATCT and not PLONE21:
 
 def get_ATCT_TYPES(self):
     result = {}
-    if PLONE21:
+    if PLONE21 or (HAS_ATCT and isSwitchedToATCT(self)):
         result["Document"] = "Document"
         result["Image"] = "Image"
         result["File"] = "File"

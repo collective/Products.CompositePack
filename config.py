@@ -26,6 +26,8 @@ except ImportError:
 else:
     PLONE21 = True
 
+from Products.CMFCore.utils import getToolByName
+
 if HAS_ATCT and not PLONE21:
     try:
         from Products.ATContentTypes.ATNewsItem import ATNewsItem

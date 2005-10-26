@@ -9,12 +9,9 @@
    <style>textarea#content { width:95%; height: 300px; }
 .forcekupu { display:none; }
 #archetypes-fieldname-content label,
-#archetypes-fieldname-content select,
+#content_text_format,
 #archetypes-fieldname-content .formHelp {
  display:none;
-}
-#kupu-editor-content select.kupu-tb-styles {
-  display: inline;
 }
 </style>
 </metal:topslot>

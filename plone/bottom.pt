@@ -36,35 +36,35 @@
 <div class="context-menu-header" 
      filter="composite_prepare_target_menu(pd_filter_object)"></div>
 <div i18n:translate="" 
+     tal:condition="not:haveAzax|nothing"
      class="context-menu-item"
      onmouseup="plone_add(event, pd_selected_item)"
      filter="pd_selected_item">Content</div>
-<!--GC remove-->
 <div i18n:translate=""
      tal:condition="haveAzax|nothing"
      class="context-menu-item"
      onmouseup="plone_add_ajax(event, pd_selected_item)"
-     filter="pd_selected_item">Ajax Content</div>
+     filter="pd_selected_item">Content</div>
 <div i18n:translate="label_title"
+     tal:condition="not:haveAzax|nothing"
      i18n:domain="plone"
      class="context-menu-item" 
      onmouseup="plone_add_title(pd_selected_item)"
      filter="pd_selected_item">Title</div>
-<!--GC remove-->
 <div class="context-menu-item" 
      tal:condition="haveAzax|nothing"
      onmouseup="plone_add_ajax_title(pd_selected_item)"
-     filter="pd_selected_item">Ajax Title</div>
+     filter="pd_selected_item">Title</div>
 <div i18n:translate="label_html"
+     tal:condition="not:haveAzax|nothing"
      i18n:domain="plone"
      class="context-menu-item" 
      onmouseup="plone_add_fragment(pd_selected_item)"
      filter="pd_selected_item">HTML</div>
-<!--GC remove-->
 <div class="context-menu-item" 
      tal:condition="haveAzax|nothing"
      onmouseup="plone_add_ajax_fragment(pd_selected_item)"
-     filter="pd_selected_item">Ajax HTML</div>
+     filter="pd_selected_item">HTML</div>
 <div class="separator"></div>
 <div i18n:translate="" 
      class="context-menu-item"

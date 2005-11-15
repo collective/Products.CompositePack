@@ -28,7 +28,7 @@ else:
     PLONE21 = True
 
 try:
-    from Products.azax import AzaxResponse
+    from Products import azax 
     from Products import Five
 except ImportError:
     warnings.warn('CompositePack performance impaired: Five and Azax recommended', DeprecationWarning)

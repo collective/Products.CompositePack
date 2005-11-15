@@ -22,8 +22,8 @@ from Products.CompositePack.config import HAS_ATCT
 from Products.CompositePack.config import PLONE21
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
-if HAS_ATCT and not PLONE21:
-    from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
+#if HAS_ATCT and not PLONE21:
+#    from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
 KUPU_TOOL_ID = PloneKupuLibraryTool.id
 

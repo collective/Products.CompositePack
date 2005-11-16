@@ -66,7 +66,7 @@ target_path) {
         params = params + "&compopage_path=" + this.compopagepath;
         params = params + "&target_id=" + this.target_id;
         params = params + "&uri=" + uri;
-        Azax.notifyServerWithParams(url, params);
+        kukit.notifyServerWithParams(url, params);
     };
 
     this.setPosition = function(e){

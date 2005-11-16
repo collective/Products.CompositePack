@@ -49,7 +49,7 @@ function plone_add_ajax_title(target) {
   params = params + "&compopage_path=" + compopage_path;
   params = params + "&title=" + title;
   params = params + "&target_id=" + id;
-  Azax.notifyServerWithParams(url, params);
+  kukit.notifyServerWithParams(url, params);
 }
 
 function plone_add_ajax_fragment(target) {
@@ -64,7 +64,7 @@ function plone_add_ajax_fragment(target) {
   params = params + "&target_index=" + target_index;
   params = params + "&compopage_path=" + compopage_path;
   params = params + "&target_id=" + id;
-  Azax.notifyServerWithParams(url, params);
+  kukit.notifyServerWithParams(url, params);
 }
 
 function plone_add_fragment(target) {

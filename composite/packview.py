@@ -69,7 +69,7 @@ class PackView(BrowserView):
 
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
-        import pdb; pdb.set_trace() 
+        #import pdb; pdb.set_trace() 
         selector = '#%s' % target_id
         return_object.addAfter(selector, added_text)
         

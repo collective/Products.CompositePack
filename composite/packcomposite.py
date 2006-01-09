@@ -37,6 +37,7 @@ from Products.CompositePack.exceptions import CompositePackError
 from Products.Archetypes.public import *
 from Products.Archetypes.utils import shasattr
 from Products.Archetypes import transaction_note
+from itertools import islice
 
 plone_edit_template = PageTemplateFile('edit_tag.pt', _plone)
 plone_add_target_template = PageTemplateFile('target_tag.pt', _plone)
@@ -73,9 +74,14 @@ class PackSlot(Slot):
         Each group contains an iterator for group_size elements.
         The last group may be padded out with empty strings.
         """
-        elements = list(self.renderIterator(allow_add)) + ['']*(group_size-1)
-        eliter = iter(elements)
-        return zip(*[eliter]*group_size)
+        it = self.renderIterator(allow_add)
+        while 1:
+            row = tuple(islice(it, group_size))
+            if len(row) == group_size:
+                yield row
+            else:
+                yield row + ('',) * (group_size - len(row))
+                break
 
     security.declareProtected(perm_names.view, "renderIterator")
     def renderIterator(self, allow_add=True):

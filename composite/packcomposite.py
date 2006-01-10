@@ -80,7 +80,8 @@ class PackSlot(Slot):
             if len(row) == group_size:
                 yield row
             else:
-                yield row + ('',) * (group_size - len(row))
+                if row:
+                    yield row + ('',) * (group_size - len(row))
                 break
 
     security.declareProtected(perm_names.view, "renderIterator")

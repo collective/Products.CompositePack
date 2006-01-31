@@ -11,17 +11,24 @@ customizable.
 Layouts and viewlets are registered through the composite_tool in ZMI (see
 below how to register them).
 
+Plone versions supported
+========================
+2.0.5
+2.1.1 (might work with 2.1.0 - not tested)
+2.1.2
+
+
 Products required 
 ================= 
 
 CompositePage 0.2 
     http://hathawaymix.org/Software/CompositePage/CompositePage-0.2.tar.gz 
 
-kupu 1.2.1 or later
-    http://kupu.oscom.org/midcom-serveattachmentguid-6b4584286e6cd5bbf2f82f0a83ead0e2/kupu-1.2.1.tar.gz
+with Plone 2.0.5, you also need
 
-Archetypes 1.3.3
-    http://sourceforge.net/project/showfiles.php?group_id=75272&package_id=75683&release_id=322541
+   kupu 1.3.3 or later
+
+   Archetypes 1.3.5
 
 Design view 
 =========== 

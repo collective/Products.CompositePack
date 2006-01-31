@@ -19,10 +19,13 @@ from Products.CompositePack.composite import packcomposite
 from Products.CompositePack.public import BaseContent, registerType
 
 class NavigationPage(BaseContent):
-    """A basic, Archetypes-based Composite Page
+    """A page composed of referenced content
     """
     meta_type = portal_type = 'Navigation Page'
     archetype_name = 'Navigation Page'
+    
+    typeDescription= 'A page composed of content selected manually.'
+    typeDescMsgId  = 'description_edit_navigation_page'
     
     _at_rename_after_creation = True
     

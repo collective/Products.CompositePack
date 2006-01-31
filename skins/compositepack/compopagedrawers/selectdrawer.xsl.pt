@@ -37,7 +37,7 @@ $Id$
            <xsl:value-of select="title" />
          </td>
        </tr>
-       <xsl:if test="/description">
+       <xsl:if test="description != ''">
        <tr class="kupu-linkdrawer-description-row">
          <td>
            <strong i18n:translate="linkdrawer_description_label">Description</strong>

@@ -206,6 +206,7 @@ class PackComposite(Composite, BaseFolderMixin):
        StringField('template_path',
                    accessor='getTemplatePath',
                    mutator='setTemplatePath',
+                   write_permission=CPpermissions.DesignCompo,
                    widget=StringWidget(label='Template Path'))
        ))
 
@@ -335,7 +336,7 @@ class PackComposite(Composite, BaseFolderMixin):
         '''composite container is never catalogued'''
         pass
 
-InitializeClass(PackComposite)
+#InitializeClass(PackComposite)
 registerType(PackComposite, PROJECTNAME)
 
 # methods monkeypatched ClassGen

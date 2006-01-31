@@ -48,7 +48,7 @@ $Id$
        </xsl:if>
      </table>
   </xsl:template>
-  <xsl:template name="drawer-title" 
-                i18n:domain="compositepack" 
-                i18n:translate="select_content">Select content</xsl:template>
+  <xsl:variable name="i18n_drawertitle"
+                i18n:domain="compopack" 
+                i18n:translate="select_content">Select content</xsl:variable>
 </xsl:stylesheet>

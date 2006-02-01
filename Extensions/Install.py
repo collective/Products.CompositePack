@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -85,11 +85,14 @@ def install_tool(self, out):
         ts.registerForType('Navigation Page')
     except AttributeError:
         raise RuntimeError, "ts=%r" % ts
-    ts.setDefaultForType('Navigation Page')
-    tool.setDefaultLayout('two_slots')
 
     ts = tool.registerLayout('three_slots', 'Three slots', 'three_slots')
     ts.registerForType('Navigation Page')
+
+    ts = tool.registerLayout('two_columns', 'Two columns', 'two_columns')
+    ts.registerForType('Navigation Page')
+    ts.setDefaultForType('Navigation Page')
+    tool.setDefaultLayout('two_columns')
 
     if INSTALL_DEMO_TYPES:
         ds = tool.registerLayout('document_sidebar_view',
@@ -98,9 +101,9 @@ def install_tool(self, out):
         ds.registerForType('Composite Document')
         ds.setDefaultForType('Composite Document')
 
-    bv = tool.registerViewlet('default_viewlet',
-                         'Basic viewlet (getId)',
-                         'default_viewlet')
+    bv = tool.registerViewlet('title_description_with_link',
+                         'Title with description',
+                         'title_description_with_link')
     tool.registerViewletForDefaultSetup(bv)
     tool.registerViewlet('link_viewlet',
                          'Link Only',

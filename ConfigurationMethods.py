@@ -1,3 +1,15 @@
+##############################################################################
+#
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
+#
+# This software is distributed under the terms of the Zope Public
+# License (ZPL) v2.1. See COPYING.txt for more information.
+#
+##############################################################################
+"""
+$Id: CPpermissions.py 11303 2005-08-23 16:38:33Z godchap $
+"""
+
 from StringIO import StringIO
 from zLOG import INFO, ERROR
 

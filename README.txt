@@ -13,9 +13,11 @@ below how to register them).
 
 Plone versions supported
 ========================
-2.0.5
-2.1.1 (might work with 2.1.0 - not tested)
-2.1.2
+    2.0.5
+
+    2.1.1 (might work with 2.1.0 - not tested)
+
+    2.1.2
 
 
 Products required 
@@ -200,8 +202,7 @@ Registering a layout
 
 - Go to the "composite_tool" in Plone root (i.e. in \manage),
 
-- Inside the composite tool, go into the "layouts" folder and add a
-CompositePack Layout using the button at the top.
+- Inside the composite tool, go into the "layouts" folder and add a CompositePack Layout using the button at the top.
 
     The CompositePack Layout has three fields :
 

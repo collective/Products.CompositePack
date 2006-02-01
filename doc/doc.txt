@@ -36,13 +36,15 @@ The layouts folder holds default layouts :
 >>> ids = layouts.objectIds()
 >>> ids.sort()
 >>> ids
-['three_slots', 'two_slots']
+['three_slots', 'two_columns', 'two_slots']
 
 The viewlets folder holds default viewlets :
 >>> ids = viewlets.objectIds()
 >>> ids.sort()
 >>> ids
-['default_viewlet', 'fragment_viewlet', 'image_caption_viewlet', 'image_title_viewlet', 'image_viewlet', 'link_viewlet', 'title_date_viewlet', 'title_viewlet']
+['fragment_viewlet', 'image_caption_viewlet', 'image_title_viewlet',
+'image_viewlet', 'link_viewlet', 'title_date_viewlet',
+'title_description_with_link', 'title_viewlet']
 
 CompositePack installs a content type :
 >>> pt = plone.portal_types
@@ -63,7 +65,7 @@ True
 
 Navigation Page has a default layout : 
 >>> tool.getDefaultLayoutForType('Navigation Page').getId()
-'two_slots'
+'two_columns'
 
 A few content types are registered as composables.
 Instances of those types are addable to composite types through the design view.

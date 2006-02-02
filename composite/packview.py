@@ -1,12 +1,7 @@
+from Products.azax import AzaxBaseView
 
-from Products.Five import BrowserView
 
-from Products.azax.azaxresponse import AzaxResponse
-
-class PackView(BrowserView):
-
-    def __init__(self, context, request):
-        BrowserView.__init__(self, context, request)
+class PackView(AzaxBaseView):
 
     def createCompositeElement(self, destination, target_index):
         factory = destination.manage_addProduct['CompositePack'].manage_addElement
@@ -65,17 +60,16 @@ class PackView(BrowserView):
         uid = new_title.UID()
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
 
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         #import pdb; pdb.set_trace() 
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.addAfter(selector, added_text)
         
         code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        self.executeCode(selector, code)
+        return self.render()
 
     def addFragment(self):
         request = self.request
@@ -96,16 +90,15 @@ class PackView(BrowserView):
         uid = new_fragment.UID()
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
 
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.addAfter(selector, added_text)
         
         code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        self.executeCode(selector, code)
+        return self.render()
 
     def addContent(self):
         request = self.request
@@ -126,15 +119,14 @@ class PackView(BrowserView):
         uid = uri.split('/')[-1]
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
 
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.addAfter(selector, added_text)
         
         code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        self.executeCode(selector, code)
+        return self.render()
 
     

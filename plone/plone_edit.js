@@ -158,8 +158,8 @@ function plone_setup_viewlet_menu_item(menuItem, current_id, viewlet_id, viewlet
 
 function plone_updateAfterAdd(results)
 {
-  plone_setUpSlotElement(results[0]);
-  plone_setUpSlotTarget(results[2]);
+  plone_setUpSlotElement(results[1]);
+  plone_setUpSlotTarget(results[3]);
 }
 
 function plone_setUpSlotElement(node) {

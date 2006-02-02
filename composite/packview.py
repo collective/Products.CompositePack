@@ -67,7 +67,7 @@ class PackView(AzaxBaseView):
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
+        code = 'plone_updateAfterAdd(kukit.getLastResults());'
         self.executeCode(selector, code)
         return self.render()
 
@@ -96,7 +96,7 @@ class PackView(AzaxBaseView):
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
+        code = 'plone_updateAfterAdd(kukit.getLastResults());'
         self.executeCode(selector, code)
         return self.render()
 
@@ -125,7 +125,7 @@ class PackView(AzaxBaseView):
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
+        code = 'plone_updateAfterAdd(kukit.getLastResults());'
         self.executeCode(selector, code)
         return self.render()
 

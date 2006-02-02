@@ -16,10 +16,12 @@ $Id$
 -->
 
 <xsl:stylesheet
+  version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:tal="http://xml.zope.org/namespaces/tal"
+  xmlns="http://www.w3.org/1999/xhtml"
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
-  xmlns="http://www.w3.org/1999/xhtml"  version="1.0">
+  i18n:domain="kupu">
 
   <xsl:import
     href="drawer.xsl"
@@ -29,38 +31,25 @@ $Id$
   <xsl:template match="resource|collection" mode="properties">
      <xsl:variable name="ext" select="substring(icon, string-length(icon)-13)" />
      <table>
-       <tr>
+       <tr class="kupu-linkdrawer-title-row">
          <td>
-           <strong>Title</strong><br />
+           <strong i18n:translate="linkdrawer_title_label">Title</strong>
+           <br />
            <xsl:value-of select="title" />
          </td>
        </tr>
-        <xsl:choose>
-            <xsl:when test="$ext='image_icon.gif'">
-              <tr>
-               <td>
-                <img src="{uri}" title="{title}" height="120" alt="{title}" />
-               </td>
-              </tr>
-            </xsl:when>
-            <xsl:when test="preview">
-                <tr>
-                    <td>
-                        <strong i18n:translate="imagedrawer_upload_preview_label">Preview</strong>
-                        <br/>
-                        <img src="{preview}" title="{title}" height="{height}"
-                            width="{width}" alt="{title}"/>
-                    </td>
-                </tr>
-            </xsl:when>
-        </xsl:choose>
-       <tr>
+       <xsl:if test="description != ''">
+       <tr class="kupu-linkdrawer-description-row">
          <td>
-           <strong>Description</strong><br />
+           <strong i18n:translate="linkdrawer_description_label">Description</strong>
+           <br />
            <xsl:value-of select="description" />
          </td>
        </tr>
+       </xsl:if>
      </table>
   </xsl:template>
-  <xsl:template name="drawer-title">Select content</xsl:template>
+  <xsl:variable name="i18n_drawertitle"
+                i18n:domain="compopack" 
+                i18n:translate="select_content">Select content</xsl:variable>
 </xsl:stylesheet>

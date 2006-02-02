@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -19,10 +19,15 @@ from Products.CompositePack.composite import packcomposite
 from Products.CompositePack.public import BaseContent, registerType
 
 class NavigationPage(BaseContent):
-    """A basic, Archetypes-based Composite Page
-    """
+    """A page composed of content selected manually."""
     meta_type = portal_type = 'Navigation Page'
     archetype_name = 'Navigation Page'
+    
+    typeDescription= 'A page composed of content selected manually.'
+    typeDescMsgId  = 'description_edit_navigation_page'
+    
+    _at_rename_after_creation = True
+    
     schema = BaseSchema.copy()
     # Move the description field into the edit view.
     schema['description'].isMetadata = False
@@ -37,12 +42,12 @@ class NavigationPage(BaseContent):
         """Return text for indexing"""
         # Want title, description, and all Title and fragment content.
         # Fragments are converted from HTML to plain text.
-        texts = [self.title, self.description]
+        texts = [self.Title(), self.Description()]
         if getattr(aq_base(self.cp_container), 'titles', None) is not None:
-	    titles = self.cp_container.titles.objectValues()
-	    for o in titles:
-		if hasattr(o, 'ContainerSearchableText'):
-		    texts.append(o.ContainerSearchableText())
+            titles = self.cp_container.titles.objectValues()
+            for o in titles:
+        	      if hasattr(o, 'ContainerSearchableText'):
+        		    texts.append(o.ContainerSearchableText())
 
         return " ".join(texts)
 

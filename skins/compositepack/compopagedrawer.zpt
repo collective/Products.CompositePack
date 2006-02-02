@@ -9,13 +9,6 @@
     
     
 <h2>Drawer Test</h2>
-<!-- 
-
-  Depends on kupu 
-
-  Compatible with ngo-stable revision 5414
-
--->
 
 <div metal:define-macro="compopagedrawer">
         <link href="#" tal:attributes="href
@@ -30,7 +23,7 @@
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/sarissa.js"> </script>
         <script type="text/javascript"
-                tal:condition="portal/sarissa_ieemu_xpath.js"
+                tal:condition="portal/sarissa_ieemu_xpath.js | nothing"
                 tal:attributes="src string:${portal_url}/sarissa_ieemu_xpath.js"> </script>
         <script type="text/javascript"
                 tal:attributes="src string:${portal_url}/kupuhelpers.js"> </script>

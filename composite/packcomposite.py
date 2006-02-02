@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -242,6 +242,7 @@ class PackComposite(Composite, BaseFolderMixin):
        StringField('template_path',
                    accessor='getTemplatePath',
                    mutator='setTemplatePath',
+                   write_permission=CPpermissions.DesignCompo,
                    widget=StringWidget(label='Template Path'))
        ))
 
@@ -262,6 +263,10 @@ class PackComposite(Composite, BaseFolderMixin):
         if getattr(aq_base(self), 'titles', None) is None:
             f = PackTitleCollection('titles')
             self._setObject(f.getId(), f)
+
+    def generateSlots(self):
+        if self.getTemplatePath():
+            Composite.generateSlots(self)
 
     manage_afterAdd = BaseFolderMixin.manage_afterAdd
     manage_beforeDelete = BaseFolderMixin.manage_beforeDelete
@@ -372,11 +377,14 @@ class PackComposite(Composite, BaseFolderMixin):
         '''composite container is never catalogued'''
         pass
 
+    def reindexObject(self, idxs=[]):
+        '''composite container is never catalogued'''
+        pass
+
     def unindexObject(self):
         '''composite container is never catalogued'''
         pass
 
-InitializeClass(PackComposite)
 registerType(PackComposite, PROJECTNAME)
 
 # methods monkeypatched ClassGen

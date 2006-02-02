@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -22,6 +22,10 @@ from Products.CompositePack import design, patch
 from Products.CMFCore import utils as cmf_utils
 from Products.CMFCore.DirectoryView import registerDirectory
 from Products.CompositePage import tool as base_tool
+
+from Products.CMFPlone import MigrationTool
+
+from Products.CompositePack.ConfigurationMethods import GeneralSetup
 
 registerDirectory('skins', GLOBALS)
 try:
@@ -76,3 +80,4 @@ def initialize(context):
                        icon=TOOL_ICON
                    ).initialize(context)
 
+    MigrationTool.registerSetupWidget(GeneralSetup)

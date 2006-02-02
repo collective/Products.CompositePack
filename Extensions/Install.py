@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -15,15 +15,14 @@ from cStringIO import StringIO
 from Products.Archetypes.public import listTypes
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
 from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
-from Products.CompositePack.config import COMPOSABLE, ATCT_TYPES
-from Products.CompositePack.config import MIGRATED_ATCT_TYPES
+from Products.CompositePack.config import COMPOSABLE
+from Products.CompositePack.config import get_COMPOSABLES_ATCT
+from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
 from Products.CompositePack.config import HAS_ATCT
 from Products.CompositePack.config import PLONE21
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
-#if HAS_ATCT and not PLONE21:
-#    from Products.ATContentTypes.Extensions.toolbox import isSwitchedToATCT
 
 KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
@@ -76,13 +75,8 @@ def install_tool(self, out):
         tool.registerAsComposite('Composable Document')
     tool.registerAsComposite('Navigation Page')
 
-    if PLONE21:
-	tool.registerAsComposable(MIGRATED_ATCT_TYPES)
-    elif HAS_ATCT:
-        if isSwitchedToATCT(self):
-	    tool.registerAsComposable(MIGRATED_ATCT_TYPES)
-	else:
-	    tool.registerAsComposable(ATCT_TYPES)
+    if HAS_ATCT:
+        tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
     
@@ -91,11 +85,14 @@ def install_tool(self, out):
         ts.registerForType('Navigation Page')
     except AttributeError:
         raise RuntimeError, "ts=%r" % ts
-    ts.setDefaultForType('Navigation Page')
-    tool.setDefaultLayout('two_slots')
 
     ts = tool.registerLayout('three_slots', 'Three slots', 'three_slots')
     ts.registerForType('Navigation Page')
+
+    ts = tool.registerLayout('two_columns', 'Two columns', 'two_columns')
+    ts.registerForType('Navigation Page')
+    ts.setDefaultForType('Navigation Page')
+    tool.setDefaultLayout('two_columns')
 
     if INSTALL_DEMO_TYPES:
         ds = tool.registerLayout('document_sidebar_view',
@@ -104,9 +101,9 @@ def install_tool(self, out):
         ds.registerForType('Composite Document')
         ds.setDefaultForType('Composite Document')
 
-    bv = tool.registerViewlet('default_viewlet',
-                         'Basic viewlet (getId)',
-                         'default_viewlet')
+    bv = tool.registerViewlet('title_description_with_link',
+                         'Title with description',
+                         'title_description_with_link')
     tool.registerViewletForDefaultSetup(bv)
     tool.registerViewlet('link_viewlet',
                          'Link Only',
@@ -133,17 +130,30 @@ def install_tool(self, out):
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
                             'fragment_viewlet')
-    if PLONE21 or HAS_ATCT and isSwitchedToATCT(self):
-	IMAGE_TYPE = 'Image'
-    else:
-	IMAGE_TYPE = 'ATImage'
-    if PLONE21 or HAS_ATCT:
-	tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
-					    'link_viewlet',
-					    'image_title_viewlet',
-					    'image_caption_viewlet'],
-				'image_viewlet')
+    if HAS_ATCT:
+       IMAGE_TYPE = get_ATCT_TYPES(self)['Image']
+       tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
+                                            'link_viewlet',
+                                            'image_title_viewlet',
+                                            'image_caption_viewlet'],
+                                            'image_viewlet')
     out.write("CompositePack Tool Installed\n")
+
+def setup_portal_factory(self, out):
+    factory = getToolByName(self, 'portal_factory')
+    types = factory.getFactoryTypes().keys()
+    if 'Navigation Page' not in types:
+        out.write('Navigation Page setup in portal_factory\n')
+        types.append('Navigation Page')
+        factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
+    if 'Navigation Titles' not in types:
+        out.write('Navigation Titles setup in portal_factory\n')
+        types.append('Navigation Titles')
+        factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
+    if 'Navigation Page HTML' not in types:
+        out.write('Navigation Page HTML setup in portal_factory\n')
+        types.append('Navigation Page HTML')
+        factory.manage_setPortalFactoryTypes(listOfTypeIds = types)
 
 def uninstall_tool(self, out):
     if hasattr(self, TOOL_ID):
@@ -218,6 +228,8 @@ def install(self):
     install_tool(self, out)
     install_customisation(self, out)
     install_fixuids(self, out)
+    if PLONE21:
+        setup_portal_factory(self, out)
 
     out.write("Successfully installed %s.\n" % PROJECTNAME)
     return out.getvalue()

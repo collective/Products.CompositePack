@@ -127,6 +127,10 @@ img.slot-element-grip {
     position: relative;
 }
 
+.contentActions li .menuPosition a {
+    border: 0;
+}
+
 div.slot_element_highlighted img.slot-element-grip {
   border: 1px solid &dtml-contentViewBorderColor;;
   background-color: &dtml-contentViewBackgroundColor;;

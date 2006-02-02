@@ -1,6 +1,6 @@
 ##############################################################################
 #
-# Copyright (c) 2004 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -23,6 +23,8 @@ class Titles(BaseContentMixin):
     archetype_name = 'Navigation Titles'
     global_allow = 0
 
+    _at_rename_after_creation = True
+    
     idfield = MinimalSchema['id'].copy()
     idfield.widget.visible = {'edit':'hidden', 'view':'invisible'}
 

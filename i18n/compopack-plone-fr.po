@@ -13,25 +13,11 @@ msgstr ""
 "Language-Code: fr\n"
 "Language-Name: French\n"
 "Preferred-Encodings: utf-8 latin1\n"
-"Domain: compopack\n"
+"Domain: plone\n"
 "X-Is-Fallback-For: fr-be fr-ca fr-lu fr-mc fr-ch\n"
-msgid "Select viewlet"
-msgstr "Choisir une vue"
+msgid "Navigation Page"
+msgstr "Page de navigation"
 
-msgid "Content"
-msgstr "Contenu"
+msgid "A page composed of content selected manually."
+msgstr "Une page composée de contenu sélectionné manuellement."
 
-msgid "Close menu"
-msgstr "Fermer le menu"
-
-msgid "Add item"
-msgstr "Ajouter"
-
-msgid "Edit item"
-msgstr "Modifier"
-
-msgid "label_layout"
-msgstr "Layout:"
-
-msgid "select_content"
-msgstr "Selectionner du contenu"

@@ -63,7 +63,6 @@ class PackView(AzaxBaseView):
 
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
-        #import pdb; pdb.set_trace() 
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
@@ -115,9 +114,9 @@ class PackView(AzaxBaseView):
         uri = request.uri
 
         new_el = self.createCompositeElement(destination, target_index)
-        
-        uid = uri.split('/')[-1]
-        new_el.setTarget(uid)
+        target_path = '/'.join(uri.split('/')[4:])
+        target = portal.restrictedTraverse(target_path)
+        new_el.setTarget(target.UID())
 
 
         added_text = destination.getEditingViewlet(new_el)

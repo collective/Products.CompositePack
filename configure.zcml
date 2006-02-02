@@ -59,6 +59,14 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="deleteElement"
+      name="ajaxDeleteElement"
+      permission="zope2.View"
+      />
+
   <browser:resource
     file="browser/pack.azax"
     name="pack.azax"

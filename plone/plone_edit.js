@@ -13,6 +13,18 @@ function plone_add(e, target) {
   draweropen(e, target_path, target_index);
 }
 
+function plone_delete_ajax(selected_items) {
+  var f, sources;
+  if (!selected_items)
+    return;
+  var form = document.forms.modify_composites;
+  var compopage_path = form.elements.composite_path.value;
+  sources = composite_getsources(selected_items);
+  url = compopage_path + '/cp_container/ajaxDeleteElement';
+  params = "uri=" + sources;
+  kukit.notifyServerWithParams(url, params);
+}
+
 function plone_add_ajax(e, target) {
   // Note that target_index is also available.
   var target_path = target.getAttribute("target_path");
@@ -162,6 +174,22 @@ function plone_updateAfterAdd(results)
   plone_setUpSlotTarget(results[3]);
 }
 
+function ajax_composite_move(selected_items, target_node) {
+  alert('ajax drop');
+  var form = document.forms.modify_composites;
+  var compopage_path = form.elements.composite_path.value;
+  sources = composite_getsources(selected_items);
+  var url = compopage_path + '/cp_container/ajaxMoveElement';
+  sources = composite_getsources(selected_items);
+  var params = "uri=" + sources;
+  var i = target_node.getAttribute("target_index");
+  params = params + "&target_index=" + i;
+  var path = target_node.getAttribute("target_path");
+  params = params + "&target_path=" + paths;
+  kukit.notifyServerWithParams(url, params);
+}
+
+
 function plone_setUpSlotElement(node) {
     setUpSlotElement(node);
     node.onmouseout = function() {
@@ -174,6 +202,7 @@ function plone_setUpSlotElement(node) {
             pd_highlight(node, 1);
         };
     };
+    pd_setupDragUI(node, ajax_composite_move, composite_checkmove);
 }
 
 pd_node_setup['slot_element'] = plone_setUpSlotElement;

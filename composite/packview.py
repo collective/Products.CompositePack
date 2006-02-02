@@ -7,7 +7,6 @@ class PackView(AzaxBaseView):
         factory = destination.manage_addProduct['CompositePack'].manage_addElement
 
         new_id = self.context.generateUniqueIdForCSS()
-#        new_id = ''.join(new_id.split('.'))
         new_id = factory(id=new_id)
         destination.moveObjectToPosition(new_id, int(target_index))
         new_el = getattr(destination, new_id)
@@ -36,9 +35,26 @@ class PackView(AzaxBaseView):
             position = 0
         else:
             position = destination.getObjectPosition(element_id) + 1
-        print position
         return position
     
+    def deleteElement(self):
+        request = self.request
+#        import pdb; pdb.set_trace() 
+        uri = request.uri
+        parts = uri.split('/')
+        slot_path = '/'.join(parts[2:-1])
+        
+        element_id = parts[-1]
+        
+        portal = self.context.portal_url.getPortalObject()
+        slot = portal.restrictedTraverse(slot_path)
+        slot.manage_delObjects([element_id])
+
+        selector = '#%s_%s' % (slot.getId(), element_id)
+        self.removePreviousSibling(selector)
+        self.removeNode(selector)
+        return self.render()
+        
     def addTitle(self):
         request = self.request
 

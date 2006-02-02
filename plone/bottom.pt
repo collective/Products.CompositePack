@@ -18,6 +18,11 @@
      i18n:domain="plone"
      class="context-menu-item" onmouseup="composite_delete(pd_selected_items)"
      filter="pd_selected_items">Delete</div>
+<div i18n:translate=""
+     i18n:domain="plone"
+     class="context-menu-item" 
+     onmouseup="plone_delete_ajax(pd_selected_items)"
+     filter="pd_selected_items">Ajax Delete</div>
 <div class="separator"></div>
 <div class="context-menu-skin"
      header_title="Select viewlet"

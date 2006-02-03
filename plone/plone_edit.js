@@ -175,7 +175,6 @@ function plone_updateAfterAdd(results)
 }
 
 function ajax_composite_move(selected_items, target_node) {
-  alert('ajax drop');
   var form = document.forms.modify_composites;
   var compopage_path = form.elements.composite_path.value;
   sources = composite_getsources(selected_items);
@@ -185,7 +184,7 @@ function ajax_composite_move(selected_items, target_node) {
   var i = target_node.getAttribute("target_index");
   params = params + "&target_index=" + i;
   var path = target_node.getAttribute("target_path");
-  params = params + "&target_path=" + paths;
+  params = params + "&target_path=" + path;
   kukit.notifyServerWithParams(url, params);
 }
 

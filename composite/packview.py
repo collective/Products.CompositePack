@@ -37,9 +37,14 @@ class PackView(AzaxBaseView):
             position = destination.getObjectPosition(element_id) + 1
         return position
     
+    def calculateIdFromPosition(self, destination, position):
+        if position == 0:
+            return 'cp_top'
+        else:
+            return destination.objectIds()[position-1]
+    
     def deleteElement(self):
         request = self.request
-#        import pdb; pdb.set_trace() 
         uri = request.uri
         parts = uri.split('/')
         slot_path = '/'.join(parts[2:-1])
@@ -53,6 +58,48 @@ class PackView(AzaxBaseView):
         selector = '#%s_%s' % (slot.getId(), element_id)
         self.removePreviousSibling(selector)
         self.removeNode(selector)
+        return self.render()
+        
+    def moveElement(self):
+        #import pdb; pdb.set_trace() 
+        portal = self.context.portal_url.getPortalObject()
+
+        request = self.request
+        target_index = int(request.target_index)
+        
+        uri = request.uri
+        parts = uri.split('/')
+        source_slot_path = '/'.join(parts[2:-1])
+        source_element_id = parts[-1]
+        source_slot = portal.restrictedTraverse(source_slot_path)
+        
+        target_path = request.target_path
+        parts = target_path.split('/')
+        
+        target_slot_path = '/'.join(parts[2:])
+        target_slot = portal.restrictedTraverse(target_slot_path)
+        target_element_id = self.calculateIdFromPosition(target_slot,
+            target_index) 
+        cpt = portal.restrictedTraverse('composite_tool')
+        cpt.moveAndDelete(uri, target_path, target_index)
+        
+        node_id = '%s_%s' % (source_slot.getId(), source_element_id)
+        node_css = '#%s' % node_id
+        node_xpath = '//DIV[@id="%s"]' % node_id
+        previous_node_xpath = (
+            '//DIV[@id="%s"]/preceding-sibling::DIV[position()=1]' % node_id )
+        previous_node_selector = self.getXpathSelector(previous_node_xpath)
+        target_id = '%s_%s' % (target_slot.getId(), 
+           target_element_id)
+        self.setAttribute(previous_node_selector, 'id', 'kukit_previous')
+        self.moveNodeAfter(previous_node_selector, target_id)
+        
+        node_new_id = '%s_%s' % (target_slot.getId(), source_element_id) 
+        node_new_css = '#%s' % node_new_id
+        self.setAttribute(node_css, 'id', node_new_id)
+        self.setAttribute(node_new_css, 'target_index', target_index+1)
+        self.moveNodeAfter(node_new_css, 'kukit_previous')
+
         return self.render()
         
     def addTitle(self):

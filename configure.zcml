@@ -67,6 +67,14 @@
       permission="zope2.View"
       />
 
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="moveElement"
+      name="ajaxMoveElement"
+      permission="zope2.View"
+      />
+
   <browser:resource
     file="browser/pack.azax"
     name="pack.azax"

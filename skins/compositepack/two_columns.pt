@@ -25,6 +25,19 @@
       string:${context/absolute_url}/cp_container/++resource++MochiKit.js;"
       src="++resource++MochiKit.js">
     </script>
+    <!-- ajaxslt-->
+    <script type="text/javascript"
+      tal:attributes="src
+      string:${context/absolute_url}/cp_container/++resource++ajaxslt_misc.js;"
+      src="++resource++ajaxslt_misc.js">
+    </script>
+    <script type="text/javascript"
+      tal:attributes="src string:${context/absolute_url}/cp_container/++resource++ajaxslt_dom.js;" src="++resource++ajaxslt_dom.js">
+    </script>
+    <script type="text/javascript"
+      tal:attributes="src string:${context/absolute_url}/cp_container/++resource++ajaxslt_xpath.js;"
+      src="++resource++ajaxslt_xpath.js">
+    </script>
     <tal:comment replace="nothing">redefine template_id is needed to fix "design" tab highlight</tal:comment>
 </tal:template_id>
 

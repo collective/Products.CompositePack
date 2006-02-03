@@ -16,13 +16,15 @@
 <div class="separator"></div>
 <div i18n:translate="" 
      i18n:domain="plone"
+     tal:condition="not:haveAzax|nothing"
      class="context-menu-item" onmouseup="composite_delete(pd_selected_items)"
      filter="pd_selected_items">Delete</div>
 <div i18n:translate=""
      i18n:domain="plone"
+     tal:condition="haveAzax|nothing"
      class="context-menu-item" 
      onmouseup="plone_delete_ajax(pd_selected_items)"
-     filter="pd_selected_items">Ajax Delete</div>
+     filter="pd_selected_items">Delete</div>
 <div class="separator"></div>
 <div class="context-menu-skin"
      header_title="Select viewlet"

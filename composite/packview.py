@@ -78,8 +78,9 @@ class PackView(AzaxBaseView):
         
         target_slot_path = '/'.join(parts[2:])
         target_slot = portal.restrictedTraverse(target_slot_path)
-        target_element_id = self.calculateIdFromPosition(target_slot,
+        target_node_id = self.calculateIdFromPosition(target_slot,
             target_index) 
+        target_node_css = '#%s_%s' % (target_slot.getId(), target_node_id)
         cpt = portal.restrictedTraverse('composite_tool')
         cpt.moveAndDelete(uri, target_path, target_index)
         
@@ -89,17 +90,20 @@ class PackView(AzaxBaseView):
         previous_node_xpath = (
             '//DIV[@id="%s"]/preceding-sibling::DIV[position()=1]' % node_id )
         previous_node_selector = self.getXpathSelector(previous_node_xpath)
-        target_id = '%s_%s' % (target_slot.getId(), 
-           target_element_id)
-        self.setAttribute(previous_node_selector, 'id', 'kukit_previous')
-        self.moveNodeAfter(previous_node_selector, target_id)
-        
-        node_new_id = '%s_%s' % (target_slot.getId(), source_element_id) 
-        node_new_css = '#%s' % node_new_id
-        self.setAttribute(node_css, 'id', node_new_id)
-        self.setAttribute(node_new_css, 'target_index', target_index+1)
-        self.moveNodeAfter(node_new_css, 'kukit_previous')
+        self.removeNode(previous_node_selector)
+        node_selector = self.getXpathSelector(node_xpath)
+        self.removeNode(node_selector)
 
+        moved_element = target_slot.restrictedTraverse(source_element_id)
+        
+        added_text = target_slot.getEditingViewlet(moved_element)
+        added_text = (added_text +
+            target_slot.getTargetAfterViewlet(moved_element))
+        self.addAfter(target_node_css, added_text)
+        
+        code = 'plone_updateAfterAdd(kukit.getLastResults());'
+        self.executeCode(target_node_css, code)
+        
         return self.render()
         
     def addTitle(self):

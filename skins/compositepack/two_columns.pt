@@ -17,13 +17,13 @@
     </script>
     <script type="text/javascript"
       tal:attributes="src
-      string:${context/absolute_url}/cp_container/++resource++kukit.js;"
-      src="++resource++kukit.js">
+      string:${context/absolute_url}/cp_container/++resource++MochiKit.js;"
+      src="++resource++MochiKit.js">
     </script>
     <script type="text/javascript"
       tal:attributes="src
-      string:${context/absolute_url}/cp_container/++resource++MochiKit.js;"
-      src="++resource++MochiKit.js">
+      string:${context/absolute_url}/cp_container/++resource++kukit.js;"
+      src="++resource++kukit.js">
     </script>
     <!-- ajaxslt-->
     <script type="text/javascript"

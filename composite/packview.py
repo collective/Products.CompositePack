@@ -41,7 +41,10 @@ class PackView(AzaxBaseView):
         if position == 0:
             return 'cp_top'
         else:
-            return destination.objectIds()[position-1]
+            try:
+                return destination.objectIds()[position-1]
+            except IndexError:
+                import pdb; pdb.set_trace() 
     
     def deleteElement(self):
         request = self.request
@@ -61,11 +64,10 @@ class PackView(AzaxBaseView):
         return self.render()
         
     def moveElement(self):
-        #import pdb; pdb.set_trace() 
         portal = self.context.portal_url.getPortalObject()
 
         request = self.request
-        target_index = int(request.target_index)
+        target_node_id = request.target_id
         
         uri = request.uri
         parts = uri.split('/')
@@ -78,9 +80,9 @@ class PackView(AzaxBaseView):
         
         target_slot_path = '/'.join(parts[2:])
         target_slot = portal.restrictedTraverse(target_slot_path)
-        target_node_id = self.calculateIdFromPosition(target_slot,
-            target_index) 
-        target_node_css = '#%s_%s' % (target_slot.getId(), target_node_id)
+        target_node_css = '#%s' % target_node_id
+        target_index = self.calculatePosition(target_slot, target_node_id)
+        
         cpt = portal.restrictedTraverse('composite_tool')
         cpt.moveAndDelete(uri, target_path, target_index)
         

@@ -181,8 +181,8 @@ function ajax_composite_move(selected_items, target_node) {
   var url = compopage_path + '/cp_container/ajaxMoveElement';
   sources = composite_getsources(selected_items);
   var params = "uri=" + sources;
-  var i = target_node.getAttribute("target_index");
-  params = params + "&target_index=" + i;
+  var id = target_node.getAttribute("id");
+  params = params + "&target_id=" + id;
   var path = target_node.getAttribute("target_path");
   params = params + "&target_path=" + path;
   kukit.notifyServerWithParams(url, params);

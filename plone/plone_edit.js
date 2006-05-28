@@ -39,6 +39,18 @@ function plone_add_fragment(target) {
     window.document.location = url;
 }
 
+function plone_add_textimageblock(target) {
+  // Note that target_index is also available.
+    var form = document.forms.modify_composites;
+    var compopage_path = form.elements.composite_path.value;
+    var target_path = target.getAttribute("target_path");
+    var target_index = target.getAttribute("target_index");
+    url = "createCompoTextImageBlock?target_path=" + target_path;
+    url = url + "&target_index=" + target_index;
+    url = url + "&compopage_path=" + compopage_path;
+    window.document.location = url;
+}
+
 function plone_change_viewlet(element, viewlet) {
   var form, url, element_path, compopage_path;
   form = document.forms.modify_composites;

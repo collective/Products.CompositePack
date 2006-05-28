@@ -38,6 +38,7 @@
      class="context-menu-item"
      onmouseup="plone_add(event, pd_selected_item)"
      filter="pd_selected_item">Content</div>
+<!--
 <div i18n:translate="label_title"
      i18n:domain="plone"
      class="context-menu-item" 
@@ -48,6 +49,12 @@
      class="context-menu-item" 
      onmouseup="plone_add_fragment(pd_selected_item)"
      filter="pd_selected_item">HTML</div>
+-->
+<div i18n:translate="label_textimageblock"
+     i18n:domain="plone"
+     class="context-menu-item" 
+     onmouseup="plone_add_textimageblock(pd_selected_item)"
+     filter="pd_selected_item">Bild-Text-Block</div>
 <div class="separator"></div>
 <div i18n:translate="" 
      class="context-menu-item"

@@ -34,11 +34,11 @@
      class="context-menu">
 <div class="context-menu-header" 
      filter="composite_prepare_target_menu(pd_filter_object)"></div>
+<!--
 <div i18n:translate="" 
      class="context-menu-item"
      onmouseup="plone_add(event, pd_selected_item)"
      filter="pd_selected_item">Content</div>
-<!--
 <div i18n:translate="label_title"
      i18n:domain="plone"
      class="context-menu-item" 
@@ -54,7 +54,12 @@
      i18n:domain="plone"
      class="context-menu-item" 
      onmouseup="plone_add_textimageblock(pd_selected_item)"
-     filter="pd_selected_item">Bild-Text-Block</div>
+     filter="pd_selected_item">Bild-Text Block</div>
+<div i18n:translate="label_imagesblock"
+     i18n:domain="plone"
+     class="context-menu-item" 
+     onmouseup="plone_add_imagesblock(pd_selected_item)"
+     filter="pd_selected_item">Bilder Block</div>
 <div class="separator"></div>
 <div i18n:translate="" 
      class="context-menu-item"

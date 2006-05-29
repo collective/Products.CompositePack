@@ -34,7 +34,6 @@
      class="context-menu">
 <div class="context-menu-header" 
      filter="composite_prepare_target_menu(pd_filter_object)"></div>
-<!--
 <div i18n:translate="" 
      class="context-menu-item"
      onmouseup="plone_add(event, pd_selected_item)"
@@ -49,22 +48,6 @@
      class="context-menu-item" 
      onmouseup="plone_add_fragment(pd_selected_item)"
      filter="pd_selected_item">HTML</div>
--->
-<div i18n:translate="label_textimageblock"
-     i18n:domain="plone"
-     class="context-menu-item" 
-     onmouseup="plone_add_textimageblock(pd_selected_item)"
-     filter="pd_selected_item">Bild-Text Block</div>
-<div i18n:translate="label_imagesblock"
-     i18n:domain="plone"
-     class="context-menu-item" 
-     onmouseup="plone_add_imagesblock(pd_selected_item)"
-     filter="pd_selected_item">Bilder Block</div>
-<div i18n:translate="label_infoboxblock"
-     i18n:domain="plone"
-     class="context-menu-item" 
-     onmouseup="plone_add_infoboxblock(pd_selected_item)"
-     filter="pd_selected_item">Infobox Block</div>
 <div class="separator"></div>
 <div i18n:translate="" 
      class="context-menu-item"

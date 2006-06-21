@@ -103,23 +103,30 @@ class Fragments(BaseContentMixin):
 
     def indexObject(self):
         '''Titles are never catalogued'''
-        self._v__indexable = True
-
-    def isTemporaryObject(self):
-        return self.portal_factory.isTemporary(self)
+        return
 
     def reindexObject(self, idxs=[]):
-        '''Titles are never catalogued, but container is'''
-        if not self.isTemporaryObject():
-            parent = self.aq_parent.aq_parent.aq_parent
-            parent.reindexObject()
+        '''Titles are never catalogued'''
+        return
 
     def unindexObject(self):
-        '''the parent will need reindexing'''
-        # Set a volatile attribute to prevent this object being
-        # indexed.
-        self._v__indexable = False
-        self.reindexObject()
+        '''Titles are never catalogued'''
+        return
+
+    def _reindexContainer(self):
+        '''Force the container to reindex'''
+	if not self.portal_factory.isTemporary(self):
+            parent = self.aq_parent.aq_parent.aq_parent
+            if parent:
+                parent.reindexObject()
+
+    def _processForm(self, *args, **kw):
+        BaseContentMixin._processForm(self, *args, **kw)
+        self._reindexContainer()
+
+    def update(self, **kwargs):
+        BaseContentMixin.update(self, **kwargs)
+        self._reindexContainer()
 
     def dereferenceComposite(self):
         """Returns the object referenced by this composite element.

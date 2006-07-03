@@ -21,8 +21,8 @@ function plone_delete_ajax(selected_items) {
   var compopage_path = form.elements.composite_path.value;
   sources = composite_getsources(selected_items);
   url = compopage_path + '/cp_container/ajaxDeleteElement';
-  params = "uri=" + sources;
-  kukit.notifyServerWithParams(url, params);
+  var params = {'uri': sources};
+  kukit.notifyServer(url, params);
 }
 
 function plone_add_ajax(e, target) {
@@ -56,12 +56,13 @@ function plone_add_ajax_title(target) {
   var target_index = target.getAttribute("target_index");
   var id = target.getAttribute("id");
   url = compopage_path + '/cp_container/addTitle';
-  params = "target_path=" + target_path;
-  params = params + "&target_index=" + target_index;
-  params = params + "&compopage_path=" + compopage_path;
-  params = params + "&title=" + title;
-  params = params + "&target_id=" + id;
-  kukit.notifyServerWithParams(url, params);
+  var params = {
+    'target_path': target_path,
+    'target_index': target_index,
+    'compopage_path': compopage_path,
+    'title': title,
+    'target_id': id};
+  kukit.notifyServer(url, params);
 }
 
 function plone_add_ajax_fragment(target) {
@@ -72,11 +73,12 @@ function plone_add_ajax_fragment(target) {
   var target_index = target.getAttribute("target_index");
   var id = target.getAttribute("id");
   url = compopage_path + '/cp_container/addFragment';
-  params = "target_path=" + target_path;
-  params = params + "&target_index=" + target_index;
-  params = params + "&compopage_path=" + compopage_path;
-  params = params + "&target_id=" + id;
-  kukit.notifyServerWithParams(url, params);
+  var params = {
+    'target_path': target_path,
+    'target_index': target_index,
+    'compopage_path': compopage_path,
+    'target_id': id};
+  kukit.notifyServer(url, params);
 }
 
 function plone_add_fragment(target) {
@@ -181,11 +183,10 @@ function ajax_composite_move(selected_items, target_node) {
   var url = compopage_path + '/cp_container/ajaxMoveElement';
   sources = composite_getsources(selected_items);
   var params = "uri=" + sources;
-  var id = target_node.getAttribute("id");
-  params = params + "&target_id=" + id;
-  var path = target_node.getAttribute("target_path");
-  params = params + "&target_path=" + path;
-  kukit.notifyServerWithParams(url, params);
+  var params = {
+    'target_path': target_node.getAttribute("target_path"),
+    'target_id': target_node.getAttribute("id")};
+  kukit.notifyServer(url, params);
 }
 
 

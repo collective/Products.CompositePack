@@ -46,9 +46,7 @@ class PackView(AzaxBaseView):
             except IndexError:
                 import pdb; pdb.set_trace() 
     
-    def deleteElement(self):
-        request = self.request
-        uri = request.uri
+    def deleteElement(self, uri):
         parts = uri.split('/')
         slot_path = '/'.join(parts[2:-1])
         
@@ -63,19 +61,14 @@ class PackView(AzaxBaseView):
         self.removeNode(selector)
         return self.render()
         
-    def moveElement(self):
+    def moveElement(self, target_path, target_id, uri):
         portal = self.context.portal_url.getPortalObject()
 
-        request = self.request
-        target_node_id = request.target_id
-        
-        uri = request.uri
         parts = uri.split('/')
         source_slot_path = '/'.join(parts[2:-1])
         source_element_id = parts[-1]
         source_slot = portal.restrictedTraverse(source_slot_path)
         
-        target_path = request.target_path
         parts = target_path.split('/')
         
         target_slot_path = '/'.join(parts[2:])
@@ -108,19 +101,14 @@ class PackView(AzaxBaseView):
         
         return self.render()
         
-    def addTitle(self):
-        request = self.request
+    def addTitle(self, title, target_path, target_id):
 
-        target_path = request.target_path
         portal = self.context.portal_url.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
         
-        target_id = request.target_id
-        
+        print "*****", target_id
         target_index = self.calculatePosition(destination, target_id) 
         
-        title = request.title
-
         new_el = self.createCompositeElement(destination, target_index)
         
         new_title = self.createTitleElement(title)
@@ -139,14 +127,9 @@ class PackView(AzaxBaseView):
         self.executeCode(selector, code)
         return self.render()
 
-    def addFragment(self):
-        request = self.request
-
-        target_path = request.target_path
+    def addFragment(self, target_path, target_id):
         portal = self.context.portal_url.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
-        
-        target_id = request.target_id
         
         target_index = self.calculatePosition(destination, target_id) 
 
@@ -168,20 +151,13 @@ class PackView(AzaxBaseView):
         self.executeCode(selector, code)
         return self.render()
 
-    def addContent(self):
-        request = self.request
-
-        target_path = request.target_path
+    def addContent(self, target_path, target_id, uri):
         portal_url_tool = self.context.portal_url
         portal = portal_url_tool.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
         
-        target_id = request.target_id
-        
         target_index = self.calculatePosition(destination, target_id) 
         
-        uri = request.uri
-
         new_el = self.createCompositeElement(destination, target_index)
         target_path = '/'.join(uri.split('/')[4:])
         target = portal.restrictedTraverse(target_path)

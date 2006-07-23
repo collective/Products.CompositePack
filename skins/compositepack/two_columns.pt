@@ -38,6 +38,11 @@
       tal:attributes="src string:${context/absolute_url}/cp_container/++resource++ajaxslt_xpath.js;"
       src="++resource++ajaxslt_xpath.js">
     </script>
+    <script type="text/javascript"
+      tal:attributes="src
+      string:${portal_url}/composite_tool/uis/plone/cp_kukit_js;"
+      src="cp_kukit_js">
+    </script>
     <tal:comment replace="nothing">redefine template_id is needed to fix "design" tab highlight</tal:comment>
 </tal:template_id>
 

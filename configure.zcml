@@ -1,5 +1,6 @@
 <configure xmlns="http://namespaces.zope.org/zope"
            xmlns:browser="http://namespaces.zope.org/browser"
+           xmlns:azax="http://namespaces.zope.org/azax"
            xmlns:five="http://namespaces.zope.org/five">
 
 
@@ -76,8 +77,16 @@
       />
 
   <browser:resource
-    file="browser/pack.azax"
-    name="pack.azax"
+      file="browser/pack.azax"
+      name="pack.azax"
   />
+
+  <azax:registerCommand
+      name="cpSetupElement"
+      />
+  
+  <azax:registerCommand
+      name="cpSetupTarget"
+      />
 
 </configure>

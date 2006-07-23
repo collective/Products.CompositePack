@@ -30,7 +30,7 @@ class PackView(AzaxBaseView):
         return new_fragment
     
     def calculatePosition(self, destination, target_id):
-        element_id = target_id[len(destination.getId())+1:]
+        element_id = target_id[len(destination.getId())+8:]
         if element_id == 'cp_top':
             position = 0
         else:
@@ -57,7 +57,7 @@ class PackView(AzaxBaseView):
         slot.manage_delObjects([element_id])
 
         selector = '#%s_%s' % (slot.getId(), element_id)
-        self.removePreviousSibling(selector)
+        self.removeNextSibling(selector)
         self.removeNode(selector)
         return self.render()
         
@@ -73,21 +73,25 @@ class PackView(AzaxBaseView):
         
         target_slot_path = '/'.join(parts[2:])
         target_slot = portal.restrictedTraverse(target_slot_path)
-        target_node_css = '#%s' % target_node_id
-        target_index = self.calculatePosition(target_slot, target_node_id)
+        #target_node_css = '#%s' % target_node_id
+        target_node_css = '#%s' % target_id
+        #target_index = self.calculatePosition(target_slot, target_node_id)
+        target_index = self.calculatePosition(target_slot, target_id)
         
         cpt = portal.restrictedTraverse('composite_tool')
         cpt.moveAndDelete(uri, target_path, target_index)
         
         node_id = '%s_%s' % (source_slot.getId(), source_element_id)
         node_css = '#%s' % node_id
-        node_xpath = '//DIV[@id="%s"]' % node_id
-        previous_node_xpath = (
-            '//DIV[@id="%s"]/preceding-sibling::DIV[position()=1]' % node_id )
-        previous_node_selector = self.getXpathSelector(previous_node_xpath)
-        self.removeNode(previous_node_selector)
-        node_selector = self.getXpathSelector(node_xpath)
-        self.removeNode(node_selector)
+        #node_xpath = '//DIV[@id="%s"]' % node_id
+        #previous_node_xpath = (
+        #    '//DIV[@id="%s"]/preceding-sibling::DIV[position()=1]' % node_id )
+        #previous_node_selector = self.getXpathSelector(previous_node_xpath)
+        #self.removeNode(previous_node_selector)
+        #node_selector = self.getXpathSelector(node_xpath)
+        #self.removeNode(node_selector)
+        self.removeNextSibling(node_css)
+        self.removeNode(node_css)
 
         moved_element = target_slot.restrictedTraverse(source_element_id)
         
@@ -96,17 +100,23 @@ class PackView(AzaxBaseView):
             target_slot.getTargetAfterViewlet(moved_element))
         self.addAfter(target_node_css, added_text)
         
-        code = 'plone_updateAfterAdd(kukit.getLastResults());'
-        self.executeCode(target_node_css, code)
-        
+        selector = "#%s" % target_slot.getViewletHtmlId(moved_element)
+        self.setupElement(selector)
+        selector = "#%s" % target_slot.getIdOfTargetAfterViewlet(moved_element)
+        self.setupTarget(selector)
         return self.render()
-        
+
+    def setupElement(self, selector):
+        command = self.addCommand('cpSetupElement', selector)
+
+    def setupTarget(self, selector):
+        command = self.addCommand('cpSetupTarget', selector)
+
     def addTitle(self, title, target_path, target_id):
 
         portal = self.context.portal_url.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
         
-        print "*****", target_id
         target_index = self.calculatePosition(destination, target_id) 
         
         new_el = self.createCompositeElement(destination, target_index)
@@ -123,8 +133,10 @@ class PackView(AzaxBaseView):
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(kukit.getLastResults());'
-        self.executeCode(selector, code)
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
         return self.render()
 
     def addFragment(self, target_path, target_id):
@@ -147,8 +159,10 @@ class PackView(AzaxBaseView):
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(kukit.getLastResults());'
-        self.executeCode(selector, code)
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
         return self.render()
 
     def addContent(self, target_path, target_id, uri):
@@ -169,8 +183,10 @@ class PackView(AzaxBaseView):
         selector = '#%s' % target_id
         self.addAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(kukit.getLastResults());'
-        self.executeCode(selector, code)
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
         return self.render()
 
     

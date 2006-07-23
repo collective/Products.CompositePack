@@ -67,7 +67,7 @@ target_path) {
             'target_index': this.target_index,
             'compopage_path': this.compopagepath,
             'target_id': this.target_id,
-            'uri': this.uri};
+            'uri': uri};
         kukit.notifyServer(url, params);
     };
 

@@ -45,6 +45,7 @@ class PloneUI(CommonUI):
     security.declarePublic('plone_edit_js')
     plone_edit_js = RawFile('plone_edit.js', 'text/javascript', _plone)
     pdlib_js = RawFile('pdlib.js', 'text/javascript', _plone)
+    cp_kukit_js = RawFile('cp_kukit.js', 'text/javascript', _plone)
     target_image = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_hover = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_active = RawFile('target_image.gif', 'image/gif', _plone)

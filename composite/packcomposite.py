@@ -132,18 +132,34 @@ class PackSlot(Slot):
 
     def _render_add_target(self, slot_id, index, path, obj_id=''):
         template = plone_add_target_template.__of__(self)
-        if index==0:
-            target_id = "%s_cp_top" % slot_id
-        else:
-            target_id = "%s_%s" % (slot_id, obj_id)
+        target_id = self._getIdOfTargetAfterViewlet(index, obj_id)
         result = template(slot_id=self.getId(),
-                             slot_path=path,
-                             index=index, target_id=target_id)
+                          slot_path=path,
+                          index=index, 
+                          target_id=target_id)
         return result
+
+    def getIdOfTargetAfterViewlet(self, obj):
+        index = self.getObjectPosition(obj.getId())
+        return self._getIdOfTargetAfterViewlet(index+1, obj.getId())
+
+    def getViewletHtmlId(self, obj):
+        return self._getViewletHtmlId(obj.getId())
+
+    def _getIdOfTargetAfterViewlet(self, index, obj_id):
+        if index==0:
+            target_id = "target_%s_cp_top" % self.getId()
+        else:
+            target_id = "target_%s" % self._getViewletHtmlId(obj_id)
+        return target_id
+
+    def _getViewletHtmlId(self, obj_id):
+        return "%s_%s" % (self.getId(), obj_id)
 
     def getTargetAfterViewlet(self, obj):
         index = self.getObjectPosition(obj.getId())
         path = escape('/'.join(self.getPhysicalPath()))
+        target_id = self.getIdOfTargetAfterViewlet(obj)
         return self._render_add_target(self.getId(), index+1, path, obj.getId())
 
     def _render_editing(self, obj, text, icon_base_url):
@@ -161,7 +177,7 @@ class PackSlot(Slot):
             title = escape(o2.title_and_id().encode('utf8'))
             composite_tool = getToolByName(self, TOOL_ID)
             viewlets_info = composite_tool.getViewletsFor(o2)
-
+            html_id = self.getViewletHtmlId(obj) 
             allowed_viewlets = []
             if viewlets_info:
                 default_id = viewlets_info['default']["id"]
@@ -191,7 +207,8 @@ class PackSlot(Slot):
                              allowed_viewlets_titles=allowed_viewlets_titles,
                              current_viewlet_id=current_viewlet_id,
                              full_path=full_path,
-                             text=text)
+                             text=text,
+                             html_id=html_id)
         return result
 
     def getEditingViewlet(self, obj):

@@ -179,11 +179,10 @@ function plone_updateAfterAdd(results)
 function ajax_composite_move(selected_items, target_node) {
   var form = document.forms.modify_composites;
   var compopage_path = form.elements.composite_path.value;
-  sources = composite_getsources(selected_items);
   var url = compopage_path + '/cp_container/ajaxMoveElement';
   sources = composite_getsources(selected_items);
-  var params = "uri=" + sources;
   var params = {
+    'uri':sources,
     'target_path': target_node.getAttribute("target_path"),
     'target_id': target_node.getAttribute("id")};
   kukit.notifyServer(url, params);

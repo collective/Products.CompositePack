@@ -4,7 +4,7 @@ CompositePack
 Installation
 ------------
 
-CompositePack depends on Archetypes, kupu, ATContentTypes :
+CompositePack depends on Archetypes, kupu, ATContentTypes, PloneAzax :
 when you install it, they get installed if they were not previously.
 
 >>> plone = self.portal
@@ -19,10 +19,19 @@ True
 True
 >>> qi.isProductInstalled('ATContentTypes')
 True
+>>> qi.isProductInstalled('PloneAzax')
+True
 
-CompositePack installs a layer :
+
+CompositePack installs three skin layers :
 >>> ps = plone.portal_skins
 >>> 'compositepack' in ps.objectIds()
+True
+>>> 'compositepack_layouts' in ps.objectIds()
+True
+>>> 'compositepack_viewlets' in ps.objectIds()
+True
+>>> 'compositepack_design' in ps.objectIds()
 True
 
 CompositePack installs a tool :
@@ -36,7 +45,7 @@ The layouts folder holds default layouts :
 >>> ids = layouts.objectIds()
 >>> ids.sort()
 >>> ids
-['three_slots', 'two_columns', 'two_slots']
+['one_column', 'two_columns']
 
 The viewlets folder holds default viewlets :
 >>> ids = viewlets.objectIds()
@@ -55,12 +64,12 @@ Navigation Page is registered as Composite : you can query the tool for the comp
 >>> tool.getRegisteredComposites()
 ['Navigation Page']
 
-Navigation Page has two layouts registered : you can query the tool for them.
+Navigation Page has layouts registered : you can query the tool for them.
 >>> rl = tool.getRegisteredLayoutsForType('Navigation Page')
 >>> ids = [layout.getId() for layout in rl]
->>> 'three_slots' in ids
+>>> 'two_columns' in ids
 True
->>> 'two_slots' in ids
+>>> 'one_column' in ids
 True
 
 Navigation Page has a default layout : 

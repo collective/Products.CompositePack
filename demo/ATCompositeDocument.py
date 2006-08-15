@@ -13,19 +13,17 @@ $Id$
 
 from Products.Archetypes.public import BaseSchema
 
-from Products.CompositePack.config import HAS_ATCT
 from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.public import registerType
 
-if HAS_ATCT:
-    from Products.ATContentTypes.types.ATDocument import ATDocument
+from Products.ATContentTypes.types.ATDocument import ATDocument
 
-    class ATCompositeDocument(ATDocument):
-	"""A basic, Archetypes-based Composite Page
-	"""
-	meta_type = portal_type = 'Composite Document'
-	archetype_name = 'Composite Document'
+class ATCompositeDocument(ATDocument):
+"""A basic, Archetypes-based Composite Page
+"""
+meta_type = portal_type = 'Composite Document'
+archetype_name = 'Composite Document'
 
-	right_slots = ['here/document_sidebar_view/macros/empty']
+right_slots = ['here/document_sidebar_view/macros/empty']
 
-    registerType(ATCompositeDocument, PROJECTNAME)
+registerType(ATCompositeDocument, PROJECTNAME)

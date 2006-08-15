@@ -13,25 +13,27 @@
 
 $Id$
 """
+from md5 import md5
+
 from AccessControl import ClassSecurityInfo
+
 from OFS.ObjectManager import BeforeDeleteException
 from OFS import PropertyManager
 from OFS.SimpleItem import Item
 
-from Products.Archetypes.public import *
-from Products.Archetypes.utils import insert_zmi_tab_before
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.permissions import ManagePortal
 
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.Archetypes.public import *
+from Products.Archetypes.utils import insert_zmi_tab_before
 
 from Products.CompositePack.viewlet.interfaces import IViewlet
 from Products.CompositePack.viewlet.interfaces import ILayout
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID
 from Products.CompositePack.config import zmi_dir
 from Products.CompositePack.exceptions import CompositePackError
-from md5 import md5
 
 class SkinMethod(BaseContentMixin, Item):
 

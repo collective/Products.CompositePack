@@ -81,12 +81,14 @@
       name="pack.azax"
   />
 
-  <azax:registerCommand
+  <azax:registerAction
       name="cpSetupElement"
+      command_factory="selector"
       />
   
-  <azax:registerCommand
+  <azax:registerAction
       name="cpSetupTarget"
+      command_factory="selector"
       />
 
 </configure>

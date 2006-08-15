@@ -1,5 +1,4 @@
-from Products.azax import AzaxBaseView
-
+from Products.azax.azaxview import AzaxBaseView
 
 class PackView(AzaxBaseView):
 
@@ -57,8 +56,8 @@ class PackView(AzaxBaseView):
         slot.manage_delObjects([element_id])
 
         selector = '#%s_%s' % (slot.getId(), element_id)
-        self.removeNextSibling(selector)
-        self.removeNode(selector)
+        self.deleteNodeAfter(selector)
+        self.deleteNode(selector)
         return self.render()
         
     def moveElement(self, target_path, target_id, uri):
@@ -73,9 +72,7 @@ class PackView(AzaxBaseView):
         
         target_slot_path = '/'.join(parts[2:])
         target_slot = portal.restrictedTraverse(target_slot_path)
-        #target_node_css = '#%s' % target_node_id
         target_node_css = '#%s' % target_id
-        #target_index = self.calculatePosition(target_slot, target_node_id)
         target_index = self.calculatePosition(target_slot, target_id)
         
         cpt = portal.restrictedTraverse('composite_tool')
@@ -83,22 +80,15 @@ class PackView(AzaxBaseView):
         
         node_id = '%s_%s' % (source_slot.getId(), source_element_id)
         node_css = '#%s' % node_id
-        #node_xpath = '//DIV[@id="%s"]' % node_id
-        #previous_node_xpath = (
-        #    '//DIV[@id="%s"]/preceding-sibling::DIV[position()=1]' % node_id )
-        #previous_node_selector = self.getXpathSelector(previous_node_xpath)
-        #self.removeNode(previous_node_selector)
-        #node_selector = self.getXpathSelector(node_xpath)
-        #self.removeNode(node_selector)
-        self.removeNextSibling(node_css)
-        self.removeNode(node_css)
+        self.deleteNodeAfter(node_css)
+        self.deleteNode(node_css)
 
         moved_element = target_slot.restrictedTraverse(source_element_id)
         
         added_text = target_slot.getEditingViewlet(moved_element)
         added_text = (added_text +
             target_slot.getTargetAfterViewlet(moved_element))
-        self.addAfter(target_node_css, added_text)
+        self.insertHTMLAfter(target_node_css, added_text)
         
         selector = "#%s" % target_slot.getViewletHtmlId(moved_element)
         self.setupElement(selector)
@@ -131,7 +121,7 @@ class PackView(AzaxBaseView):
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        self.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
         selector = "#%s" % destination.getViewletHtmlId(new_el)
         self.setupElement(selector)
@@ -157,7 +147,7 @@ class PackView(AzaxBaseView):
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        self.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
         selector = "#%s" % destination.getViewletHtmlId(new_el)
         self.setupElement(selector)
@@ -181,7 +171,7 @@ class PackView(AzaxBaseView):
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        self.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
         selector = "#%s" % destination.getViewletHtmlId(new_el)
         self.setupElement(selector)

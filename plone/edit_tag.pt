@@ -12,7 +12,7 @@
         <ul><li>
             <div class="menuPosition">
                 <a i18n:domain="compopack"
-                   i18n:translate=""
+                   i18n:translate="edit_item"
                    href="#" onclick="">Edit&nbsp;item</a>
             </div>
         </li></ul>

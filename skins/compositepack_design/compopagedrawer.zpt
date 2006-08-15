@@ -1,0 +1,39 @@
+<html i18n:domain="plone">
+<div metal:use-macro="context/global_defines/macros/defines" />
+    <head>
+
+
+    </head>
+    
+<body>
+    
+    
+<h2>Drawer Test</h2>
+
+<div metal:define-macro="compopagedrawer">
+        <div class="kupu-librarydrawer-parent">
+        <div id="kupu-librarydrawer" class="kupu-drawer">
+        </div>
+        </div>
+
+        <script type="text/javascript" 
+                tal:define="compopage nocall:options/composite;
+                            base compopage/aq_parent/absolute_url;
+                            lib_prefix    string:${base}/kupulibraries.xml?resource_type=;
+                            search_prefix string:${portal_url}/kupusearch.xml?resource_type=;
+                            link_libraries_uri  string:${lib_prefix}composable;
+                            search_links_uri    string:${search_prefix}composable;
+                            link_xsl_uri string:${portal_url}/compopagedrawers/selectdrawer.xsl;
+                            compo_page_path compopage/cp_container/getPathFromPortalToParent;"
+                tal:content="string:cp_initdrawer('$link_xsl_uri', '$link_libraries_uri',
+                '$search_links_uri', '$compo_page_path');">
+        </script>    
+</div>
+
+        <input type="submit" value="Open Drawer"
+        onclick="javascript:draweropen('target_path');" />
+        
+        
+
+    </body>
+</html>

@@ -170,12 +170,6 @@ function plone_setup_viewlet_menu_item(menuItem, current_id, viewlet_id, viewlet
       pd_setupContextMenuItem(menuItem);
 }
 
-function plone_updateAfterAdd(results)
-{
-  plone_setUpSlotElement(results[1]);
-  plone_setUpSlotTarget(results[3]);
-}
-
 function ajax_composite_move(selected_items, target_node) {
   var form = document.forms.modify_composites;
   var compopage_path = form.elements.composite_path.value;
@@ -207,10 +201,10 @@ function plone_setUpSlotElement(node) {
 pd_node_setup['slot_element'] = plone_setUpSlotElement;
 
 function plone_setUpSlotTarget(node) {
-    var PackSetup = node.getAttribute('PackSetup');
+    /*var PackSetup = node.getAttribute('PackSetup');
     if (!PackSetup) {
         setup_pack_slot_target(node);
-    };
+    };*/
     setUpSlotTarget(node);
     node.onmouseover = function() {
         pd_highlight(node, 1);

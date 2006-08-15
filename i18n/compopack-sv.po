@@ -24,10 +24,10 @@ msgstr "Innehåll"
 msgid "Close menu"
 msgstr "Stäng menyn"
 
-msgid "Add item"
+msgid "add_item"
 msgstr "Lägg till post"
 
-msgid "Edit item"
+msgid "edit_item"
 msgstr "Ändra"
 
 msgid "label_layout"

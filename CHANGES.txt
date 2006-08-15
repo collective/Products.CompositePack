@@ -1,24 +1,50 @@
-* set better layout and viewlet as default for navigation page
-  [gotcha]
+After 1.0
+=========
+  * remove js hack to build target menu
+    [gotcha]
 
-* styling and i18n
-  [gotcha]
-
-* setup portal factory and id calculated from title for Plone 2.1
-  [gotcha]
+  * remove 2.0 compatibility
+    [gotcha]
  
-* register cleanIndexes setup widget in portal_migration to remove wrongly
-  indexed software.
-  [gotcha]
+  * restructure skin layers
+    [gotcha]
 
-* fix indexing : software elements like layout registry, viewlet registry,
-  layouts, viewlets, composite container and elements are not indexed
-  anymore.
-  [gotcha]
+  * remove two_slots and three_slots dummy layouts
+    [gotcha]
+    
+  * ajaxify design view with Azax, PloneAzax
+    [gotcha, ree]
 
-* fix SearchableText at creation time
-  [gotcha]
+  * setup css and js in their registries
+    [gotcha]
 
-* fix package so that it can load when ATContentTypes is not installed
-  [gotcha]
+  * remove deprecated use of CMFCorePermissions
+    [gotcha]
+
+1.0
+===
+
+  * set better layout and viewlet as default for navigation page
+    [gotcha]
+
+  * styling and i18n
+    [gotcha]
+
+  * setup portal factory and id calculated from title for Plone 2.1
+    [gotcha]
+   
+  * register cleanIndexes setup widget in portal_migration to remove wrongly
+    indexed software.
+    [gotcha]
+
+  * fix indexing : software elements like layout registry, viewlet registry,
+    layouts, viewlets, composite container and elements are not indexed
+    anymore.
+    [gotcha]
+
+  * fix SearchableText at creation time
+    [gotcha]
+
+  * fix package so that it can load when ATContentTypes is not installed
+    [gotcha]
 

@@ -10,11 +10,13 @@
 
 $Id$
 """
+from Products.CMFCore.utils import UniqueObject
+
 from Products.Archetypes.public import *
+
 from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.viewlet.interfaces import IViewlet
 from Products.CompositePack.viewlet.interfaces import ILayout
-from Products.CMFCore.utils import UniqueObject
 
 class ViewletContainer(BaseFolderMixin, UniqueObject):
     """A container for registered viewlets

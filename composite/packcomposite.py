@@ -10,6 +10,7 @@
 $Id$
 """
 from cgi import escape
+from itertools import islice
 
 from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
@@ -18,14 +19,19 @@ from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
 from OFS.Folder import Folder
 
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import AddPortalContent, View
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+
+from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.permissions import AddPortalContent, View
+
+from Products.Archetypes.public import *
+from Products.Archetypes.utils import shasattr
+from Products.Archetypes import transaction_note
 
 from Products.CompositePage.composite import Composite, SlotGenerator
 from Products.CompositePage.composite import SlotCollection
-from Products.CompositePage.slot import Slot, getIconURL, formatException, target_tag
+from Products.CompositePage.slot import formatException, target_tag
+from Products.CompositePage.slot import Slot, getIconURL
 from Products.CompositePage import perm_names
 from Products.CompositePage.interfaces import ICompositeElement
 
@@ -34,10 +40,6 @@ from Products.CompositePack.config import TOOL_ID, PROJECTNAME, HAVEAZAX
 from Products.CompositePack.design import _plone
 from Products.CompositePack import CPpermissions
 from Products.CompositePack.exceptions import CompositePackError
-from Products.Archetypes.public import *
-from Products.Archetypes.utils import shasattr
-from Products.Archetypes import transaction_note
-from itertools import islice
 
 plone_edit_template = PageTemplateFile('edit_tag.pt', _plone)
 plone_add_target_template = PageTemplateFile('target_tag.pt', _plone)

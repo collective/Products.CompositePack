@@ -20,8 +20,6 @@ from Testing import ZopeTestCase
 
 from Products.CompositePack.tests import CompositePackTestCase
 
-from Products.CompositePack.config import PLONE21
-
 
 from cStringIO import StringIO
 from cPickle import load, dump
@@ -67,8 +65,8 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         self.portal.invokeFactory('Navigation Page', 'page')
         page = self.portal.page
 
-        # Change to two slots layout
-        page.cp_container.setLayout('two_slots')
+        # Change to two columns layout
+        page.cp_container.setLayout('two_columns')
         page.cp_container.getLayout()
         page.cp_container.generateSlots()
         slots = page.cp_container.filled_slots
@@ -146,7 +144,7 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         pbefore = [len(cat()) for cat in pcats]
 
         # Change to two slots layout
-        page.cp_container.setLayout('two_slots')
+        page.cp_container.setLayout('two_columns')
         page.cp_container.generateSlots()
         slots = page.cp_container.filled_slots
         self.failUnless('first' in slots.objectIds())
@@ -188,12 +186,8 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         self.assertEquals(got, expected)
 
         # Finally, the public catalogs should have
-        if PLONE21:
-            # uid+11 (private has also a UID), references+4
-            pexpected = [pbefore[0]+11, pbefore[1]+4]
-        else:
-            # uid+10, references+4
-            pexpected = [pbefore[0]+10, pbefore[1]+4]
+        # uid+11 (private has also a UID), references+4
+        pexpected = [pbefore[0]+11, pbefore[1]+4]
         pgot = [len(cat()) for cat in pcats]
         self.assertEquals(pgot, pexpected)
 

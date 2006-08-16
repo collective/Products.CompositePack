@@ -87,6 +87,11 @@ True
 >>> 'image_caption_viewlet' in ids
 True
 
+Navigation Pages are selectable as default page
+>>> site_props = plone.portal_properties.site_properties
+>>> 'Navigation Page' in site_props.getProperty('default_page_types')
+True
+
 Layouts
 -------
 

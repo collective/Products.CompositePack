@@ -1,3 +1,7 @@
+* Play nice with Plone 2.1 by adding navigation page to the list of default
+  page types in site_properties.
+  [jladage]
+
 * set better layout and viewlet as default for navigation page
   [gotcha]
 

@@ -1,3 +1,7 @@
+* fix css to do better layer handling (position: relative was elements to
+  be rendered over the plone drop down menus)
+  [jslob and mteulingen]
+
 * Play nice with Plone 2.1 by adding navigation page to the list of default
   page types in site_properties.
   [jladage]

@@ -1,3 +1,8 @@
+* changed tool.py to handle multiple users messing with the same 
+  navigation page. Some sanity checks were added and neat error messages
+  will be sent to users when things go wrong
+  [jslob and maurits]
+
 * fix css to do better layer handling (position: relative was elements to
   be rendered over the plone drop down menus)
   [jslob and mteulingen]

@@ -105,14 +105,71 @@ class CompositeTool(Folder, BaseTool):
                       composite_path="", REQUEST=None):
         """Move and/or delete elements.
         """
-        # This method should be a little more robust
-        # e.g. check if move_source_paths is still there
-        # or if composite_path even still exists.
-
         portal = getToolByName(self, 'portal_url').getPortalObject()
-        compo = portal.restrictedTraverse(composite_path)
-        BaseTool.moveAndDelete(self, move_source_paths, move_target_path,
-                               move_target_index, delete_source_paths, REQUEST)
+        
+        # Try to get translation service for status messages
+        translation_service = getToolByName(self, 'translation_service', None)
+        if translation_service:
+            utranslate = translation_service.utranslate
+        # else I won't translate at all
+
+        try:
+            compo = portal.restrictedTraverse(composite_path)
+        except AttributeError:
+            # We cannot traverse towards the asked composite path, this might 
+            # happen when another user deleted the navigation page where we are 
+            # dragging an item to a new location.
+            # Or in short: composite_path no longer exists at this place.
+            error = 'The page you were working on has been moved or deleted by another user.'
+            if translation_service:
+                # Translate if possible
+                message = utranslate(
+                    'compopack', 'navigation_page_deleted_or_moved', {}, self,
+                    default = error)
+            else:
+                # We don't have a translation service? Then we will just serve 
+                # the default English error
+                message = error
+            status_message = '?portal_status_message=' + message
+
+            if REQUEST:
+                # Redirect to portal root with a status message, because 
+                # current document no longer exists at this place.
+                url = getToolByName(self, 'portal_url')()
+                url += status_message
+                REQUEST.RESPONSE.redirect(url)            
+            return
+ 
+        try:
+            BaseTool.moveAndDelete(self, move_source_paths, move_target_path,
+                                  move_target_index, delete_source_paths, REQUEST)
+        except AttributeError:
+            # Item cannot be moved or deleted because the item within this page has
+            # been either deleted or moved to another location.
+            error = 'The item you tried to move or delete was already touched by another user.'
+            if translation_service:
+                # Translate our error
+                message = utranslate(
+                    'compopack', 'item_touched_by_other_user', {}, self,
+                    default = error)
+                status_message = '?portal_status_message=' + message
+            else:
+                # or not...
+                message = error
+            status_message = '?portal_status_message=' + message
+
+            if REQUEST:
+                # Redirect to same (updated) page with a smart remark
+                url = REQUEST['HTTP_REFERER'].split('?')[0]
+                url += status_message
+                REQUEST.RESPONSE.redirect(url)
+            return
+
+        if REQUEST:
+            # Change was succesful so remove any standing error messages and
+            # reload the page
+            url = REQUEST['HTTP_REFERER'].split('?')[0]
+            REQUEST.RESPONSE.redirect(url)
 
     security.declarePrivate('getMapMetatypesPortalTypes')
     def getMapMetatypesPortalTypes(self):

@@ -8,11 +8,13 @@
 - viewlets should use macros (to structure a bit the HTML included), named
   "portlet" (to be able to reuse portlets as well)
 
-- add exception handling to moveAndDelete (if two people are designing the
-  same navigation page at the same time, elements might be unavailable
-  because of changes by the other user)
+- createCompoFragment and createCompoTitle cause problems when another
+  user deleted the navigation page and the current user tried to add
+  Title or HTML. When the user tries to add content, he gets a
+  javascript error (unknown origin).
 
-- plone 2.1 compat
+plone 2.1 compat
+================
 
   * smart ids
 
@@ -21,4 +23,8 @@
 Plone 2.5 compatibility
 =======================
 
-  * some tests are failing (regarding CMFStaging)
+  * test is failing regarding CMFStaging
+
+  * test is failing regarding the references of a renamed navigation page
+
+  * Viewlets can not be added using the ZMI (you get a login screen)

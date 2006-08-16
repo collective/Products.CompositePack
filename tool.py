@@ -105,6 +105,10 @@ class CompositeTool(Folder, BaseTool):
                       composite_path="", REQUEST=None):
         """Move and/or delete elements.
         """
+        # This method should be a little more robust
+        # e.g. check if move_source_paths is still there
+        # or if composite_path even still exists.
+
         portal = getToolByName(self, 'portal_url').getPortalObject()
         compo = portal.restrictedTraverse(composite_path)
         BaseTool.moveAndDelete(self, move_source_paths, move_target_path,

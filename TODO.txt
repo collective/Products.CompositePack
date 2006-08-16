@@ -14,3 +14,10 @@
   * smart ids
 
   * replace layouts by templatemixin ?
+
+Plone 2.5 compatibility
+=======================
+
+  * some tests are failing (regarding CMFStaging)
+
+  * CSS issues with dropdown menu's (z-indexes)

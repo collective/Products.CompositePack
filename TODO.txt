@@ -8,6 +8,7 @@
 - viewlets should use macros (to structure a bit the HTML included), named
   "portlet" (to be able to reuse portlets as well)
 
+- Allow navigation page content type to be the default view of a folder
 
 - plone 2.1 compat
 
@@ -19,5 +20,3 @@ Plone 2.5 compatibility
 =======================
 
   * some tests are failing (regarding CMFStaging)
-
-  * CSS issues with dropdown menu's (z-indexes)

@@ -77,6 +77,18 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             self._purgeObjects()
 
         self._initObjects(node)
+        
+    def _purgeObjects(self):
+        """ Keep the followin folders:
+              -  CompositePack Layout Container
+              -  CompositePack Viewlet Container
+              -  Slot Class Folder
+            but delete all child object inside those folders
+        """
+        tool = self.context
+        for id in tool.objectIds():
+            ids =  tool['id'].objectIds()
+            tool['id'].delObjects(ids)
 
     def _initObjects(self, node):
         """Import subobjects"""

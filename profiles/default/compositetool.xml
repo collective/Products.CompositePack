@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<object name="composite_tool" meta_type="CompositePack Tool">
+
+ <layoutRegistry>
+  <type name="Navigation Page">
+   <layout name="three_slots"/>
+   <layout name="two_slots"/>
+   <layout name="two_columns" default="True"/>
+  </type>
+ </layoutRegistry>
+
+ <viewletRegistry>
+  <type name="(Default Setup)">
+   <viewlet name="title_description_with_link"/>
+  </type>
+  <type name="CompositePack Titles">
+   <viewlet name="title_viewlet"/>
+  </type>
+  <type name="CompositePack Fragments">
+   <viewlet name="fragment_viewlet"/>
+  </type>
+  <type name="Image">
+   <viewlet name="image_viewlet" default="True"/>
+   <viewlet name="image_caption_viewlet"/>
+   <viewlet name="image_title_viewlet"/>
+  </type>
+ </viewletRegistry>
+
+ <object name="layouts" meta_type="CompositePack Layout Container">
+  <layout name="three_slots"
+          title="Three slots"
+          skin_method="three_slots"/>
+  <layout name="two_columns"
+          title="Two columns"
+          skin_method="two_columns"/>
+  <layout name="two_slots" 
+          title="Two slots"
+          skin_method="two_slots"/> 
+ </object>
+
+ <object name="slot_classes" meta_type="Slot Class Folder">
+  <class name="example"/>
+ </object>
+ 
+ <object name="viewlets" meta_type="CompositePack Viewlet Container">
+  <viewlet name="fragment_viewlet"
+           title value="HTML Fragment"
+           skin_method="fragment_viewlet"/>
+  <viewlet name="image_caption_viewlet"
+           title="Image with caption"
+           skin_method="image_caption_viewlet"/>
+  <viewlet name="image_title_viewlet"
+           title="Image with title"
+           skin_method="image_title_viewlet"/>
+  <viewlet name="image_viewlet"
+           title="Image"
+           skin_method="image_viewlet"/>
+  <viewlet name="link_viewlet"
+           title="Link Only"
+           skin_method="link_viewlet"/>
+  <viewlet name="title_date_viewlet"
+           title="Title and Date"
+           skin_method="title_date_viewlet"/>
+  <viewlet name="title_description_with_link"
+           title="Title with description"
+           skin_method="title_description_with_link"/>
+  <viewlet name="title_viewlet"
+           title="Title"
+           skin_method="title_viewlet"/>
+ </object>
+</object>

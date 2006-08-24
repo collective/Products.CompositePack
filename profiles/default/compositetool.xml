@@ -1,32 +1,7 @@
 <?xml version="1.0"?>
 <object name="composite_tool" meta_type="CompositePack Tool">
-
- <layoutRegistry>
-  <type name="Navigation Page">
-   <layout name="three_slots"/>
-   <layout name="two_slots"/>
-   <layout name="two_columns" default="True"/>
-  </type>
- </layoutRegistry>
-
- <viewletRegistry>
-  <type name="(Default Setup)">
-   <viewlet name="title_description_with_link"/>
-  </type>
-  <type name="CompositePack Titles">
-   <viewlet name="title_viewlet"/>
-  </type>
-  <type name="CompositePack Fragments">
-   <viewlet name="fragment_viewlet"/>
-  </type>
-  <type name="Image">
-   <viewlet name="image_viewlet" default="True"/>
-   <viewlet name="image_caption_viewlet"/>
-   <viewlet name="image_title_viewlet"/>
-  </type>
- </viewletRegistry>
-
- <object name="layouts" meta_type="CompositePack Layout Container">
+    
+ <layouts name="layouts">
   <layout name="three_slots"
           title="Three slots"
           skin_method="three_slots"/>
@@ -36,15 +11,15 @@
   <layout name="two_slots" 
           title="Two slots"
           skin_method="two_slots"/> 
- </object>
+ </layouts>
 
- <object name="slot_classes" meta_type="Slot Class Folder">
-  <class name="example"/>
- </object>
+ <classes name="slot_classes">
+  <class name="dummy"/>
+ </classes>
  
- <object name="viewlets" meta_type="CompositePack Viewlet Container">
+ <viewlets name="viewlets">
   <viewlet name="fragment_viewlet"
-           title value="HTML Fragment"
+           title="HTML Fragment"
            skin_method="fragment_viewlet"/>
   <viewlet name="image_caption_viewlet"
            title="Image with caption"
@@ -67,5 +42,32 @@
   <viewlet name="title_viewlet"
            title="Title"
            skin_method="title_viewlet"/>
- </object>
+ </viewlets>
+
+ <composites>
+  <composite name="Navigation Page">
+   <c_layout name="three_slots"/>
+   <c_layout name="two_slots"/>
+   <c_layout name="two_columns" default="True"/>
+  </composite>
+ </composites>
+
+ <composables>
+  <composable name="(Default Setup)">
+   <c_viewlet name="title_description_with_link"/>
+  </composable>
+  <composable name="CompositePack Titles">
+   <c_viewlet name="title_viewlet"/>
+  </composable>
+  <composable name="CompositePack Fragments">
+   <c_viewlet name="fragment_viewlet"/>
+  </composable>
+  <composable name="Image">
+   <c_viewlet name="image_viewlet" default="True"/>
+   <c_viewlet name="image_caption_viewlet"/>
+   <c_viewlet name="image_title_viewlet"/>
+  </composable>
+ </composables>
+
+
 </object>

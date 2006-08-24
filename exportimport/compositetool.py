@@ -14,7 +14,18 @@ from Products.GenericSetup.utils import I18NURI
 from Products.CMFPlone.PropertiesTool import SimpleItemWithProperties
 from Products.CMFPlone.interfaces import IPropertiesTool, ISimpleItemWithProperties
 
+from Products.CompositePack.Extensions.Install from toolWrapper
+
 _FILENAME = 'compositetool.xml'
+nodeTypeMap = {'layouts':'CompositePack Layout Container',
+               'layout':'CompositePack Layout',
+               'viewlet':'CompositePack Viewlet',
+               'viewlets':'CompositePack Viewlet Container',
+               'classes':'Slot Class Folder',
+               'class':'Slot Class',
+    }
+containers = ['layouts','viewlets','classes']
+
 
 def importCompositeToolProperties(context):
     """ Import composite tool properties.
@@ -79,7 +90,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         self._initObjects(node)
         
     def _purgeObjects(self):
-        """ Keep the followin folders:
+        """ Keep the following folders:
               -  CompositePack Layout Container
               -  CompositePack Viewlet Container
               -  Slot Class Folder
@@ -90,22 +101,79 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             ids =  tool['id'].objectIds()
             tool['id'].delObjects(ids)
 
+    def _createObjectTree(self, node, context):
+        """ Create the object treetructure found in the ZMI
+        """
+        obj_id = str(node.getAttribute('name'))
+        obj_type = node.nodeName
+        
+        # Here we only take care of the content type found in de ZMI as
+        # defined in the nodeTypeMap.
+        if obj_type in nodeTypeMap.keys() and obj_id not in context.objectIds():
+            context._setObject(id, obj_type(id))
+            if obj_type in ['layout','viewlet']:
+                obj.setTitle(obj_title)
+                skin_method = str(node.getAttribute('skin_method'))
+                
+                
+            if obj_type == 'layout':
+                obj.setTitle(obj_title)
+                
+            if node.childNodes:
+                for child in node.childNodes:
+                    _createObject(child, obj)
+
+    def _configureComposables(self, node, context):
+        """ Configure the mapping between content types and layouts
+        """
+        if obj_type == 'composables':
+
+    def _configureComposites(self, node, context):
+        """ Configure the mapping between content types and layouts
+        """
+        if obj_type == 'composites':
+
     def _initObjects(self, node):
-        """Import subobjects"""
-        ## XXX: We could just use the _initObjects() from
-        ## ObjectManagerHelpers except that it looks up the object
-        ## constructor from Products.meta_type and
-        ## SimpleItemWithProperties doesn't get registered there.
+        """ Import subobjects from the DOM tree.
+            Directly under a compositetool we are allowed to create:
+                -  CompositePack Layout Container
+                -  CompositePack Viewlet Container
+                -  Slot Class Folder
+            Within each container only one type of object can be created
+                -  CompositePack Layout
+                -  CompositePack Viewlet
+                -  Slot Class
+                
+            Base on the nodeName of the DOM we create the corresponding type of object.
+            
+        """
+
+        self.tool = toolWrapper(self.context)
+        
+        for child in node.Childnodes:
+            if child.nodeName == 'object':
+                obj_id = str(node.getAttribute('name'))
+                obj_type = str(node.getAttribute('name'))
+                
+            if child.nodeName == 'composables':
+                self._configureComposites(child, tool)
+
+        self._createObjectTree(node, self.context)
+        self._configureComposables(node, tool)
+
         for child in node.childNodes:
-            if child.nodeName != 'object':
-                continue
+            # Make sure that if we deprecate a node it is not added.
             if child.hasAttribute('deprecated'):
                 continue
-            parent = self.context
 
-            obj_id = str(child.getAttribute('name'))
+            # For each child we check if the 
+                tool._createObject(node, tool nodeTypeMap[obj_type](obj_id))
+                if child.childNodes is not None:
+                    
+                
+            obj_type = child.nodName
             if obj_id not in parent.objectIds():
-                parent._setObject(obj_id, SimpleItemWithProperties(obj_id))
+                
 ##                 Original _initObjects code:
 ##                 meta_type = str(child.getAttribute('meta_type'))
 ##                 for mt_info in Products.meta_types:

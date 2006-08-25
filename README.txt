@@ -19,6 +19,7 @@ Plone versions supported
 
     2.1.2
 
+    2.5 (need to uncomment the code in configure.zcml)
 
 Products required 
 ================= 
@@ -220,6 +221,28 @@ Registering a layout
   should be used with.
 
 - Click the Select button.
+
+GenericSetup extension profile 
+===============================
+
+Plone-2.5 uses GenericSetup for site configuration. To learn more about GenericSetup
+please read the following documentation:
+
+- http://plone.org/documentation/tutorial/understanding-and-using-genericsetup-in-plone
+
+This means CompositePack can be configure completely throught xml configuration files.
+In the folder profiles/default you will find the base profile for the default
+configuration of the compositetool.
+
+- toolset.xml : Adds the composite_tool to the plone site when running all import
+  steps.
+
+- import_steps.xml : This registers the import method 
+
+- export_steps.xml : This registers the export method.
+
+- compositetool.xml : This is the xml representation of all viewlets, layouts,
+  composables and composites.
 
 Customisation policy script
 ===========================

@@ -5,7 +5,7 @@ from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import ObjectManagerHelpers
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
-
+from Products.Archetypes.utils import shasattr
 from Products.CompositePack.interfaces import ICompositeTool
 from Products.CompositePack.Extensions.Install import toolWrapper
 
@@ -126,32 +126,32 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
         return fragment
 
-    def _createObjectTree(self, node, context):
-        """ Create the object treetructure found in the ZMI
-        """
-        obj_id = str(node.getAttribute('name'))
-        obj_type = node.nodeName
-        
-        # Here we only take care of the content type found in de ZMI as
-        # defined in the nodeTypeMap.
-        if obj_type in nodeTypeMap.keys() and obj_id not in context.objectIds():
-            context._setObject(id, obj_type(id))
-            if obj_type in ['layout','viewlet']:
-                obj.setTitle(obj_title)
-                skin_method = str(node.getAttribute('skin_method'))
-                
-                
-            if obj_type == 'layout':
-                obj.setTitle(obj_title)
-                
-            if node.childNodes:
-                for child in node.childNodes:
-                    _createObject(child, obj)
-
     def _configureComposables(self, node):
         """ Configure the mapping between content types and layouts
         """
-        # import pdb; pdb.set_trace()
+        import pdb; pdb.set_trace()
+        wtool = toolWrapper(self.context)
+        comp_items = list()
+        # Register composables first
+        for composable in _filterNodes(node.childNodes):
+            comp_items.append(composable.getAttribute('name'))
+        wtool.registerAsComposable(comp_items)
+        for composable in _filterNodes(node.childNodes):
+            composable_id = composable.getAttribute('name')
+            default_viewlet = ''
+            c_viewlets = list()
+            # Now register viewlets for each composable
+            for c_viewlet in _filterNodes(composable.childNodes):
+                c_viewlet_id = c_viewlet.getAttribute('name')
+                c_viewlets.append(c_viewlet_id)
+                if c_viewlet.hasAttribute('default'):
+                    default_viewlet = c_viewlet_id
+            if default_viewlet == '':
+                if c_viewlets == []:
+                    raise ValueError
+                default_viewlet = c_viewlets[0]
+
+            wtool.setViewletsForType(composable_id, c_viewlets, default_viewlet)
 
     def _configureComposites(self, node):
         """ Configure the mapping between content types and layouts
@@ -189,11 +189,17 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             "composables" : self._configureComposables,
         }
 
-        for child in node.childNodes:
+        for child in _filterNodes(node.childNodes):
             if child.nodeName not in first_level_nodes.keys():
                 continue
-
             first_level_nodes.get(child.nodeName)(child)
+
+def _filterNodes(nodes):
+    """
+    return a list of nodes with textnodes filtered out.
+    """
+    return [node for node in nodes if not shasattr(node, 'data')]
+
 
 def importCompositeTool(context):
     """ Import composite tool properties.

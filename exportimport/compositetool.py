@@ -103,6 +103,12 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                 composableElement.appendChild(child)
 
         fragment.appendChild(composablesElement)
+        
+        # Let's add some layouts!
+        layoutsElement = self._doc.createElement('layouts')
+        layoutsElement.setAttribute('name', 'layouts')
+        
+        fragment.appendChild(layoutsElement)
 
         return fragment
 

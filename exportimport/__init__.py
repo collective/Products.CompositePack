@@ -1,1 +1,1 @@
-import compositetool
+# Make it a package

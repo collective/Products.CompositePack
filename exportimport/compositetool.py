@@ -1,22 +1,14 @@
-"""Plone Properties tool setup handlers.
-
-$Id:$
-"""
-
 from zope.app import zapi
 from Products.CMFCore.utils import getToolByName
-from Products.GenericSetup.interfaces import IBody
-from Products.GenericSetup.interfaces import INode
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import ObjectManagerHelpers
-from Products.GenericSetup.utils import PropertyManagerHelpers
-from Products.GenericSetup.utils import I18NURI
-from Products.CMFPlone.PropertiesTool import SimpleItemWithProperties
-from Products.CMFPlone.interfaces import IPropertiesTool, ISimpleItemWithProperties
+from Products.GenericSetup.utils import exportObjects
+from Products.GenericSetup.utils import importObjects
 
+from Products.CompositePack.interfaces import ICompositeTool
+from Products.CompositePack.Extensions.Install from toolWrapper
 from Products.CompositePack.Extensions.Install from toolWrapper
 
-_FILENAME = 'compositetool.xml'
 nodeTypeMap = {'layouts':'CompositePack Layout Container',
                'layout':'CompositePack Layout',
                'viewlet':'CompositePack Viewlet',
@@ -27,58 +19,21 @@ nodeTypeMap = {'layouts':'CompositePack Layout Container',
 containers = ['layouts','viewlets','classes']
 
 
-def importCompositeToolProperties(context):
-    """ Import composite tool properties.
-    """
-    site = context.getSite()
-    logger = context.getLogger('composite tool properties')
-    ptool = getToolByName(site, 'composite_tool')
-
-    body = context.readDataFile(_FILENAME)
-    if body is None:
-        logger.info('Composite tool: Nothing to import.')
-        return
-
-    importer = zapi.queryMultiAdapter((ptool, context), IBody)
-    if importer is None:
-        logger.warning('Composite tool: Import adapter misssing.')
-        return
-
-    importer.body = body
-    logger.info('Composite tool imported.')
-
-def exportCompositeToolProperties(context):
-    """ Export composite tool properties.
-    """
-    site = context.getSite()
-    logger = context.getLogger('composite tool properties')
-    ptool = getToolByName(site, 'composite_tool', None)
-    if ptool is None:
-        logger.info('Composite tool: Nothing to export.')
-        return
-
-    exporter = zapi.queryMultiAdapter((ptool, context), IBody)
-    if exporter is None:
-        return 'Composite tool: Export adapter misssing.'
-
-    context.writeDataFile(_FILENAME, exporter.body, exporter.mime_type)
-    logger.info('Composite tool properties exported.')
-
-
 class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
-
-    """Node im- and exporter for composite tool.
     """
-
+    Node im- and exporter for composite tool.
+    """
     __used_for__ = ICompositeTool
 
+    name = 'composite_tool'
+
     def _exportNode(self):
-        """Export the object as a DOM node.
         """
-        #self._doc = doc
+	Export the object as a DOM node.
+        """
         node = self._getObjectNode('object')
-        #node.setAttribute('xmlns:i18n', I18NURI)
         node.appendChild(self._extractObjects())
+	self._logger.info("Composite settings exported.")
         return node
 
     def _importNode(self, node):
@@ -88,6 +43,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             self._purgeObjects()
 
         self._initObjects(node)
+	self._logger.info("Composite settings imported.")
         
     def _purgeObjects(self):
         """ Keep the following folders:
@@ -100,6 +56,22 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         for id in tool.objectIds():
             ids =  tool['id'].objectIds()
             tool['id'].delObjects(ids)
+
+    def _extractCompositeConfiguration(self):
+        """
+	Generate the compositetool.xml from the current configuration.
+        """
+	fragment = self._doc.createDocumentFragment()
+
+	# Lets start with the composites.
+	compositesNode = self._doc.createElement('composites')
+	for composite in self.context.getRegisteredComposites()
+	    compositeNode = compositesNode.createElement('composite')
+	    compositeNode.setAttibute('name', composite['meta_type'])
+	    layoutsForType = self.context.getRegisteredLayoutsForType()
+	    for layout in layoutsForType:
+	        layout = compositeNode.createElement('c_layout')
+		layout.setAttribute('name', layout['id'])
 
     def _createObjectTree(self, node, context):
         """ Create the object treetructure found in the ZMI
@@ -208,4 +180,42 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             importer = zapi.queryMultiAdapter((obj, self.environ), INode)
             if importer:
                 importer.node = child
+
+
+def importCompositeTool(context):
+    """ Import composite tool properties.
+    """
+    site = context.getSite()
+    logger = context.getLogger('composite tool properties')
+    ptool = getToolByName(site, 'composite_tool')
+
+    body = context.readDataFile(_FILENAME)
+    if body is None:
+        logger.info('Composite tool: Nothing to import.')
+        return
+
+    importer = zapi.queryMultiAdapter((ptool, context), IBody)
+    if importer is None:
+        logger.warning('Composite tool: Import adapter misssing.')
+        return
+
+    importer.body = body
+    logger.info('Composite tool imported.')
+
+def exportCompositeTool(context):
+    """ Export composite tool properties.
+    """
+    site = context.getSite()
+    logger = context.getLogger('composite tool properties')
+    ptool = getToolByName(site, 'composite_tool', None)
+    if ptool is None:
+        logger.info('Composite tool: Nothing to export.')
+        return
+
+    exporter = zapi.queryMultiAdapter((ptool, context), IBody)
+    if exporter is None:
+        return 'Composite tool: Export adapter misssing.'
+
+    context.writeDataFile(_FILENAME, exporter.body, exporter.mime_type)
+    logger.info('Composite tool properties exported.')
 

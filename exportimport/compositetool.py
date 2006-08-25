@@ -1,13 +1,13 @@
 from zope.app import zapi
 from Products.CMFCore.utils import getToolByName
+from Products.GenericSetup.interfaces import IBody
 from Products.GenericSetup.utils import XMLAdapterBase
 from Products.GenericSetup.utils import ObjectManagerHelpers
 from Products.GenericSetup.utils import exportObjects
 from Products.GenericSetup.utils import importObjects
 
 from Products.CompositePack.interfaces import ICompositeTool
-from Products.CompositePack.Extensions.Install from toolWrapper
-from Products.CompositePack.Extensions.Install from toolWrapper
+from Products.CompositePack.Extensions.Install import toolWrapper
 
 nodeTypeMap = {'layouts':'CompositePack Layout Container',
                'layout':'CompositePack Layout',
@@ -29,11 +29,11 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
     def _exportNode(self):
         """
-	Export the object as a DOM node.
+        Export the object as a DOM node.
         """
         node = self._getObjectNode('object')
-        node.appendChild(self._extractObjects())
-	self._logger.info("Composite settings exported.")
+        node.appendChild(self._extractCompositeConfiguration())
+        self._logger.info("Composite settings exported.")
         return node
 
     def _importNode(self, node):
@@ -43,7 +43,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             self._purgeObjects()
 
         self._initObjects(node)
-	self._logger.info("Composite settings imported.")
+        self._logger.info("Composite settings imported.")
         
     def _purgeObjects(self):
         """ Keep the following folders:
@@ -59,19 +59,49 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
     def _extractCompositeConfiguration(self):
         """
-	Generate the compositetool.xml from the current configuration.
+        Generate the compositetool.xml from the current configuration.
         """
-	fragment = self._doc.createDocumentFragment()
+        fragment = self._doc.createDocumentFragment()
+        tool = self.context
 
-	# Lets start with the composites.
-	compositesNode = self._doc.createElement('composites')
-	for composite in self.context.getRegisteredComposites()
-	    compositeNode = compositesNode.createElement('composite')
-	    compositeNode.setAttibute('name', composite['meta_type'])
-	    layoutsForType = self.context.getRegisteredLayoutsForType()
-	    for layout in layoutsForType:
-	        layout = compositeNode.createElement('c_layout')
-		layout.setAttribute('name', layout['id'])
+        # Lets start with the composites.
+        compositesElement = self._doc.createElement('composites')
+        compositesElement.setAttribute('name', 'composites')
+        for composite in tool.getRegisteredComposites():
+            child = self._doc.createElement('composite')
+            child.setAttribute('name', composite)
+            compositeElement = compositesElement.appendChild(child)
+
+            layoutsForType = tool.getRegisteredLayoutsForType(composite)
+            layoutsForType = [l.getId() for l in layoutsForType]
+            for layout in layoutsForType:
+                child = self._doc.createElement('c_layout')
+                child.setAttribute('name', layout)
+                default_layout = tool.getDefaultLayoutForType(composite).getId()
+                if default_layout == layout and len(layoutsForType) > 1:
+                    child.setAttribute('default', 'True')
+                compositeElement.appendChild(child)
+
+        fragment.appendChild(compositesElement)
+
+        # Now for the composables.
+        composablesElement = self._doc.createElement('composables')
+        composablesElement.setAttribute('name', 'composites')
+        for composable in tool.getRegisteredComposables():
+            child = self._doc.createElement('composable')
+            child.setAttribute('name', composable)
+            composableElement = composablesElement.appendChild(child)
+
+            viewletsForType = tool.getRegisteredViewletsForType(composable)
+            viewletsForType = [v.getId() for v in viewletsForType]
+            for viewlet in viewletsForType:
+                child = composableElement.createElement('c_viewlet')
+                child.setAttribute('name', viewlet)
+                default_viewlet = tool.getDefaultViewletForType(composable).getId()
+                if default_viewlet == viewlet and len(viewletsForType) > 1:
+                    child.setAttribute('default', 'True')
+        fragment.appendChild(composablesElement)
+        return fragment
 
     def _createObjectTree(self, node, context):
         """ Create the object treetructure found in the ZMI
@@ -98,12 +128,10 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
     def _configureComposables(self, node, context):
         """ Configure the mapping between content types and layouts
         """
-        if obj_type == 'composables':
 
     def _configureComposites(self, node, context):
         """ Configure the mapping between content types and layouts
         """
-        if obj_type == 'composites':
 
     def _initObjects(self, node):
         """ Import subobjects from the DOM tree.
@@ -120,66 +148,6 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             
         """
 
-        self.tool = toolWrapper(self.context)
-        
-        for child in node.Childnodes:
-            if child.nodeName == 'object':
-                obj_id = str(node.getAttribute('name'))
-                obj_type = str(node.getAttribute('name'))
-                
-            if child.nodeName == 'composables':
-                self._configureComposites(child, tool)
-
-        self._createObjectTree(node, self.context)
-        self._configureComposables(node, tool)
-
-        for child in node.childNodes:
-            # Make sure that if we deprecate a node it is not added.
-            if child.hasAttribute('deprecated'):
-                continue
-
-            # For each child we check if the 
-                tool._createObject(node, tool nodeTypeMap[obj_type](obj_id))
-                if child.childNodes is not None:
-                    
-                
-            obj_type = child.nodName
-            if obj_id not in parent.objectIds():
-                
-##                 Original _initObjects code:
-##                 meta_type = str(child.getAttribute('meta_type'))
-##                 for mt_info in Products.meta_types:
-##                     if mt_info['name'] == meta_type:
-##                         parent._setObject(obj_id, mt_info['instance'](obj_id))
-##                         break
-##                 else:
-##                     raise ValueError('unknown meta_type \'%s\'' % obj_id)
-
-            if child.hasAttribute('insert-before'):
-                insert_before = child.getAttribute('insert-before')
-                if insert_before == '*':
-                    parent.moveObjectsToTop(obj_id)
-                else:
-                    try:
-                        position = parent.getObjectPosition(insert_before)
-                        parent.moveObjectToPosition(obj_id, position)
-                    except ValueError:
-                        pass
-            elif child.hasAttribute('insert-after'):
-                insert_after = child.getAttribute('insert-after')
-                if insert_after == '*':
-                    parent.moveObjectsToBottom(obj_id)
-                else:
-                    try:
-                        position = parent.getObjectPosition(insert_after)
-                        parent.moveObjectToPosition(obj_id, position+1)
-                    except ValueError:
-                        pass
-
-            obj = getattr(self.context, obj_id)
-            importer = zapi.queryMultiAdapter((obj, self.environ), INode)
-            if importer:
-                importer.node = child
 
 
 def importCompositeTool(context):
@@ -189,7 +157,7 @@ def importCompositeTool(context):
     logger = context.getLogger('composite tool properties')
     ptool = getToolByName(site, 'composite_tool')
 
-    body = context.readDataFile(_FILENAME)
+    body = context.readDataFile('compositetool.xml')
     if body is None:
         logger.info('Composite tool: Nothing to import.')
         return
@@ -205,17 +173,14 @@ def importCompositeTool(context):
 def exportCompositeTool(context):
     """ Export composite tool properties.
     """
+
     site = context.getSite()
     logger = context.getLogger('composite tool properties')
-    ptool = getToolByName(site, 'composite_tool', None)
-    if ptool is None:
+    tool = getToolByName(site, 'composite_tool', None)
+    if tool is None:
         logger.info('Composite tool: Nothing to export.')
         return
 
-    exporter = zapi.queryMultiAdapter((ptool, context), IBody)
-    if exporter is None:
-        return 'Composite tool: Export adapter misssing.'
-
-    context.writeDataFile(_FILENAME, exporter.body, exporter.mime_type)
+    exportObjects(tool, '', context)
     logger.info('Composite tool properties exported.')
 

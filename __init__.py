@@ -30,8 +30,9 @@ from Products.CompositePack.config import *
 from Products.CompositePack import design, patch
 from Products.CompositePack.ConfigurationMethods import GeneralSetup
 
-from Products.GenericSetup import EXTENSION
-from Products.GenericSetup import profile_registry
+if PLONE25:
+    from Products.GenericSetup import EXTENSION
+    from Products.GenericSetup import profile_registry
 
 registerDirectory('skins', GLOBALS)
 try:
@@ -85,13 +86,14 @@ def initialize(context):
                        icon=TOOL_ICON
                    ).initialize(context)
 
-    profile_registry.registerProfile(
-        name='default',
-        title='Composite Site',
-        description='Profile for Composite Pack',
-        path='profiles/default',
-        product='CompositePack',
-        profile_type=EXTENSION,
-        for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
+    if PLONE25:
+        profile_registry.registerProfile(
+            name='default',
+            title='Composite Site',
+            description='Profile for Composite Pack',
+            path='profiles/default',
+            product='CompositePack',
+            profile_type=EXTENSION,
+            for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
 
     MigrationTool.registerSetupWidget(GeneralSetup)

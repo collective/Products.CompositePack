@@ -111,6 +111,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             child = self._doc.createElement('layout')
             child.setAttribute('name', layout)
             child.setAttribute('title', tool.getLayoutById(layout).title)
+            child.setAttribute('skin_method', tool.getLayoutById(layout).getSkinMethod())
             layoutsElement.appendChild(child)
         
         fragment.appendChild(layoutsElement)

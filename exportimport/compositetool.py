@@ -97,11 +97,13 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             for viewlet in viewletsForType:
                 child = self._doc.createElement('c_viewlet')
                 child.setAttribute('name', viewlet)
-                import pdb; pdb.set_trace()
                 default_viewlet = tool.getDefaultViewletForType(composable).getId()
                 if default_viewlet == viewlet and len(viewletsForType) > 1:
                     child.setAttribute('default', 'True')
+                composableElement.appendChild(child)
+
         fragment.appendChild(composablesElement)
+
         return fragment
 
     def _createObjectTree(self, node, context):

@@ -9,7 +9,6 @@
 """
 $Id: compositetool.py 18879 2006-02-02 15:27:55Z jladage $
 """
-
 from zope.app import zapi
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.interfaces import IBody
@@ -21,22 +20,11 @@ from Products.Archetypes.utils import shasattr
 from Products.CompositePack.interfaces import ICompositeTool
 from Products.CompositePack.Extensions.Install import toolWrapper
 
-nodeTypeMap = {'layouts':'CompositePack Layout Container',
-               'layout':'CompositePack Layout',
-               'viewlet':'CompositePack Viewlet',
-               'viewlets':'CompositePack Viewlet Container',
-               'classes':'Slot Class Folder',
-               'class':'Slot Class',
-    }
-containers = ['layouts','viewlets','classes']
-
-
 class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
     """
     Node im- and exporter for composite tool.
     """
     __used_for__ = ICompositeTool
-
     name = 'composite_tool'
 
     def _exportNode(self):
@@ -49,7 +37,8 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         return node
 
     def _importNode(self, node):
-        """Import the object from the DOM node.
+        """
+        Import the object from the DOM node.
         """
         if self.environ.shouldPurge():
             self._purgeObjects()
@@ -58,12 +47,15 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         self._logger.info("Composite settings imported.")
         
     def _purgeObjects(self):
-        """ Keep the following folders:
-              -  CompositePack Layout Container
-              -  CompositePack Viewlet Container
-              -  Slot Class Folder
-            but delete all child object inside those folders
         """
+        Keep the following folders:
+          -  CompositePack Layout Container
+          -  CompositePack Viewlet Container
+          -  Slot Class Folder
+        but delete all child object inside those folders
+        """
+        # This should be using the tools api instead.
+        # not tested yet.
         tool = self.context
         for id in tool.objectIds():
             ids =  tool['id'].objectIds()
@@ -141,7 +133,6 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
     def _configureComposables(self, node):
         """ Configure the mapping between content types and layouts
         """
-        import pdb; pdb.set_trace()
         wtool = toolWrapper(self.context)
         comp_items = list()
         # Register composables first
@@ -162,49 +153,88 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                 if c_viewlets == []:
                     raise ValueError
                 default_viewlet = c_viewlets[0]
-
             wtool.setViewletsForType(composable_id, c_viewlets, default_viewlet)
 
     def _configureComposites(self, node):
-        """ Configure the mapping between content types and layouts
+        """
+        Configure the mapping between content types and layouts
         """
         # import pdb; pdb.set_trace()
+        wtool = toolWrapper(self.context)
+        comp_items = list()
+        # Register composites first
+        for composite in _filterNodes(node.childNodes):
+            comp_items.append(composite.getAttribute('name'))
+        wtool.registerAsComposite(comp_items)
+        for composite in _filterNodes(node.childNodes):
+            composite_id = composite.getAttribute('name')
+            default_id = ''
+            c_layouts = list()
+            # Now register layouts for each composable
+            for c_layout in _filterNodes(composite.childNodes):
+                c_layout_id = c_layout.getAttribute('name')
+                c_layouts.append(c_layout_id)
+                if c_layout.hasAttribute('default'):
+                    default_id = c_layout_id
+
+            if default_id == '':
+                if c_layouts == []:
+                    raise ValueError
+                default_id = c_layouts[0]
+
+            for c_layout in c_layouts:
+                layout = wtool.getLayoutById(c_layout)
+                wtool.registerLayoutForType(layout, composite_id)
+
+            default_layout = wtool.getLayoutById(default_id)
+            wtool.setDefaultLayoutForType(default_layout, composite_id)
+
 
     def _configureLayouts(self, node):
         """ Configure the layouts
         """
+        wtool = toolWrapper(self.context)
+        # Register the layouts
+        for layout in _filterNodes(node.childNodes):
+            import pdb; pdb.set_trace()
+            layout_id = layout.getAttribute('name')
+            layout_title = layout.getAttribute('title')
+            layout_skin_method = layout.getAttribute('skin_method')
+            wtool.registerLayout(layout_id.encode(), layout_title.encode(), layout_skin_method.encode())
 
     def _configureViewlets(self, node):
         """ Configure the Viewlets
         """
-        # import pdb; pdb.set_trace()
+        wtool = toolWrapper(self.context)
+        # Register the viewlets
+        for viewlet in _filterNodes(node.childNodes):
+            viewlet_id = viewlet.getAttribute('name')
+            viewlet_title = viewlet.getAttribute('title')
+            viewlet_skin_method = viewlet.getAttribute('skin_method')
+            wtool.registerViewlet(viewlet_id.encode(), viewlet_title.encode(), viewlet_skin_method.encode())
 
     def _initObjects(self, node):
-        """ Import subobjects from the DOM tree.
-            Directly under a compositetool we are allowed to create:
-                -  CompositePack Layout Container
-                -  CompositePack Viewlet Container
-                -  Slot Class Folder
-            Within each container only one type of object can be created
-                -  CompositePack Layout
-                -  CompositePack Viewlet
-                -  Slot Class
-                
-            Base on the nodeName of the DOM we create the corresponding type of object.
-            
+        """
+        Base on the nodeName of the DOM we create the corresponding type of object.
+        One Issue though, layouts have to be registered before composites!
         """
 
-        first_level_nodes = {
+        top_nodes = {
             "layouts"     : self._configureLayouts,
             "viewlets"    : self._configureViewlets,
             "composites"  : self._configureComposites,
             "composables" : self._configureComposables,
         }
 
+        # Need to change the order, layouts first.
         for child in _filterNodes(node.childNodes):
-            if child.nodeName not in first_level_nodes.keys():
-                continue
-            first_level_nodes.get(child.nodeName)(child)
+            if child.nodeName == 'layout':
+                top_nodes.get(child.nodeName)(child)
+
+        for child in _filterNodes(node.childNodes):
+            if child.nodeName in top_nodes.keys() and \
+                child.nodeName != 'layout':
+                top_nodes.get(child.nodeName)(child)
 
 def _filterNodes(nodes):
     """

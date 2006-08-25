@@ -81,7 +81,6 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                 if default_layout == layout and len(layoutsForType) > 1:
                     child.setAttribute('default', 'True')
                 compositeElement.appendChild(child)
-
         fragment.appendChild(compositesElement)
 
         # Now for the composables.
@@ -101,19 +100,28 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                 if default_viewlet == viewlet and len(viewletsForType) > 1:
                     child.setAttribute('default', 'True')
                 composableElement.appendChild(child)
-
         fragment.appendChild(composablesElement)
-        
+
+        # Let's add some viewlet!
+        viewletsElement = self._doc.createElement('viewlets')
+        viewletsElement.setAttribute('name', 'viewlets')
+        for viewlet in tool.getAllViewlets():
+            child = self._doc.createElement('viewlet')
+            child.setAttribute('name', viewlet.getId())
+            child.setAttribute('title', viewlet.Title())
+            child.setAttribute('skin_method', viewlet.getSkinMethod())
+            viewletsElement.appendChild(child)
+        fragment.appendChild(viewletsElement)
+
         # Let's add some layouts!
         layoutsElement = self._doc.createElement('layouts')
         layoutsElement.setAttribute('name', 'layouts')
-        for layout in [l.getId() for l in tool.getAllLayouts()]:
+        for layout in tool.getAllLayouts():
             child = self._doc.createElement('layout')
-            child.setAttribute('name', layout)
-            child.setAttribute('title', tool.getLayoutById(layout).title)
-            child.setAttribute('skin_method', tool.getLayoutById(layout).getSkinMethod())
+            child.setAttribute('name', layout.getId())
+            child.setAttribute('title', layout.Title())
+            child.setAttribute('skin_method', layout.getSkinMethod())
             layoutsElement.appendChild(child)
-        
         fragment.appendChild(layoutsElement)
 
         return fragment

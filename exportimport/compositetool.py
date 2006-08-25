@@ -107,6 +107,10 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         # Let's add some layouts!
         layoutsElement = self._doc.createElement('layouts')
         layoutsElement.setAttribute('name', 'layouts')
+        for layout in [l.getId() for l in tool.getAllLayouts()]:
+            child = self._doc.createElement('layout')
+            child.setAttribute('name', layout)
+            layoutsElement.appendChild(child)
         
         fragment.appendChild(layoutsElement)
 

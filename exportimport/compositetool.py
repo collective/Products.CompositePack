@@ -148,13 +148,24 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                 for child in node.childNodes:
                     _createObject(child, obj)
 
-    def _configureComposables(self, node, context):
+    def _configureComposables(self, node):
         """ Configure the mapping between content types and layouts
+        """
+        # import pdb; pdb.set_trace()
+
+    def _configureComposites(self, node):
+        """ Configure the mapping between content types and layouts
+        """
+        # import pdb; pdb.set_trace()
+
+    def _configureLayouts(self, node):
+        """ Configure the layouts
         """
 
-    def _configureComposites(self, node, context):
-        """ Configure the mapping between content types and layouts
+    def _configureViewlets(self, node):
+        """ Configure the Viewlets
         """
+        # import pdb; pdb.set_trace()
 
     def _initObjects(self, node):
         """ Import subobjects from the DOM tree.
@@ -171,26 +182,39 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             
         """
 
+        first_level_nodes = {
+            "layouts"     : self._configureLayouts,
+            "viewlets"    : self._configureViewlets,
+            "composites"  : self._configureComposites,
+            "composables" : self._configureComposables,
+        }
 
+        for child in node.childNodes:
+            if child.nodeName not in first_level_nodes.keys():
+                continue
+
+            first_level_nodes.get(child.nodeName)(child)
 
 def importCompositeTool(context):
     """ Import composite tool properties.
     """
     site = context.getSite()
     logger = context.getLogger('composite tool properties')
-    ptool = getToolByName(site, 'composite_tool')
+    tool = getToolByName(site, 'composite_tool')
 
     body = context.readDataFile('compositetool.xml')
     if body is None:
         logger.info('Composite tool: Nothing to import.')
         return
 
-    importer = zapi.queryMultiAdapter((ptool, context), IBody)
+    importer = zapi.queryMultiAdapter((tool, context), IBody)
     if importer is None:
         logger.warning('Composite tool: Import adapter misssing.')
         return
 
     importer.body = body
+
+    importObjects(tool, '', context)
     logger.info('Composite tool imported.')
 
 def exportCompositeTool(context):

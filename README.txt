@@ -19,7 +19,7 @@ Plone versions supported
 
     2.1.2
 
-    2.5 (need to uncomment the code in configure.zcml)
+    2.5 (need to uncomment the line in configure.zcml)
 
 Products required 
 ================= 
@@ -236,6 +236,10 @@ configuration of the compositetool.
 
 - toolset.xml : Adds the composite_tool to the plone site when running all import
   steps.
+
+- types.xml : Adds the content types that come with CompositePack
+
+- types/*.xml : A config file for each type
 
 - import_steps.xml : This registers the import method 
 

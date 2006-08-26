@@ -5,6 +5,7 @@
     handler="Products.CompositePack.exportimport.compositetool.importCompositeTool"
     title="Composite Tool">
     <dependency step="toolset"/>
+    <dependency step="typeinfo" />
     Import composite tool specific configuration.
   </import-step>
 </import-steps>

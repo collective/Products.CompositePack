@@ -19,6 +19,7 @@ from Products.GenericSetup.utils import importObjects
 from Products.Archetypes.utils import shasattr
 from Products.CompositePack.interfaces import ICompositeTool
 from Products.CompositePack.Extensions.Install import toolWrapper
+from Products.CompositePack.config import LAYOUTS, VIEWLETS
 
 class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
     """
@@ -44,7 +45,6 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             self._purgeObjects()
 
         self._initObjects(node)
-        self._logger.info("Composite settings imported.")
         
     def _purgeObjects(self):
         """
@@ -154,12 +154,12 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                     raise ValueError
                 default_viewlet = c_viewlets[0]
             wtool.setViewletsForType(composable_id, c_viewlets, default_viewlet)
+            self._logger.info('Composable: %s registered with viewlets: %s' % (composable_id,' '.join(c_viewlets)))
 
     def _configureComposites(self, node):
         """
         Configure the mapping between content types and layouts
         """
-        # import pdb; pdb.set_trace()
         wtool = toolWrapper(self.context)
         comp_items = list()
         # Register composites first
@@ -188,30 +188,44 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
             default_layout = wtool.getLayoutById(default_id)
             wtool.setDefaultLayoutForType(default_layout, composite_id)
+            self._logger.info('Composite: %s registered with layouts: %s' % (composite_id,' '.join(c_layouts)))
 
 
     def _configureLayouts(self, node):
         """ Configure the layouts
         """
         wtool = toolWrapper(self.context)
+
+        # Make sure the layouts folder exists.
+        if not shasattr(self.context, LAYOUTS):
+            from Products.CompositePack.viewlet import container
+            container.addLayoutContainer(self.context, id=LAYOUTS,
+                                  title='A Container for registered Layouts')
         # Register the layouts
         for layout in _filterNodes(node.childNodes):
-            import pdb; pdb.set_trace()
             layout_id = layout.getAttribute('name')
             layout_title = layout.getAttribute('title')
             layout_skin_method = layout.getAttribute('skin_method')
             wtool.registerLayout(layout_id.encode(), layout_title.encode(), layout_skin_method.encode())
-
+            self._logger.info('Layout: %s registered' % layout_title.encode())
+            
     def _configureViewlets(self, node):
         """ Configure the Viewlets
         """
         wtool = toolWrapper(self.context)
+
+        # Make sure the viewlets folder exists.
+        if not shasattr(self.context, VIEWLETS):
+            from Products.CompositePack.viewlet import container
+            container.addViewletContainer(self.context, id=VIEWLETS,
+                                 title='A Container for registered Viewlets')
         # Register the viewlets
         for viewlet in _filterNodes(node.childNodes):
             viewlet_id = viewlet.getAttribute('name')
             viewlet_title = viewlet.getAttribute('title')
             viewlet_skin_method = viewlet.getAttribute('skin_method')
             wtool.registerViewlet(viewlet_id.encode(), viewlet_title.encode(), viewlet_skin_method.encode())
+            self._logger.info('Viewlet: %s registered' % viewlet_title.encode())
 
     def _initObjects(self, node):
         """
@@ -228,12 +242,14 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
         # Need to change the order, layouts first.
         for child in _filterNodes(node.childNodes):
-            if child.nodeName == 'layout':
+            if child.nodeName in ('viewlets', 'layouts'):
                 top_nodes.get(child.nodeName)(child)
+
+                
 
         for child in _filterNodes(node.childNodes):
             if child.nodeName in top_nodes.keys() and \
-                child.nodeName != 'layout':
+                child.nodeName != 'layouts':
                 top_nodes.get(child.nodeName)(child)
 
 def _filterNodes(nodes):
@@ -261,21 +277,18 @@ def importCompositeTool(context):
         return
 
     importer.body = body
-
     importObjects(tool, '', context)
-    logger.info('Composite tool imported.')
 
 def exportCompositeTool(context):
     """ Export composite tool properties.
     """
 
     site = context.getSite()
-    logger = context.getLogger('composite tool properties')
+    logger = context.getLogger('composite tool')
     tool = getToolByName(site, 'composite_tool', None)
     if tool is None:
-        logger.info('Composite tool: Nothing to export.')
+        logger.info('Nothing to export.')
         return
 
     exportObjects(tool, '', context)
-    logger.info('Composite tool properties exported.')
 

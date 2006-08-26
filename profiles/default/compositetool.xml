@@ -60,6 +60,7 @@
  <layouts name="layouts">
   <layout name="two_slots" title="Two slots" skin_method="two_slots"/>
   <layout name="three_slots" title="Three slots" skin_method="three_slots"/>
-  <layout name="two_columns" title="Two columns" skin_method="two_columns"/>
+  <layout name="two_columns" title="Two columns" skin_method="two_columns"
+      default="True"/>
  </layouts>
 </object>

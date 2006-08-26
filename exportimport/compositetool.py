@@ -154,7 +154,8 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
                     raise ValueError
                 default_viewlet = c_viewlets[0]
             wtool.setViewletsForType(composable_id, c_viewlets, default_viewlet)
-            self._logger.info('Composable: %s registered with viewlets: %s' % (composable_id,' '.join(c_viewlets)))
+            self._logger.info('Composable: "%s" registered with viewlets: "%s"' % (composable_id,' '.join(c_viewlets)))
+            self._logger.info('Default layout for "%s" is set to: "%s"' % (composable_id, default_viewlet))
 
     def _configureComposites(self, node):
         """
@@ -188,8 +189,8 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
             default_layout = wtool.getLayoutById(default_id)
             wtool.setDefaultLayoutForType(default_layout, composite_id)
-            self._logger.info('Composite: %s registered with layouts: %s' % (composite_id,' '.join(c_layouts)))
-
+            self._logger.info('Composite: "%s" registered with layouts: "%s"' % (composite_id,' '.join(c_layouts)))
+            self._logger.info('Default layout for "%s" is set to: ""%s"' % (composite_id, default_id))
 
     def _configureLayouts(self, node):
         """ Configure the layouts
@@ -207,7 +208,10 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             layout_title = layout.getAttribute('title')
             layout_skin_method = layout.getAttribute('skin_method')
             wtool.registerLayout(layout_id.encode(), layout_title.encode(), layout_skin_method.encode())
-            self._logger.info('Layout: %s registered' % layout_title.encode())
+            self._logger.info('Layout: "%s" registered' % layout_title.encode())
+            if layout.hasAttribute('default'):
+                wtool.setDefaultLayout(layout_id)
+                self._logger.info('Layout: "%s" set as tool default layout' % layout_title.encode())
             
     def _configureViewlets(self, node):
         """ Configure the Viewlets
@@ -225,7 +229,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             viewlet_title = viewlet.getAttribute('title')
             viewlet_skin_method = viewlet.getAttribute('skin_method')
             wtool.registerViewlet(viewlet_id.encode(), viewlet_title.encode(), viewlet_skin_method.encode())
-            self._logger.info('Viewlet: %s registered' % viewlet_title.encode())
+            self._logger.info('Viewlet: "%s" registered' % viewlet_title.encode())
 
     def _initObjects(self, node):
         """
@@ -249,7 +253,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
         for child in _filterNodes(node.childNodes):
             if child.nodeName in top_nodes.keys() and \
-                child.nodeName != 'layouts':
+                child.nodeName not in ('viewlets', 'layouts'):
                 top_nodes.get(child.nodeName)(child)
 
 def _filterNodes(nodes):

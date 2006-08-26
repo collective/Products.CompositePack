@@ -125,6 +125,8 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             child.setAttribute('name', layout.getId())
             child.setAttribute('title', layout.Title())
             child.setAttribute('skin_method', layout.getSkinMethod())
+            if layout.getId() == tool.getDefaultLayout():
+                child.setAttribute('default', "true")
             layoutsElement.appendChild(child)
         fragment.appendChild(layoutsElement)
 

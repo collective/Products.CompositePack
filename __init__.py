@@ -15,17 +15,25 @@ $Id$
 from Products.CompositePack.Extensions import Install
 del Install
 
-from Products.Archetypes.public import *
-from Products.Archetypes import listTypes
-from Products.CompositePack.config import *
-from Products.CompositePack import design, patch
 from Products.CMFCore import utils as cmf_utils
 from Products.CMFCore.DirectoryView import registerDirectory
-from Products.CompositePage import tool as base_tool
 
 from Products.CMFPlone import MigrationTool
+import Products.CMFPlone.interfaces
 
+from Products.Archetypes.public import *
+from Products.Archetypes.atapi import *
+from Products.Archetypes import listTypes
+
+from Products.CompositePage import tool as base_tool
+
+from Products.CompositePack.config import *
+from Products.CompositePack import design, patch
 from Products.CompositePack.ConfigurationMethods import GeneralSetup
+
+if PLONE25:
+    from Products.GenericSetup import EXTENSION
+    from Products.GenericSetup import profile_registry
 
 registerDirectory('skins', GLOBALS)
 try:
@@ -36,7 +44,6 @@ except KeyError:
 base_tool.registerUI('plone', design.PloneUI())
 
 def initialize(context):
-
     from Products.CompositePack import tool, viewlet
     from Products.CompositePack.composite import archetype
     from Products.CompositePack.viewlet import container
@@ -79,5 +86,15 @@ def initialize(context):
                        product_name = PROJECTNAME,
                        icon=TOOL_ICON
                    ).initialize(context)
+
+    if PLONE25:
+        profile_registry.registerProfile(
+            name='default',
+            title='Composite Site',
+            description='Profile for Composite Pack',
+            path='profiles/default',
+            product='CompositePack',
+            profile_type=EXTENSION,
+            for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
 
     MigrationTool.registerSetupWidget(GeneralSetup)

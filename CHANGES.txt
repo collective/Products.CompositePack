@@ -1,7 +1,3 @@
-* Added GenericSetup base profile for configuring the composite_tool. You can
-  now import and export the entire configuration in XML.
-  [jladage and jorisslob]
-
 * changed tool.py to handle multiple users messing with the same 
   navigation page. Some sanity checks were added and neat error messages
   will be sent to users when things go wrong

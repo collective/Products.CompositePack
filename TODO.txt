@@ -28,4 +28,3 @@ Plone 2.5 compatibility
   * test is failing regarding the references of a renamed navigation page
 
   * Viewlets can not be added using the ZMI (you get a login screen)
-

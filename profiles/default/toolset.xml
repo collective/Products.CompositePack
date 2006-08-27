@@ -1,5 +1,0 @@
-<?xml version="1.0"?>
-<tool-setup>
-  <required tool_id="composite_tool"
-            class="Products.CompositePack.tool.CompositeTool"/>
-</tool-setup>

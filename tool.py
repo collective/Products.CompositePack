@@ -51,10 +51,12 @@ from Products.CompositePack.ViewletRegistry import ViewletRegistry
 from Products.CompositePack.ViewletRegistry import DEFAULT
 from Products.CompositePack.ViewletRegistry import ViewletsForType
 from Products.CompositePack.exceptions import CompositePackError
+from Products.CompositePack.interfaces import ICompositeTool
+from zope.interface import implements
 
-class CompositeTool(Folder, BaseTool):
+class CompositeTool(BaseTool, Folder):
     """ CompositePack Tool """
-
+    implements(ICompositeTool)
     id = TOOL_ID
     meta_type = 'CompositePack Tool'
 

@@ -28,3 +28,7 @@ Plone 2.5 compatibility
   * test is failing regarding the references of a renamed navigation page
 
   * Viewlets can not be added using the ZMI (you get a login screen)
+
+  * Generic setups' toolset.xml step doesn't call the manaage_addCompositeTool method, so
+    as a result the layouts, and viewlets folder is not created. Let's handle those in our
+    import step.

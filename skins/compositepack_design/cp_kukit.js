@@ -1,16 +1,16 @@
-kukit.cr.makeSelectorCommand('cpSetupTarget', function(node) {
-    plone_setUpSlotTarget(node);
+kukit.cr.makeSelectorCommand('cpSetupTarget', function(oper) {
+    plone_setUpSlotTarget(oper.node);
     kukit.logDebug('CP target setup');
 });
 
-kukit.cr.makeSelectorCommand('cpSetupElement', function(node) {
-    plone_setUpSlotElement(node);
+kukit.cr.makeSelectorCommand('cpSetupElement', function(oper) {
+    plone_setUpSlotElement(oper.node);
     kukit.logDebug('CP element setup');
 });
 
 kukit.logDebug('CP commands registered')
 
-kukit.pdlib = {};
+/* kukit.pdlib = {};
 
 kukit.pdlib.ContextMenuEvent = function() {
 };
@@ -29,4 +29,4 @@ kukit.pdlib.ContextMenuEvent.prototype.__default_click__ = function(name, parms,
 
 kukit.er.eventRegistry.register('pdlibContextMenu', 'click', kukit.pdlib.ContextMenuEvent, '__bind_click__', '__default_click__');
 
-kukit.logDebug('CP context menu registered')
+kukit.logDebug('CP context menu registered') */

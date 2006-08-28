@@ -201,10 +201,6 @@ function plone_setUpSlotElement(node) {
 pd_node_setup['slot_element'] = plone_setUpSlotElement;
 
 function plone_setUpSlotTarget(node) {
-    /*var PackSetup = node.getAttribute('PackSetup');
-    if (!PackSetup) {
-        setup_pack_slot_target(node);
-    };*/
     setUpSlotTarget(node);
     node.onmouseover = function() {
         pd_highlight(node, 1);
@@ -223,27 +219,6 @@ function getNodeHeaderTitle(node, default_value) {
     else {
         return default_value;
     }
-}
-
-function setup_pack_slot_target(node) {
-    node.setAttribute('PackSetup', '1');
-    title_node = document.getElementById("slot-target-context-menu");
-    header_title = getNodeHeaderTitle(title_node, "Add item");
-    var menuItem = document.createElement("div");
-    menuItem.className = "contentActions";
-    var ul = document.createElement("ul");
-    var li = document.createElement("li");
-    var div = document.createElement("div");
-    div.className = "menuPosition";
-    var link = document.createElement("a");
-    link.setAttribute("href", "#");
-    var child = document.createTextNode(header_title.replace(' ', '\xa0'));
-    link.appendChild(child);
-    div.appendChild(link);
-    li.appendChild(div);
-    ul.appendChild(li);
-    menuItem.appendChild(ul);
-    node.appendChild(menuItem);
 }
 
 pd_node_setup['slot_target'] = plone_setUpSlotTarget;

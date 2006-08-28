@@ -4,8 +4,6 @@
            i18n_domain="compopack">
 
   <five:traversable class=".tool.CompositeTool" />
-<!-- enable this line with Plone-2.5
      <include package=".exportimport" />
--->
 </configure>
 

@@ -9,13 +9,12 @@
 """Composite Portlet :
    used to select a portlet to be used as a composite element in composite pages
 
-$Id: titles.py 25210 2006-06-21 08:35:15Z duncanb $
+$Id: portlets.py 25210 2006-09-05 08:35:15Z jladage $
 """
 from Products.Archetypes.public import *
 from Products.CompositePack.config import PROJECTNAME
 from Products.CMFCore.utils import getToolByName
 
-COMPOSITE = 'composite'
 
 class Portlet(BaseContentMixin):
 
@@ -54,6 +53,27 @@ class Portlet(BaseContentMixin):
             'permissions': ('''View''',)},
 
            )
+
+    def getAvailablePortlets(self):
+        """ Return a list of tuples available portlets in the portal. This will scan
+        for all page templates that define a macro called portlet.
+        """
+        import pdb;pdb.set_trace()
+
+        vocab = []
+        skins = getToolByName(self, 'portal_skins')
+        results = self.zopeFind(skins, obj_searchterm='metal:define-macro="portlet"', search_sub=1,)
+        for brain in results:
+            if brain['id'] in ids:
+                id = brain['id']
+                title = _pretty_title(id)
+                item = (id, title)
+                vocab.append(item)
+                
+        return vocab
+        
+    def _pretty_title(self, id):
+        return id[7:].capitalize()
 
     def SearchableText(self):
         '''Titles shouldn't be indexed in their own right'''
@@ -95,7 +115,7 @@ class Portlet(BaseContentMixin):
     def dereferenceComposite(self):
         """Returns the object referenced by this composite element.
         """
-        refs = self.getRefs(COMPOSITE)
-        return refs and refs[0] or None
+        #refs = self.getRefs(COMPOSITE)
+        #return refs and refs[0] or None
 
-registerType(Titles, PROJECTNAME)
+registerType(Portlet, PROJECTNAME)

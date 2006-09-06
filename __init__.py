@@ -49,6 +49,7 @@ def initialize(context):
     from Products.CompositePack.composite import navigationpage
     from Products.CompositePack.composite import titles
     from Products.CompositePack.composite import fragments
+    from Products.CompositePack.composite import portlets
 
     if INSTALL_DEMO_TYPES:
         from Products.CompositePack.demo import ATCompositeDocument
@@ -72,7 +73,8 @@ def initialize(context):
                                            'CompositePack Titles',
                                            'CompositePack Fragments',
                                            'CompositePack Viewlet Container',
-                                           'CompositePack Layout Container'])
+                                           'CompositePack Layout Container',
+                                           'CompositePack Portlet'])
 
     context.registerClass(
         tool.CompositeTool,

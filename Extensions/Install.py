@@ -79,6 +79,7 @@ def install_tool(self, out):
         tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
+    tool.registerAsComposable('CompositePack Portlet')
     
     ts = tool.registerLayout('two_slots', 'Two slots', 'two_slots')
     try:

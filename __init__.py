@@ -30,9 +30,12 @@ from Products.CompositePack.config import *
 from Products.CompositePack import design, patch
 from Products.CompositePack.ConfigurationMethods import GeneralSetup
 
-if PLONE25:
-    from Products.GenericSetup import EXTENSION
+try:
     from Products.GenericSetup import profile_registry
+    from Products.GenericSetup import EXTENSION
+    hasGenericSetup = True
+except ImportError:
+    hasGenericSetup = False
 
 registerDirectory('skins', GLOBALS)
 try:
@@ -88,7 +91,7 @@ def initialize(context):
                        icon=TOOL_ICON
                    ).initialize(context)
 
-    if PLONE25:
+    if hasGenericSetup:
         profile_registry.registerProfile(
             name='default',
             title='Composite Site',

@@ -137,6 +137,50 @@ class ComposableTest(CompositeGSTestCase):
             self.failUnless(title == expected[id][0])
             self.failUnless(skin == expected[id][1])
 
+    def test_additive_prop(self):
+        """ This tests the additive property of the import function.
+            When you make local changes, the import function should
+            only add and not replace things
+        """
+
+        # We first make some custom Composite Pack modifications
+        self.ct.registerLayout("custom_layout_id", "custom_layout_title", "custom_layout_skin_method")
+        self.ct.registerViewlet("custom_viewlet_id", "custom_viewlet_title", "custom_viewlet_skin_method")
+        viewlet = self.ct.getViewletById("custom_viewlet_id")
+        self.ct.registerViewletForType(viewlet, "custom_composable_id")
+        layout = self.ct.getLayoutById("custom_layout_id")
+        self.ct.registerLayoutForType(layout, "custom_composite_id")
+
+        # Now we use Generic Setup to import the default
+        self.gs = self.portal.portal_setup
+        self.gs.setImportContext('profile-CompositePack:default')
+        self.gs.runAllImportSteps()
+
+        # Let's get the Layouts
+        layouts = self.ct.getAllLayouts()
+        layouts_names = [str(l) for l in layouts]
+
+        layouts_for_custom = self.ct.getRegisteredLayoutsForType("custom_composite_id")
+        layouts_for_custom_names = [str(lf) for lf in layouts_for_custom]
+
+        # And let's get the Viewlets
+        viewlets = self.ct.getAllViewlets()
+        viewlets_names = [str(v) for v in viewlets]
+
+        viewlets_for_custom = self.ct.getRegisteredViewletsForType("custom_composable_id")
+        viewlets_for_custom_names = [str(lv) for lv in viewlets_for_custom]
+
+
+        # Now, let us check if our customization still exists or if the import
+        # replaced it all.
+        self.failUnless('<Layout at custom_layout_id>' in layouts_names, 
+                        "Custom layout was overwritten at import")
+        self.failUnless('<Viewlet at custom_viewlet_id>' in viewlets_names,
+                        "Custom viewlet was overwritten at import")
+        self.failUnless('<Viewlet at custom_viewlet_id>' in viewlets_for_custom_names,
+                        "Custom viewlet for composable overwritten at import")
+        self.failUnless('<Layout at custom_layout_id>' in layouts_for_custom_names,
+                        "Custom layout for composite overwritten at import")
 
 def test_suite():
     import unittest

@@ -43,21 +43,21 @@ img.slot-element-grip {
 .slot_target_highlighted .contentActions {
     border: 1px solid &dtml-contentViewBorderColor;;
     font-size: 92%;
+}
+
+.slot_target_highlighted .contentActions {
     background-color: &dtml-contentViewBackgroundColor;;
-    position: static;
 }
 
 .slot_target .contentActions {
     background-color: &dtml-contentViewBackgroundColor;;
     /* comment line hereunder to have very visible bars */
     background-color: transparent;
-    position: static;
 }
 
 .slot_element .contentActions,
 .slot_element_highlighted .contentActions {
     background-color: transparent;
-    position: static;
     border: 0px;
     font-size: 92%;
     margin: 1px 0px 0px 0px; 
@@ -124,10 +124,7 @@ img.slot-element-grip {
 .slot_element .menuPosition,
 .slot_element .contentActions li,
 .slot_element_highlighted .contentActions li {
-    /* Position relative removed, it didn't break anything, but fixed z-ordering 
-       A neater solution would be to clean this (but references were found in js files
-       so we didn't want to delete it completely.
-    */
+    position: relative;
 }
 
 .contentActions li .menuPosition a {

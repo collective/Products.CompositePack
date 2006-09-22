@@ -87,7 +87,6 @@ def initialize(context):
 
     cmf_utils.ToolInit(TOOL_NAME,
                        tools = tools,
-                       product_name = PROJECTNAME,
                        icon=TOOL_ICON
                    ).initialize(context)
 

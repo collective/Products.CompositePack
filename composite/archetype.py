@@ -11,13 +11,18 @@
 $Id$
 """
 
+from Acquisition import aq_base, aq_parent, aq_inner
+
+from DocumentTemplate.DT_Util import safe_callable
+
+from Products.CMFCore.utils import getToolByName
+
 from Products.Archetypes.public import *
+
 from Products.CompositePage.interfaces import ICompositeElement
+
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID
 from Products.CompositePack.exceptions import CompositePackError
-from Products.CMFCore.utils import getToolByName
-from DocumentTemplate.DT_Util import safe_callable
-from Acquisition import aq_base, aq_parent, aq_inner
 
 TARGET = 'target'
 VIEWLET = 'viewlet'

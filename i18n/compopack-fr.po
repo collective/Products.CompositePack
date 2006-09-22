@@ -24,10 +24,10 @@ msgstr "Contenu"
 msgid "Close menu"
 msgstr "Fermer le menu"
 
-msgid "Add item"
+msgid "add_item"
 msgstr "Ajouter"
 
-msgid "Edit item"
+msgid "edit_item"
 msgstr "Modifier"
 
 msgid "label_layout"

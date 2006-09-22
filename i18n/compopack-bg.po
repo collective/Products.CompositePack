@@ -26,10 +26,10 @@ msgstr "Съдържание"
 msgid "Close menu"
 msgstr "Затваряне на менюто"
 
-msgid "Add item"
+msgid "add_item"
 msgstr "Добавяне"
 
-msgid "Edit item"
+msgid "edit_item"
 msgstr "Редактиране"
 
 msgid "label_layout"

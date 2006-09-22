@@ -12,16 +12,9 @@
 redefine template_id is needed to fix "design" tab highlight
 </tal:template_id>
 
-<metal:cssslot fill-slot="css_slot">
-    <style type="text/css" media="screen"
-           tal:content="string: @import url($portal_url/compo.css);">
-    </style>
-</metal:cssslot>
-
 <metal:main fill-slot="main">
     <tal:main-macro metal:define-macro="main"
            tal:define="len_text python:len(getattr(here, 'text', ''));">
-
         <h1 tal:content="context/title_or_id" class="documentFirstHeading">
           Title or id
         </h1>
@@ -30,10 +23,6 @@ redefine template_id is needed to fix "design" tab highlight
             Document actions (print, sendto etc)
         </div>
     
-        <div class="emphasis"
-        tal:condition="python:here.cp_container.isEditing() or 
-        here.cp_container.filled_slots.first.objectIds()" tal:content="structure slot:first 'Emphasis'" />
-
         <div class="documentDescription"
              tal:content="context/Description">
             description
@@ -60,6 +49,26 @@ it.
         </div>
     </tal:main-macro>
 </metal:main>
+
+<div metal:fill-slot="portlets_two_slot">
+
+    <metal:empty define-macro="empty" />
+    <div class="portlet" tal:condition="python:options['composite'].isEditing()
+                     or len(options['composite'].filled_slots.related.objectIds()) ">
+
+        <h5>Related Content</h5>
+
+        <div class="portletBody">
+            <div class="portletContent">
+
+                <div tal:replace="structure slot: related 'Related'" />
+            </div>
+        </div>
+
+    </div>
+
+
+</div>
 
 </body>
 </html>

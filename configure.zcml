@@ -1,9 +1,99 @@
 <configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:browser="http://namespaces.zope.org/browser"
            xmlns:five="http://namespaces.zope.org/five"
+           xmlns:azax="http://namespaces.zope.org/azax"
            xmlns:i18n="http://namespaces.zope.org/i18n"
            i18n_domain="compopack">
 
   <five:traversable class=".tool.CompositeTool" />
-     <include package=".exportimport" />
+  <include package=".exportimport" />
+
+  <interface
+      interface=".interfaces.IPackComposite"
+      type="zope.app.content.interfaces.IContentType"
+      />
+
+  <five:traversable class=".composite.packcomposite.PackComposite" />
+
+  <!--five:defaultViewable class=".simplecontent.SimpleContent" /-->
+
+  <content class=".composite.packcomposite.PackComposite">
+    <implements
+        interface=".interfaces.IPackComposite"
+        />
+    <require
+        permission="zope2.View"
+        interface=".interfaces.IPackComposite"
+        />
+  </content>
+ 
+  <!--browser:defaultView
+      for=".interfaces.ISimpleContent"
+      name="index.html"
+      /-->
+
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      template="browser/test.pt"
+      name="index.html"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="addTitle"
+      name="addTitle"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="addFragment"
+      name="addFragment"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="addContent"
+      name="addContent"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="deleteElement"
+      name="ajaxDeleteElement"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for=".interfaces.IPackComposite"
+      class=".composite.packview.PackView"
+      attribute="moveElement"
+      name="ajaxMoveElement"
+      permission="zope2.View"
+      />
+
+  <browser:resource
+      file="browser/pack.azax"
+      name="pack.azax"
+  />
+
+  <azax:registerAction
+      name="cpSetupElement"
+      command_factory="selector"
+      />
+  
+  <azax:registerAction
+      name="cpSetupTarget"
+      command_factory="selector"
+      />
+
 </configure>
 

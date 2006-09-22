@@ -60,13 +60,15 @@ target_path) {
         uri = uri.strip();  // needs kupuhelpers.js
 
         this.hide();
-        url = this.compopagepath + '/cp_container/addContent';
-        params = "target_path=" + this.target_path;
-        params = params + "&target_index=" + this.target_index;
-        params = params + "&compopage_path=" + this.compopagepath;
-        params = params + "&target_id=" + this.target_id;
-        params = params + "&uri=" + uri;
-        kukit.notifyServerWithParams(url, params);
+        var url = this.compopagepath + '/cp_container/addContent';
+
+        var params = {
+            'target_path': this.target_path,
+            'target_index': this.target_index,
+            'compopage_path': this.compopagepath,
+            'target_id': this.target_id,
+            'uri': uri};
+        kukit.notifyServer(url, params);
     };
 
     this.setPosition = function(e){

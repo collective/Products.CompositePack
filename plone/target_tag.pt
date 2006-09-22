@@ -3,4 +3,13 @@
                      target_path options/slot_path;
                      target_index options/index;
                      id options/target_id">
+  <div class="contentActions">
+    <ul>
+      <li>
+        <div class="menuPosition">
+          <a href="#" i18n:domain="compopack" i18n:translate="add_item">Add item</a>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>

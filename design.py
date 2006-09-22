@@ -24,14 +24,9 @@ from Products.CMFCore.FSDTMLMethod import FSDTMLMethod
 from Products.CompositePage.designuis import CommonUI
 from Products.CompositePage.rawfile import RawFile
 
-from Products.CompositePack.config import PLONE21
-
 _plone = os.path.join(os.path.dirname(__file__), 'plone')
 
-if PLONE21:
-    start_of_contentmenu_search = re.compile("(<li>[^<]*<dl[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
-else:
-    start_of_contentmenu_search = re.compile("(<li[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
+start_of_contentmenu_search = re.compile("(<li>[^<]*<dl[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
 
 class PloneUI(CommonUI):
     """Page design UI meant to fit Plone.
@@ -42,27 +37,15 @@ class PloneUI(CommonUI):
 
     workspace_view_name = 'view'
 
-    security.declarePublic('plone_edit_js')
-    plone_edit_js = RawFile('plone_edit.js', 'text/javascript', _plone)
-    pdlib_js = RawFile('pdlib.js', 'text/javascript', _plone)
     target_image = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_hover = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_active = RawFile('target_image.gif', 'image/gif', _plone)
 
-    editstyles_css = FSDTMLMethod("editstyles.css", os.path.join(_plone,
-        "editstyles.css"))
-    pdstyles_css = FSDTMLMethod("pdstyles.css", os.path.join(_plone,
-        "pdstyles.css"))
-
-    header_templates = CommonUI.header_templates + (
-        PageTemplateFile('header.pt', _plone),)
+    header_templates = ()
     top_templates = CommonUI.top_templates + (
         PageTemplateFile('top.pt', _plone),)
     bottom_templates = (PageTemplateFile('bottom.pt', _plone),)
-    if not PLONE21:
-        contentmenu_templates = (PageTemplateFile('contentmenu_plone20.pt', _plone),)
-    else:
-        contentmenu_templates = (PageTemplateFile('contentmenu.pt', _plone),)
+    contentmenu_templates = (PageTemplateFile('contentmenu.pt', _plone),)
 
     security.declarePublic("getFragments")
     def getFragments(self, composite):

@@ -1,41 +1,72 @@
-* Added GenericSetup base profile for configuring the composite_tool. You can
-  now import and export the entire configuration in XML.
-  [jladage and jorisslob]
+=========
+After 1.0
+=========
 
-* changed tool.py to handle multiple users messing with the same 
-  navigation page. Some sanity checks were added and neat error messages
-  will be sent to users when things go wrong
-  [jslob and maurits]
+  * Added GenericSetup base profile for configuring the composite_tool. You can
+    now import and export the entire configuration in XML.
+    [jladage and jorisslob]
 
-* fix css to do better layer handling (position: relative was elements to
-  be rendered over the plone drop down menus)
-  [jslob and mteulingen]
+  * changed tool.py to handle multiple users messing with the same 
+    navigation page. Some sanity checks were added and neat error messages
+    will be sent to users when things go wrong
+    [jslob and maurits]
 
-* Play nice with Plone 2.1 by adding navigation page to the list of default
-  page types in site_properties.
-  [jladage]
+  * fix css to do better layer handling (position: relative was elements to
+    be rendered over the plone drop down menus)
+    [jslob and mteulingen]
 
-* set better layout and viewlet as default for navigation page
-  [gotcha]
+  * Play nice with Plone 2.1 by adding navigation page to the list of default
+    page types in site_properties.
+    [jladage]
 
-* styling and i18n
-  [gotcha]
+  * set better layout and viewlet as default for navigation page
+    [gotcha]
 
-* setup portal factory and id calculated from title for Plone 2.1
-  [gotcha]
+  * remove js hack to build target menu
+    [gotcha]
+
+  * remove 2.0 compatibility
+    [gotcha]
  
-* register cleanIndexes setup widget in portal_migration to remove wrongly
-  indexed software.
-  [gotcha]
+  * restructure skin layers
+    [gotcha]
 
-* fix indexing : software elements like layout registry, viewlet registry,
-  layouts, viewlets, composite container and elements are not indexed
-  anymore.
-  [gotcha]
+  * remove two_slots and three_slots dummy layouts
+    [gotcha]
+    
+  * ajaxify design view with Azax, PloneAzax
+    [gotcha, ree]
 
-* fix SearchableText at creation time
-  [gotcha]
+  * setup css and js in their registries
+    [gotcha]
 
-* fix package so that it can load when ATContentTypes is not installed
-  [gotcha]
+  * remove deprecated use of CMFCorePermissions
+    [gotcha]
+
+1.0
+===
+
+  * set better layout and viewlet as default for navigation page
+    [gotcha]
+
+  * styling and i18n
+    [gotcha]
+
+  * setup portal factory and id calculated from title for Plone 2.1
+    [gotcha]
+   
+  * register cleanIndexes setup widget in portal_migration to remove wrongly
+    indexed software.
+    [gotcha]
+
+  * fix indexing : software elements like layout registry, viewlet registry,
+    layouts, viewlets, composite container and elements are not indexed
+    anymore.
+    [gotcha]
+
+  * fix SearchableText at creation time
+    [gotcha]
+
+  * fix package so that it can load when ATContentTypes is not installed
+    [gotcha]
 

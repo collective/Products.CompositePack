@@ -11,9 +11,11 @@
 
 $Id$
 """
-from Products.Archetypes.public import *
-from Products.CompositePack.config import PROJECTNAME
 from Products.CMFCore.utils import getToolByName
+
+from Products.Archetypes.public import *
+
+from Products.CompositePack.config import PROJECTNAME
 
 COMPOSITE = 'composite'
 

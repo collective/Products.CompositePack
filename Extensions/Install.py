@@ -12,21 +12,20 @@ $Id$
 """
 
 from cStringIO import StringIO
+
+from Products.CMFCore.utils import getToolByName
+
 from Products.Archetypes.public import listTypes
 from Products.Archetypes.Extensions.utils import installTypes, install_subskin
+
+from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
+KUPU_TOOL_ID = PloneKupuLibraryTool.id
+
 from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
 from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import get_COMPOSABLES_ATCT
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
-from Products.CompositePack.config import HAS_ATCT
-from Products.CompositePack.config import PLONE21
-from Products.CMFCore.utils import getToolByName
-from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
-
-KUPU_TOOL_ID = PloneKupuLibraryTool.id
-
-COMPO_TYPE = 'CMF Composite Page'
 
 class toolWrapper:
     def __init__(self, tool):
@@ -75,25 +74,18 @@ def install_tool(self, out):
         tool.registerAsComposite('Composable Document')
     tool.registerAsComposite('Navigation Page')
 
-    if HAS_ATCT:
-        tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
+    tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
     tool.registerAsComposable('CompositePack Portlet')
     
-    ts = tool.registerLayout('two_slots', 'Two slots', 'two_slots')
-    try:
-        ts.registerForType('Navigation Page')
-    except AttributeError:
-        raise RuntimeError, "ts=%r" % ts
-
-    ts = tool.registerLayout('three_slots', 'Three slots', 'three_slots')
-    ts.registerForType('Navigation Page')
-
     ts = tool.registerLayout('two_columns', 'Two columns', 'two_columns')
     ts.registerForType('Navigation Page')
     ts.setDefaultForType('Navigation Page')
     tool.setDefaultLayout('two_columns')
+    
+    ts = tool.registerLayout('one_column', 'One column', 'one_column')
+    ts.registerForType('Navigation Page')
 
     if INSTALL_DEMO_TYPES:
         ds = tool.registerLayout('document_sidebar_view',
@@ -131,13 +123,13 @@ def install_tool(self, out):
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
                             'fragment_viewlet')
-    if HAS_ATCT:
-       IMAGE_TYPE = get_ATCT_TYPES(self)['Image']
-       tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
-                                            'link_viewlet',
-                                            'image_title_viewlet',
-                                            'image_caption_viewlet'],
-                                            'image_viewlet')
+       
+    IMAGE_TYPE = get_ATCT_TYPES(self)['Image']
+    tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
+                                        'link_viewlet',
+                                        'image_title_viewlet',
+                                        'image_caption_viewlet'],
+                                        'image_viewlet')
     out.write("CompositePack Tool Installed\n")
 
 def setup_portal_factory(self, out):
@@ -201,15 +193,17 @@ def install_fixuids(self, out):
             out.write("Migrated UID for viewlet %s\n" % id)
 
 def installDependencies(self, out):
-    qi = self.portal_quickinstaller
+    qi = getToolByName(self, 'portal_quickinstaller')
     if not qi.isProductInstalled('Archetypes'):
         qi.installProduct('Archetypes',locked=1)
         print >>out, 'Installing Archetypes'
     if not qi.isProductInstalled('kupu'):
         qi.installProduct('kupu')
         print >>out, 'Installing kupu'
-    if HAS_ATCT and not qi.isProductInstalled('ATContentTypes'):
-
+    if not qi.isProductInstalled('PloneAzax'):
+        qi.installProduct('PloneAzax')
+        print >>out, 'Installing PloneAzax'
+    if not qi.isProductInstalled('ATContentTypes'):
         qi.installProduct('ATContentTypes')
         print >>out, 'Installing ATContentTypes'
 
@@ -224,6 +218,25 @@ def addToDefaultPageTypes(self, out):
             site_props._updateProperty('default_page_types', dptypes)
             print >>out, 'Added Navigation Page to the list of default page types'
     
+
+def install_javascripts(self, out):
+    jsreg = getToolByName(self, 'portal_javascripts')
+    EXPR_ISCOMPO_IN_DESIGN = 'python:here.composite_tool.isComposite(here.portal_type) and here.cp_container.isEditing()'
+    jsreg.registerScript('cp_pdlib.js', expression=EXPR_ISCOMPO_IN_DESIGN)
+    jsreg.registerScript('cp_edit.js', expression=EXPR_ISCOMPO_IN_DESIGN)
+    jsreg.registerScript('cp_plone_edit.js', expression=EXPR_ISCOMPO_IN_DESIGN)
+    jsreg.registerScript('cp_kukit.js', expression=EXPR_ISCOMPO_IN_DESIGN)
+    jsreg.registerScript('compopagedrawer.js', expression=EXPR_ISCOMPO_IN_DESIGN)
+
+def install_css(self, out):
+    cssreg = getToolByName(self, 'portal_css')
+    EXPR_ISCOMPO = 'python:here.composite_tool.isComposite(here.portal_type)'
+    EXPR_ISCOMPO_IN_DESIGN = EXPR_ISCOMPO + ' and here.cp_container.isEditing()'
+    cssreg.registerStylesheet('cp_pdstyles.css', expression=EXPR_ISCOMPO_IN_DESIGN)
+    cssreg.registerStylesheet('cp_editstyles.css', expression=EXPR_ISCOMPO_IN_DESIGN)
+    cssreg.registerStylesheet('compo.css', expression=EXPR_ISCOMPO)
+    cssreg.registerStylesheet('compo.kss', expression=EXPR_ISCOMPO_IN_DESIGN,
+        compression='none', rel='kukit', rendering='link' )
 
 def install(self):
     out = StringIO()
@@ -240,9 +253,10 @@ def install(self):
     install_tool(self, out)
     install_customisation(self, out)
     install_fixuids(self, out)
-    if PLONE21:
-        setup_portal_factory(self, out)
-        addToDefaultPageTypes(self, out)
+    install_javascripts(self, out)
+    install_css(self, out)
+    setup_portal_factory(self, out)
+    addToDefaultPageTypes(self, out)
         
     out.write("Successfully installed %s.\n" % PROJECTNAME)
     return out.getvalue()

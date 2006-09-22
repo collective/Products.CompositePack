@@ -1,7 +1,6 @@
-
 from Products.Five import BrowserView
 
-from Products.azax.azaxresponse import AzaxResponse
+from Products.azax.azaxview import AzaxBaseView
 
 class PackView(BrowserView):
 
@@ -36,7 +35,7 @@ class PackView(BrowserView):
         return new_fragment
     
     def calculatePosition(self, destination, target_id):
-        element_id = target_id[len(destination.getId())+1:]
+        element_id = target_id[len(destination.getId())+8:]
         if element_id == 'cp_top':
             position = 0
         else:
@@ -44,19 +43,79 @@ class PackView(BrowserView):
         print position
         return position
     
-    def addTitle(self):
-        request = self.request
+    def calculateIdFromPosition(self, destination, position):
+        if position == 0:
+            return 'cp_top'
+        else:
+            try:
+                return destination.objectIds()[position-1]
+            except IndexError:
+                import pdb; pdb.set_trace() 
+    
+    def deleteElement(self, uri):
+        parts = uri.split('/')
+        slot_path = '/'.join(parts[2:-1])
+        
+        element_id = parts[-1]
+        
+        portal = self.context.portal_url.getPortalObject()
+        slot = portal.restrictedTraverse(slot_path)
+        slot.manage_delObjects([element_id])
 
-        target_path = request.target_path
+        selector = '#%s_%s' % (slot.getId(), element_id)
+        self.deleteNodeAfter(selector)
+        self.deleteNode(selector)
+        return self.render()
+        
+    def moveElement(self, target_path, target_id, uri):
+        portal = self.context.portal_url.getPortalObject()
+
+        parts = uri.split('/')
+        source_slot_path = '/'.join(parts[2:-1])
+        source_element_id = parts[-1]
+        source_slot = portal.restrictedTraverse(source_slot_path)
+        
+        parts = target_path.split('/')
+        
+        target_slot_path = '/'.join(parts[2:])
+        target_slot = portal.restrictedTraverse(target_slot_path)
+        target_node_css = '#%s' % target_id
+        target_index = self.calculatePosition(target_slot, target_id)
+        
+        cpt = portal.restrictedTraverse('composite_tool')
+        cpt.moveAndDelete(uri, target_path, target_index)
+        
+        node_id = '%s_%s' % (source_slot.getId(), source_element_id)
+        node_css = '#%s' % node_id
+        self.deleteNodeAfter(node_css)
+        self.deleteNode(node_css)
+
+        moved_element = target_slot.restrictedTraverse(source_element_id)
+        
+        added_text = target_slot.getEditingViewlet(moved_element)
+        added_text = (added_text +
+            target_slot.getTargetAfterViewlet(moved_element))
+        self.insertHTMLAfter(target_node_css, added_text)
+        
+        selector = "#%s" % target_slot.getViewletHtmlId(moved_element)
+        self.setupElement(selector)
+        selector = "#%s" % target_slot.getIdOfTargetAfterViewlet(moved_element)
+        self.setupTarget(selector)
+        return self.render()
+
+    def setupElement(self, selector):
+        command = self.addCommand('cpSetupElement', selector)
+
+    def setupTarget(self, selector):
+        command = self.addCommand('cpSetupTarget', selector)
+
+    def addTitle(self, title, target_path, target_id):
+
         portal = self.context.portal_url.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
         
-        target_id = request.target_id
-        
         target_index = self.calculatePosition(destination, target_id) 
         
-        title = request.title
-
         new_el = self.createCompositeElement(destination, target_index)
         
         new_title = self.createTitleElement(title)
@@ -65,26 +124,21 @@ class PackView(BrowserView):
         uid = new_title.UID()
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
-
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         #import pdb; pdb.set_trace() 
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
+        return self.render()
 
-    def addFragment(self):
-        request = self.request
-
-        target_path = request.target_path
+    def addFragment(self, target_path, target_id):
         portal = self.context.portal_url.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
-        
-        target_id = request.target_id
         
         target_index = self.calculatePosition(destination, target_id) 
 
@@ -96,45 +150,37 @@ class PackView(BrowserView):
         uid = new_fragment.UID()
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
-
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
+        return self.render()
 
-    def addContent(self):
-        request = self.request
-
-        target_path = request.target_path
+    def addContent(self, target_path, target_id, uri):
         portal_url_tool = self.context.portal_url
         portal = portal_url_tool.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
         
-        target_id = request.target_id
-        
         target_index = self.calculatePosition(destination, target_id) 
         
-        uri = request.uri
-
         new_el = self.createCompositeElement(destination, target_index)
         
         uid = uri.split('/')[-1]
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
-
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
+        return self.render()
 
-    

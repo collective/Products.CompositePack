@@ -19,3 +19,7 @@ try:
 except ImportError:
     from Products.Archetypes.public import BaseContent
 
+try:
+    from Products.LinguaPlone.public import BaseFolder
+except ImportError:
+    from Products.Archetypes.public import BaseFolder

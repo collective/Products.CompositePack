@@ -11,14 +11,22 @@
 $Id$
 """
 from Acquisition import aq_base
+from AccessControl import ClassSecurityInfo
+from Interface import Interface 
 
 from Products.Archetypes.public import BaseSchema
 
 from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.composite import packcomposite
-from Products.CompositePack.public import BaseContent, registerType
+from Products.CompositePack.public import BaseFolder, registerType
 
-class NavigationPage(BaseContent):
+from Products.CMFPlone.interfaces.NonStructuralFolder import INonStructuralFolder
+
+class INavigationPage(Interface):
+    """ Marker interface
+    """
+
+class NavigationPage(BaseFolder):
     """A page composed of content selected manually."""
     meta_type = portal_type = 'Navigation Page'
     archetype_name = 'Navigation Page'
@@ -27,6 +35,16 @@ class NavigationPage(BaseContent):
     typeDescMsgId  = 'description_edit_navigation_page'
     
     _at_rename_after_creation = True
+
+    # Add INonStructuralFolder to tell Plone that even though
+    # this type is technically a folder, it should be treated as a standard
+    # content type. This ensures the user doesn't perceive a Navigation Page as
+    # a folder.
+
+    __implements__ = BaseFolder.__implements__ + \
+                     (INavigationPage, INonStructuralFolder,)
+
+    security = ClassSecurityInfo()
     
     schema = BaseSchema.copy()
     # Move the description field into the edit view.

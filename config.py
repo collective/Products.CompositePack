@@ -26,6 +26,12 @@ except ImportError:
     PLONE21 = False
 else:
     PLONE21 = True
+try:
+    from Products.CMFPlone.migrations.v2_5 import rcs
+except ImportError:
+    PLONE25 = False
+else:
+    PLONE25 = True
 
 try:
     from Products import azax 

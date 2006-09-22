@@ -65,6 +65,19 @@
      tal:condition="haveAzax|nothing"
      onmouseup="plone_add_ajax_fragment(pd_selected_item)"
      filter="pd_selected_item">HTML</div>
+     
+<div i18n:translate="label_portlet"
+     tal:condition="not:haveAzax|nothing"
+     i18n:domain="plone"
+     class="context-menu-item" 
+     onmouseup="plone_add_portlet(pd_selected_item)"
+     filter="pd_selected_item">Portlet</div>
+<div class="context-menu-item" 
+     tal:condition="haveAzax|nothing"
+     onmouseup="plone_add_portlet(pd_selected_item)"
+     filter="pd_selected_item">Portlet</div>     
+     
+     
 <div class="separator"></div>
 <div i18n:translate="" 
      class="context-menu-item"

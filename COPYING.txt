@@ -12,3 +12,6 @@ Copyright (C) 2004-2006 CompositePack Contributors:
 
   - Duncan Booth (duncan.booth@suttoncourtenay.org.uk)
 
+  - Jean-Paul Ladage (j.ladage@zestsoftware.nl)
+
+  - Joris Slob (j.slob@zestsoftware.nl)

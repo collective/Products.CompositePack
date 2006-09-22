@@ -1,3 +1,20 @@
+* Added GenericSetup base profile for configuring the composite_tool. You can
+  now import and export the entire configuration in XML.
+  [jladage and jorisslob]
+
+* changed tool.py to handle multiple users messing with the same 
+  navigation page. Some sanity checks were added and neat error messages
+  will be sent to users when things go wrong
+  [jslob and maurits]
+
+* fix css to do better layer handling (position: relative was elements to
+  be rendered over the plone drop down menus)
+  [jslob and mteulingen]
+
+* Play nice with Plone 2.1 by adding navigation page to the list of default
+  page types in site_properties.
+  [jladage]
+
 * set better layout and viewlet as default for navigation page
   [gotcha]
 

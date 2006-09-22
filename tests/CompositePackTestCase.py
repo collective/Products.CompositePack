@@ -31,6 +31,8 @@ PloneTestCase.installProduct('ATContentTypes')
 PloneTestCase.installProduct('CompositePage')
 PloneTestCase.installProduct('kupu')
 PloneTestCase.installProduct('CompositePack')
+
+
 PloneTestCase.setupPloneSite()
 
 from cStringIO import StringIO
@@ -45,15 +47,21 @@ class CompositePackTestCase(PloneTestCase.PloneTestCase):
     def afterSetUp(self):
         super(PloneTestCase.PloneTestCase, self).afterSetUp()
         self.qi = getToolByName(self.portal, 'portal_quickinstaller')
+        self.gs = getToolByName(self.portal, 'portal_setup')
+
         if HAS_LINGUA_PLONE:
             self.qi.installProduct('PloneLanguageTool')
         self.qi.installProduct('ATContentTypes')
         self.qi.installProduct('kupu')
-        self.qi.installProduct('CompositePack')
+        self.installCompositePack()
+
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
         self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
+
+    def installCompositePack(self):
+        self.qi.installProduct('CompositePack')
 
     def beforeTearDown(self):
         self.composite_tool.clearLayoutRegistry()

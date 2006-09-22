@@ -79,6 +79,7 @@ def install_tool(self, out):
         tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
+    tool.registerAsComposable('CompositePack Portlet')
     
     ts = tool.registerLayout('two_slots', 'Two slots', 'two_slots')
     try:
@@ -211,6 +212,17 @@ def installDependencies(self, out):
 
         qi.installProduct('ATContentTypes')
         print >>out, 'Installing ATContentTypes'
+
+def addToDefaultPageTypes(self, out):
+    # We want a Navigation Page to be selectable as default page in Plone.
+    site_props = self.portal_properties.site_properties
+    if site_props.hasProperty('default_page_types'):
+        dptypes = site_props.getProperty('default_page_types')
+        if not 'Navigation Page' in dptypes:
+            dptypes = list(dptypes)
+            dptypes.append('Navigation Page')
+            site_props._updateProperty('default_page_types', dptypes)
+            print >>out, 'Added Navigation Page to the list of default page types'
     
 
 def install(self):
@@ -230,7 +242,8 @@ def install(self):
     install_fixuids(self, out)
     if PLONE21:
         setup_portal_factory(self, out)
-
+        addToDefaultPageTypes(self, out)
+        
     out.write("Successfully installed %s.\n" % PROJECTNAME)
     return out.getvalue()
 

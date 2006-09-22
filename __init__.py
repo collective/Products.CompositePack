@@ -15,17 +15,27 @@ $Id$
 from Products.CompositePack.Extensions import Install
 del Install
 
-from Products.Archetypes.public import *
-from Products.Archetypes import listTypes
-from Products.CompositePack.config import *
-from Products.CompositePack import design, patch
 from Products.CMFCore import utils as cmf_utils
 from Products.CMFCore.DirectoryView import registerDirectory
-from Products.CompositePage import tool as base_tool
 
 from Products.CMFPlone import MigrationTool
+import Products.CMFPlone.interfaces
 
+from Products.Archetypes.public import *
+from Products.Archetypes import listTypes
+
+from Products.CompositePage import tool as base_tool
+
+from Products.CompositePack.config import *
+from Products.CompositePack import design, patch
 from Products.CompositePack.ConfigurationMethods import GeneralSetup
+
+try:
+    from Products.GenericSetup import profile_registry
+    from Products.GenericSetup import EXTENSION
+    hasGenericSetup = True
+except ImportError:
+    hasGenericSetup = False
 
 registerDirectory('skins', GLOBALS)
 try:
@@ -36,13 +46,13 @@ except KeyError:
 base_tool.registerUI('plone', design.PloneUI())
 
 def initialize(context):
-
     from Products.CompositePack import tool, viewlet
     from Products.CompositePack.composite import archetype
     from Products.CompositePack.viewlet import container
     from Products.CompositePack.composite import navigationpage
     from Products.CompositePack.composite import titles
     from Products.CompositePack.composite import fragments
+    from Products.CompositePack.composite import portlets
 
     if INSTALL_DEMO_TYPES:
         from Products.CompositePack.demo import ATCompositeDocument
@@ -66,7 +76,8 @@ def initialize(context):
                                            'CompositePack Titles',
                                            'CompositePack Fragments',
                                            'CompositePack Viewlet Container',
-                                           'CompositePack Layout Container'])
+                                           'CompositePack Layout Container',
+                                           'CompositePack Portlet'])
 
     context.registerClass(
         tool.CompositeTool,
@@ -79,5 +90,15 @@ def initialize(context):
                        product_name = PROJECTNAME,
                        icon=TOOL_ICON
                    ).initialize(context)
+
+    if hasGenericSetup:
+        profile_registry.registerProfile(
+            name='default',
+            title='Composite Site',
+            description='Profile for Composite Pack',
+            path='profiles/default',
+            product='CompositePack',
+            profile_type=EXTENSION,
+            for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
 
     MigrationTool.registerSetupWidget(GeneralSetup)

@@ -42,20 +42,11 @@ class PloneUI(CommonUI):
 
     workspace_view_name = 'view'
 
-    security.declarePublic('plone_edit_js')
-    plone_edit_js = RawFile('plone_edit.js', 'text/javascript', _plone)
-    pdlib_js = RawFile('pdlib.js', 'text/javascript', _plone)
     target_image = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_hover = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_active = RawFile('target_image.gif', 'image/gif', _plone)
 
-    editstyles_css = FSDTMLMethod("editstyles.css", os.path.join(_plone,
-        "editstyles.css"))
-    pdstyles_css = FSDTMLMethod("pdstyles.css", os.path.join(_plone,
-        "pdstyles.css"))
-
-    header_templates = CommonUI.header_templates + (
-        PageTemplateFile('header.pt', _plone),)
+    header_templates = CommonUI.header_templates
     top_templates = CommonUI.top_templates + (
         PageTemplateFile('top.pt', _plone),)
     bottom_templates = (PageTemplateFile('bottom.pt', _plone),)

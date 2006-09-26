@@ -1,3 +1,16 @@
+* Removed the ++resource++ code from the layout templates which were generating
+  at least 4 404's per request.
+  [jladage]
+
+* Added ResourceRegistry config for all js and css. Moved the skins files
+  to a few skindirs as done in the azax-ree branch. And off course add
+  GenericSetup profiles for the js and css.
+  [jladage]
+
+* Fixed the renaming issue by inheriting from BaseFolder and implement the
+  INonStructuralFolder interface.
+  [jladage and jorisslob]
+
 * Added GenericSetup base profile for configuring the composite_tool. You can
   now import and export the entire configuration in XML.
   [jladage and jorisslob]

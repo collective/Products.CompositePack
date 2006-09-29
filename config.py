@@ -63,6 +63,7 @@ except ImportError:
     HAS_GS = False
 else:
     HAS_GS = True
+    del tool
 
 def get_ATCT_TYPES(self):
     result = {}

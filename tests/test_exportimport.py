@@ -18,8 +18,9 @@ if __name__ == '__main__':
 # Load fixture
 from Testing import ZopeTestCase
 
-from Products.CompositePack.tests.CompositeGSTestCase import CompositeGSTestCase
 from Products.CMFCore.utils import getToolByName
+from Products.CompositePack.tests.CompositeGSTestCase import CompositeGSTestCase
+from Products.CompositePack.config import HAS_GS
 
 
 class ComposableTest(CompositeGSTestCase):
@@ -142,7 +143,8 @@ class ComposableTest(CompositeGSTestCase):
             When you make local changes, the import function should
             only add and not replace things
         """
-
+        if not HAS_GS:
+            return
         # We first make some custom Composite Pack modifications
         self.ct.registerLayout("custom_layout_id", "custom_layout_title", "custom_layout_skin_method")
         self.ct.registerViewlet("custom_viewlet_id", "custom_viewlet_title", "custom_viewlet_skin_method")
@@ -152,7 +154,6 @@ class ComposableTest(CompositeGSTestCase):
         self.ct.registerLayoutForType(layout, "custom_composite_id")
 
         # Now we use Generic Setup to import the default
-        self.gs = self.portal.portal_setup
         self.gs.setImportContext('profile-CompositePack:default')
         self.gs.runAllImportSteps()
 

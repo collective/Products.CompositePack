@@ -57,7 +57,12 @@ if HAS_ATCT and not PLONE21:
         else:
             return 0
 
-            
+try:
+    from Products.GenericSetup import tool
+except ImportError:
+    HAS_GS = False
+else:
+    HAS_GS = True
 
 def get_ATCT_TYPES(self):
     result = {}

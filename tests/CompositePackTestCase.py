@@ -40,14 +40,15 @@ from cPickle import load, dump
 from Acquisition import aq_base, aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
 
-from Products.CompositePack.config import get_ATCT_TYPES
+from Products.CompositePack.config import get_ATCT_TYPES, HAS_GS
 
 class CompositePackTestCase(PloneTestCase.PloneTestCase):
 
     def afterSetUp(self):
         super(PloneTestCase.PloneTestCase, self).afterSetUp()
         self.qi = getToolByName(self.portal, 'portal_quickinstaller')
-        self.gs = getToolByName(self.portal, 'portal_setup')
+        if HAS_GS:
+            self.gs = getToolByName(self.portal, 'portal_setup')
 
         if HAS_LINGUA_PLONE:
             self.qi.installProduct('PloneLanguageTool')

@@ -19,7 +19,7 @@ from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import get_COMPOSABLES_ATCT
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
-from Products.CompositePack.config import HAS_ATCT
+from Products.CompositePack.config import HAS_ATCT, HAVEAZAX
 from Products.CompositePack.config import PLONE21
 from Products.CompositePack.config import STYLESHEETS, JAVASCRIPTS
 from Products.CMFCore.utils import getToolByName
@@ -266,6 +266,27 @@ def resetResources(self, out, toolname, resources):
                     resource._data[key] = resource._data[originalkey]
                 del resource._data[originalkey]
 
+def sort_skins(self):
+    STANDARD_SKINS = ('Plone Default', 'Plone Tableless')
+    CP_LAYERS = ('compositepack_layouts','compositepack_layouts_azax')
+    skintool = getToolByName(self, 'portal_skins')
+    skin_selections = skintool.getSkinSelections()
+    for skin_selection in skin_selections:
+        if skin_selection not in STANDARD_SKINS:
+            continue
+        path = skintool.getSkinPath(skin_selection)
+        path = [p.strip() for p in path.split(',') if p]
+        if CP_LAYERS[0] in path and CP_LAYERS[1] in path:
+            cl_index = path.index(CP_LAYERS[0])
+            cla_index = path.index(CP_LAYERS[1])
+            if cl_index < cla_index and HAVEAZAX:
+                path[cl_index] = CP_LAYERS[1]
+                path[cla_index] = CP_LAYERS[0]
+            elif cla_index < cl_index and not HAVEAZAX:
+                path[cl_index] = CP_LAYERS[1]
+                path[cla_index] = CP_LAYERS[0]
+            skintool['selections'][skin_selection] = ",".join(path)
+                
 def install(self):
     out = StringIO()
 
@@ -278,6 +299,9 @@ def install(self):
     archetype_tool.setCatalogsByType('CompositePack Layout', ())   
     archetype_tool.setCatalogsByType('CompositePack Layout Container', ())   
     install_subskin(self, out, GLOBALS)
+    # The skins need to be sorted differently depending on whether Azax
+    # is available or not.
+    sort_skins(self)
     install_tool(self, out)
     install_customisation(self, out)
     registerResources(self, out, 'portal_css', STYLESHEETS)
@@ -297,5 +321,4 @@ def uninstall(self):
     resetResources(self, out, 'portal_css', STYLESHEETS)
     resetResources(self, out, 'portal_javascripts', JAVASCRIPTS)
     out.write("Successfully uninstalled %s.\n" % PROJECTNAME)
-    return out.getvalue()
-    
+    return out.getvalue()    

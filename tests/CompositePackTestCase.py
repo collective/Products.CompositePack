@@ -21,16 +21,22 @@ else:
     HAS_LINGUA_PLONE = True
     del registerType
 
+DEPENDENCIES = (
+    'Archetypes',
+    'MimetypesRegistry',
+    'PortalTransforms',
+    'ATContentTypes',
+    'kupu',
+    'GenericSetup',
+    'CompositePack',
+    'CompositePage',
+)
+
+[PloneTestCase.installProduct(dep, quiet=1) for dep in DEPENDENCIES]
+
 # Install our product
 if HAS_LINGUA_PLONE:
     PloneTestCase.installProduct('PloneLanguageTool')
-PloneTestCase.installProduct('Archetypes')
-PloneTestCase.installProduct('MimetypesRegistry')
-PloneTestCase.installProduct('PortalTransforms')
-PloneTestCase.installProduct('ATContentTypes')
-PloneTestCase.installProduct('CompositePage')
-PloneTestCase.installProduct('kupu')
-PloneTestCase.installProduct('CompositePack')
 
 
 PloneTestCase.setupPloneSite()

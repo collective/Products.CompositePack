@@ -67,7 +67,7 @@ class ComposableTest(CompositeGSTestCase):
                     'Link':                    '<Viewlet at title_description_with_link>',
                     'Image':                   '<Viewlet at image_viewlet>',
                     'Event':                   '<Viewlet at title_description_with_link>',
-                    'Topic':                   '<Viewlet at title_description_with_link>',
+                    'Topic':                   '<Viewlet at topic_viewlet>',
                     'Document':                '<Viewlet at title_description_with_link>',
                     'News Item':               '<Viewlet at title_description_with_link>',
                     '(Default Setup)':         '<Viewlet at title_description_with_link>',
@@ -92,7 +92,7 @@ class ComposableTest(CompositeGSTestCase):
                                            '<Viewlet at image_caption_viewlet>'])
 
     def test_viewlets(self):
-        """ This tests the viewlets registered in this tool. Normally 8 
+        """ This tests the viewlets registered in this tool. Normally 9 
             viewlets are created and we know what to expect as id, title and 
             skin_method for each one of them, so let's be thorough in testing.
         """
@@ -106,10 +106,11 @@ class ComposableTest(CompositeGSTestCase):
                     'image_title_viewlet': ['Image with title', 
                                             'image_title_viewlet'],
                     'image_caption_viewlet': ['Image with caption', 
-                                              'image_caption_viewlet']}
+                                              'image_caption_viewlet'],
+                    'topic_viewlet': ['Topic Listing','topic_viewlet']}
 
         viewlets = self.ct.getAllViewlets()
-        self.failUnless(len(viewlets) == 8)
+        self.failUnless(len(viewlets) == 9)
 
         for viewlet in viewlets:
             id = viewlet.getId()

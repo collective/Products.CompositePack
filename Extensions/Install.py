@@ -127,6 +127,9 @@ def install_tool(self, out):
     tool.registerViewlet('image_caption_viewlet',
                          'Image with caption',
                          'image_caption_viewlet')
+    tool.registerViewlet('topic_viewlet',
+                         'Topic Listing',
+                         'topic_viewlet')
     tool.setViewletsForType('CompositePack Titles', ['title_viewlet'],
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
@@ -138,6 +141,8 @@ def install_tool(self, out):
                                             'image_title_viewlet',
                                             'image_caption_viewlet'],
                                             'image_viewlet')
+       TOPIC_TYPE = get_ATCT_TYPES(self)['Topic']
+       tool.setViewletsForType(TOPIC_TYPE, ['topic_viewlet'], 'topic_viewlet')
     out.write("CompositePack Tool Installed\n")
 
 def setup_portal_factory(self, out):

@@ -39,12 +39,14 @@
    <c_viewlet name="title_description_with_link"/>
   </composable>
   <composable name="Topic">
+   <c_viewlet name="topic_viewlet" default="True"/>
    <c_viewlet name="title_description_with_link"/>
   </composable>
  </composables>
  <viewlets>
   <viewlet name="title_description_with_link" title="Title with description"
      skin_method="title_description_with_link"/>
+  <viewlet name="topic_viewlet" title="Topic Listing" skin_method="topic_viewlet"/>
   <viewlet name="link_viewlet" title="Link Only" skin_method="link_viewlet"/>
   <viewlet name="title_viewlet" title="Title" skin_method="title_viewlet"/>
   <viewlet name="fragment_viewlet" title="HTML Fragment"

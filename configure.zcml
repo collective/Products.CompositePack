@@ -4,10 +4,8 @@
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="compopack">
 
-  <!--
   <five:traversable class=".tool.CompositeTool" />
   <include package=".exportimport" />
-  -->
 
 </configure>
 

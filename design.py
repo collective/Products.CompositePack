@@ -46,7 +46,8 @@ class PloneUI(CommonUI):
     target_image_hover = RawFile('target_image.gif', 'image/gif', _plone)
     target_image_active = RawFile('target_image.gif', 'image/gif', _plone)
 
-    header_templates = CommonUI.header_templates
+    header_templates = CommonUI.header_templates + (
+        PageTemplateFile('header.pt', _plone),)
     top_templates = CommonUI.top_templates + (
         PageTemplateFile('top.pt', _plone),)
     bottom_templates = (PageTemplateFile('bottom.pt', _plone),)

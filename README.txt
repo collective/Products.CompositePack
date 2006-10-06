@@ -13,13 +13,12 @@ below how to register them).
 
 Plone versions supported
 ========================
-    2.0.5
 
-    2.1.1 (might work with 2.1.0 - not tested)
+    2.1.1 (need to comment out or rename the configure.zcml)
 
-    2.1.2
+    2.1.2 (need to comment out or rename the configure.zcml)
 
-    2.5 (need to uncomment the line in configure.zcml)
+    2.5 
 
 Products required 
 ================= 

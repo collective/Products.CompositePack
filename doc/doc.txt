@@ -44,7 +44,7 @@ The viewlets folder holds default viewlets :
 >>> ids
 ['fragment_viewlet', 'image_caption_viewlet', 'image_title_viewlet',
 'image_viewlet', 'link_viewlet', 'title_date_viewlet',
-'title_description_with_link', 'title_viewlet']
+'title_description_with_link', 'title_viewlet', 'topic_viewlet']
 
 CompositePack installs a content type :
 >>> pt = plone.portal_types

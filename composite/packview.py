@@ -1,7 +1,7 @@
 
 from Products.Five import BrowserView
 
-from Products.azax.azaxresponse import AzaxResponse
+##from Products.azax.azaxresponse import AzaxResponse
 
 class PackView(BrowserView):
 
@@ -44,19 +44,12 @@ class PackView(BrowserView):
         print position
         return position
     
-    def addTitle(self):
-        request = self.request
-
-        target_path = request.target_path
+    def addTitle(self, title, target_path, target_id):
         portal = self.context.portal_url.getPortalObject()
         destination = portal.restrictedTraverse(target_path)
         
-        target_id = request.target_id
-        
         target_index = self.calculatePosition(destination, target_id) 
         
-        title = request.title
-
         new_el = self.createCompositeElement(destination, target_index)
         
         new_title = self.createTitleElement(title)
@@ -65,17 +58,23 @@ class PackView(BrowserView):
         uid = new_title.UID()
         new_el.setTarget(uid)
 
-        return_object = AzaxResponse(self.request.response)
-
         added_text = destination.getEditingViewlet(new_el)
         added_text = added_text + destination.getTargetAfterViewlet(new_el)
-        #import pdb; pdb.set_trace() 
+
         selector = '#%s' % target_id
-        return_object.addAfter(selector, added_text)
+        self.insertHTMLAfter(selector, added_text)
         
-        code = 'plone_updateAfterAdd(Azax.getLastResults());'
-        return_object.executeCode(selector, code)
-        return return_object()
+        # XXX WAS:
+        #code = 'plone_updateAfterAdd(Azax.getLastResults());'
+        #return_object.executeCode(selector, code)
+        #return return_object()
+        
+        selector = "#%s" % destination.getViewletHtmlId(new_el)
+        self.setupElement(selector)
+        selector = "#%s" % destination.getIdOfTargetAfterViewlet(new_el)
+        self.setupTarget(selector)
+        return self.render()
+
 
     def addFragment(self):
         request = self.request

@@ -66,7 +66,7 @@ target_path) {
         params = params + "&compopage_path=" + this.compopagepath;
         params = params + "&target_id=" + this.target_id;
         params = params + "&uri=" + uri;
-        kukit.notifyServerWithParams(url, params);
+        (new kukit.op.Oper({parms: params})).executeServerAction(url);
     };
 
     this.setPosition = function(e){

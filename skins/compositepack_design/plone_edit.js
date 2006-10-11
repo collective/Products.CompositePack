@@ -43,13 +43,18 @@ function plone_add_ajax_title(target) {
   var target_path = target.getAttribute("target_path");
   var target_index = target.getAttribute("target_index");
   var id = target.getAttribute("id");
+  //params = "target_path=" + target_path;
+  //params = params + "&target_index=" + target_index;
+  //params = params + "&compopage_path=" + compopage_path;
+  //params = params + "&title=" + title;
+  //params = params + "&target_id=" + id;
   url = compopage_path + '/cp_container/addTitle';
-  params = "target_path=" + target_path;
-  params = params + "&target_index=" + target_index;
-  params = params + "&compopage_path=" + compopage_path;
-  params = params + "&title=" + title;
-  params = params + "&target_id=" + id;
-  kukit.notifyServerWithParams(url, params);
+  var parms = {
+      target_path: target_path,
+      target_id: id,
+      title: title
+  };
+  (new kukit.op.Oper({parms: parms})).executeServerAction(url);
 }
 
 function plone_add_ajax_fragment(target) {
@@ -64,7 +69,7 @@ function plone_add_ajax_fragment(target) {
   params = params + "&target_index=" + target_index;
   params = params + "&compopage_path=" + compopage_path;
   params = params + "&target_id=" + id;
-  kukit.notifyServerWithParams(url, params);
+  (new kukit.op.Oper({parms: params})).executeServerAction(url);
 }
 
 function plone_add_fragment(target) {

@@ -165,6 +165,29 @@ def uninstall_tool(self, out):
     if hasattr(self, TOOL_ID):
         out.write("CompositePack Tool not removed\n")
 
+def install_kupu_resource(self, out):
+    if hasattr(self, KUPU_TOOL_ID):
+        kupu_tool = getattr(self, KUPU_TOOL_ID)
+        composables = (
+            'File',
+            'Link',
+            'Image',
+            'Event',
+            'Topic',
+            'Document',
+            'News Item',
+            'CompositePack Titles',
+#            'CompositePack Portlet',
+            'CompositePack Fragments',
+            )
+        try:
+            kupu_tool.addResourceType(COMPOSABLE, composables)
+            out.write("Composable Resource added in Kupu Library Tool\n")
+        except KeyError:
+            out.write("Composable Resource not added in Kupu Library Tool, already present\n")
+    else:
+        out.write("Kupu Library Tool not available\n")
+
 def uninstall_kupu_resource(self, out):
     if hasattr(self, KUPU_TOOL_ID):
         kupu_tool = getattr(self, KUPU_TOOL_ID)
@@ -315,6 +338,7 @@ def install(self):
     if PLONE21:
         setup_portal_factory(self, out)
         addToDefaultPageTypes(self, out)
+    install_kupu_resource(self, out)
         
     out.write("Successfully installed %s.\n" % PROJECTNAME)
     return out.getvalue()

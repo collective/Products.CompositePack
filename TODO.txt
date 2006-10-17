@@ -1,6 +1,3 @@
-- create two folders in the skin 
-      compositepack/layouts
-      compositepack/viewlets
 
 - setup of composable should happen in composite_tool rather than in
   kupu_library_tool
@@ -23,9 +20,7 @@ plone 2.1 compat
 Plone 2.5 compatibility
 =======================
 
-  * test is failing regarding CMFStaging
-
-  * test is failing regarding the references of a renamed navigation page
-
   * Viewlets can not be added using the ZMI (you get a login screen)
 
+  * Added import_step for fixing up the azax layer in portal_skins
+    (currently works only through QuickInstaller).

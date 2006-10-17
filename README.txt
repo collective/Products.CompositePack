@@ -26,11 +26,6 @@ Products required
 CompositePage 0.2 
     http://hathawaymix.org/Software/CompositePage/CompositePage-0.2.tar.gz 
 
-with Plone 2.0.5, you also need
-
-   kupu 1.3.3 or later
-
-   Archetypes 1.3.5
 
 Design view 
 =========== 

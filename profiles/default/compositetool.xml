@@ -1,22 +1,19 @@
 <?xml version="1.0"?>
 <object name="composite_tool" meta_type="CompositePack Tool">
- <composites name="composites">
+ <composites>
   <composite name="Navigation Page">
    <c_layout name="two_slots"/>
    <c_layout name="three_slots"/>
    <c_layout name="two_columns" default="True"/>
   </composite>
  </composites>
- <composables name="composites">
+ <composables>
   <composable name="(Default Setup)">
    <c_viewlet name="title_description_with_link"/>
   </composable>
   <composable name="CompositePack Fragments">
    <c_viewlet name="fragment_viewlet"/>
   </composable>
-<!--  <composable name="CompositePack Portlet">
-   <c_viewlet name="title_description_with_link"/>
-  </composable> -->
   <composable name="CompositePack Titles">
    <c_viewlet name="title_viewlet"/>
   </composable>
@@ -42,12 +39,14 @@
    <c_viewlet name="title_description_with_link"/>
   </composable>
   <composable name="Topic">
+   <c_viewlet name="topic_viewlet" default="True"/>
    <c_viewlet name="title_description_with_link"/>
   </composable>
  </composables>
- <viewlets name="viewlets">
+ <viewlets>
   <viewlet name="title_description_with_link" title="Title with description"
      skin_method="title_description_with_link"/>
+  <viewlet name="topic_viewlet" title="Topic Listing" skin_method="topic_viewlet"/>
   <viewlet name="link_viewlet" title="Link Only" skin_method="link_viewlet"/>
   <viewlet name="title_viewlet" title="Title" skin_method="title_viewlet"/>
   <viewlet name="fragment_viewlet" title="HTML Fragment"
@@ -60,7 +59,7 @@
   <viewlet name="image_caption_viewlet" title="Image with caption"
      skin_method="image_caption_viewlet"/>
  </viewlets>
- <layouts name="layouts">
+ <layouts>
   <layout name="two_slots" title="Two slots" skin_method="two_slots"/>
   <layout name="three_slots" title="Three slots" skin_method="three_slots"/>
   <layout name="two_columns" title="Two columns" skin_method="two_columns"

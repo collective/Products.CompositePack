@@ -238,7 +238,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         Base on the nodeName of the DOM we create the corresponding type of object.
         One Issue though, layouts have to be registered before composites!
         """
-
+        
         top_nodes = {
             "layouts"     : self._configureLayouts,
             "viewlets"    : self._configureViewlets,
@@ -251,11 +251,8 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
             if child.nodeName in ('viewlets', 'layouts'):
                 top_nodes.get(child.nodeName)(child)
 
-                
-
         for child in _filterNodes(node.childNodes):
-            if child.nodeName in top_nodes.keys() and \
-                child.nodeName not in ('viewlets', 'layouts'):
+            if child.nodeName in ('composites', 'composables'):
                 top_nodes.get(child.nodeName)(child)
 
 def _filterNodes(nodes):

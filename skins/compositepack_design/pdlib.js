@@ -13,7 +13,7 @@
 // A library for manipulating objects on a page with object selection,
 // context menus, and drag and drop.  Mostly DOM 2 oriented, with bits
 // for IE compatibility.
-// $Id$
+// $Id: pdlib.js 11301 2005-08-23 14:08:42Z godchap $
 
 // The following variables and functions are documented for use by
 // scripts that use this library:

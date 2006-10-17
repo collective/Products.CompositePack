@@ -18,8 +18,9 @@ if __name__ == '__main__':
 # Load fixture
 from Testing import ZopeTestCase
 
-from Products.CompositePack.tests.CompositeGSTestCase import CompositeGSTestCase
 from Products.CMFCore.utils import getToolByName
+from Products.CompositePack.tests.CompositeGSTestCase import CompositeGSTestCase
+from Products.CompositePack.config import HAS_GS
 
 
 class ComposableTest(CompositeGSTestCase):
@@ -66,7 +67,7 @@ class ComposableTest(CompositeGSTestCase):
                     'Link':                    '<Viewlet at title_description_with_link>',
                     'Image':                   '<Viewlet at image_viewlet>',
                     'Event':                   '<Viewlet at title_description_with_link>',
-                    'Topic':                   '<Viewlet at title_description_with_link>',
+                    'Topic':                   '<Viewlet at topic_viewlet>',
                     'Document':                '<Viewlet at title_description_with_link>',
                     'News Item':               '<Viewlet at title_description_with_link>',
                     '(Default Setup)':         '<Viewlet at title_description_with_link>',
@@ -91,7 +92,7 @@ class ComposableTest(CompositeGSTestCase):
                                            '<Viewlet at image_caption_viewlet>'])
 
     def test_viewlets(self):
-        """ This tests the viewlets registered in this tool. Normally 8 
+        """ This tests the viewlets registered in this tool. Normally 9 
             viewlets are created and we know what to expect as id, title and 
             skin_method for each one of them, so let's be thorough in testing.
         """
@@ -105,10 +106,11 @@ class ComposableTest(CompositeGSTestCase):
                     'image_title_viewlet': ['Image with title', 
                                             'image_title_viewlet'],
                     'image_caption_viewlet': ['Image with caption', 
-                                              'image_caption_viewlet']}
+                                              'image_caption_viewlet'],
+                    'topic_viewlet': ['Topic Listing','topic_viewlet']}
 
         viewlets = self.ct.getAllViewlets()
-        self.failUnless(len(viewlets) == 8)
+        self.failUnless(len(viewlets) == 9)
 
         for viewlet in viewlets:
             id = viewlet.getId()
@@ -142,7 +144,8 @@ class ComposableTest(CompositeGSTestCase):
             When you make local changes, the import function should
             only add and not replace things
         """
-
+        if not HAS_GS:
+            return
         # We first make some custom Composite Pack modifications
         self.ct.registerLayout("custom_layout_id", "custom_layout_title", "custom_layout_skin_method")
         self.ct.registerViewlet("custom_viewlet_id", "custom_viewlet_title", "custom_viewlet_skin_method")
@@ -152,7 +155,6 @@ class ComposableTest(CompositeGSTestCase):
         self.ct.registerLayoutForType(layout, "custom_composite_id")
 
         # Now we use Generic Setup to import the default
-        self.gs = self.portal.portal_setup
         self.gs.setImportContext('profile-CompositePack:default')
         self.gs.runAllImportSteps()
 

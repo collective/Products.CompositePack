@@ -19,8 +19,9 @@ from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import get_COMPOSABLES_ATCT
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
-from Products.CompositePack.config import HAS_ATCT
+from Products.CompositePack.config import HAS_ATCT, HAVEAZAX
 from Products.CompositePack.config import PLONE21
+from Products.CompositePack.config import STYLESHEETS, JAVASCRIPTS
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
@@ -79,7 +80,6 @@ def install_tool(self, out):
         tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
-    tool.registerAsComposable('CompositePack Portlet')
     
     ts = tool.registerLayout('two_slots', 'Two slots', 'two_slots')
     try:
@@ -127,6 +127,9 @@ def install_tool(self, out):
     tool.registerViewlet('image_caption_viewlet',
                          'Image with caption',
                          'image_caption_viewlet')
+    tool.registerViewlet('topic_viewlet',
+                         'Topic Listing',
+                         'topic_viewlet')
     tool.setViewletsForType('CompositePack Titles', ['title_viewlet'],
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
@@ -138,6 +141,8 @@ def install_tool(self, out):
                                             'image_title_viewlet',
                                             'image_caption_viewlet'],
                                             'image_viewlet')
+       TOPIC_TYPE = get_ATCT_TYPES(self)['Topic']
+       tool.setViewletsForType(TOPIC_TYPE, ['topic_viewlet'], 'topic_viewlet')
     out.write("CompositePack Tool Installed\n")
 
 def setup_portal_factory(self, out):
@@ -159,6 +164,29 @@ def setup_portal_factory(self, out):
 def uninstall_tool(self, out):
     if hasattr(self, TOOL_ID):
         out.write("CompositePack Tool not removed\n")
+
+def install_kupu_resource(self, out):
+    if hasattr(self, KUPU_TOOL_ID):
+        kupu_tool = getattr(self, KUPU_TOOL_ID)
+        composables = (
+            'File',
+            'Link',
+            'Image',
+            'Event',
+            'Topic',
+            'Document',
+            'News Item',
+            'CompositePack Titles',
+#            'CompositePack Portlet',
+            'CompositePack Fragments',
+            )
+        try:
+            kupu_tool.addResourceType(COMPOSABLE, composables)
+            out.write("Composable Resource added in Kupu Library Tool\n")
+        except KeyError:
+            out.write("Composable Resource not added in Kupu Library Tool, already present\n")
+    else:
+        out.write("Kupu Library Tool not available\n")
 
 def uninstall_kupu_resource(self, out):
     if hasattr(self, KUPU_TOOL_ID):
@@ -223,8 +251,70 @@ def addToDefaultPageTypes(self, out):
             dptypes.append('Navigation Page')
             site_props._updateProperty('default_page_types', dptypes)
             print >>out, 'Added Navigation Page to the list of default page types'
-    
 
+def registerResources(self, out, toolname, resources):
+    tool = getToolByName(self, toolname)
+    existing = tool.getResourceIds()
+    cook = False
+    for resource in resources:
+        if not resource['id'] in existing:
+            # register additional resource in the specified registry...
+            if toolname == "portal_css":
+                tool.registerStylesheet(**resource)
+            if toolname == "portal_javascripts":
+                tool.registerScript(**resource)
+            print >> out, "Added %s to %s." % (resource['id'], tool)
+        else:
+            # ...or update existing one
+            parameters = tool.getResource(resource['id'])._data
+            for key in [k for k in resource.keys() if k != 'id']:
+                originalkey = 'original_'+key
+                original = parameters.get(originalkey)
+                if not original:
+                    parameters[originalkey] = parameters[key]
+                parameters[key] = resource[key]
+                print >> out, "Updated %s in %s." % (resource['id'], tool)
+                cook = True
+    if cook:
+        tool.cookResources()
+    print >> out, "Successfuly Installed/Updated resources in %s." % tool
+
+def resetResources(self, out, toolname, resources):
+    # Revert resource customizations
+    tool = getToolByName(self, toolname)
+    for resource in [tool.getResource(r['id']) for r in resources]:
+        if resource == None:
+            continue
+        for key in resource._data.keys():
+            originalkey = 'original_'+key
+            if resource._data.has_key(originalkey):
+                try: # <- BBB
+                    resource._data[key] = resource._data[originalkey]['value']
+                except TypeError:
+                    resource._data[key] = resource._data[originalkey]
+                del resource._data[originalkey]
+
+def sort_skins(self):
+    STANDARD_SKINS = ('Plone Default', 'Plone Tableless')
+    CP_LAYERS = ('compositepack_layouts','compositepack_layouts_azax')
+    skintool = getToolByName(self, 'portal_skins')
+    skin_selections = skintool.getSkinSelections()
+    for skin_selection in skin_selections:
+        if skin_selection not in STANDARD_SKINS:
+            continue
+        path = skintool.getSkinPath(skin_selection)
+        path = [p.strip() for p in path.split(',') if p]
+        if CP_LAYERS[0] in path and CP_LAYERS[1] in path:
+            cl_index = path.index(CP_LAYERS[0])
+            cla_index = path.index(CP_LAYERS[1])
+            if cl_index < cla_index and HAVEAZAX:
+                path[cl_index] = CP_LAYERS[1]
+                path[cla_index] = CP_LAYERS[0]
+            elif cla_index < cl_index and not HAVEAZAX:
+                path[cl_index] = CP_LAYERS[1]
+                path[cla_index] = CP_LAYERS[0]
+            skintool['selections'][skin_selection] = ",".join(path)
+                
 def install(self):
     out = StringIO()
 
@@ -237,12 +327,18 @@ def install(self):
     archetype_tool.setCatalogsByType('CompositePack Layout', ())   
     archetype_tool.setCatalogsByType('CompositePack Layout Container', ())   
     install_subskin(self, out, GLOBALS)
+    # The skins need to be sorted differently depending on whether Azax
+    # is available or not.
+    sort_skins(self)
     install_tool(self, out)
     install_customisation(self, out)
+    registerResources(self, out, 'portal_css', STYLESHEETS)
+    registerResources(self, out, 'portal_javascripts', JAVASCRIPTS)
     install_fixuids(self, out)
     if PLONE21:
         setup_portal_factory(self, out)
         addToDefaultPageTypes(self, out)
+    install_kupu_resource(self, out)
         
     out.write("Successfully installed %s.\n" % PROJECTNAME)
     return out.getvalue()
@@ -251,5 +347,7 @@ def uninstall(self):
     out = StringIO()
     uninstall_tool(self, out)
     uninstall_kupu_resource(self, out)
+    resetResources(self, out, 'portal_css', STYLESHEETS)
+    resetResources(self, out, 'portal_javascripts', JAVASCRIPTS)
     out.write("Successfully uninstalled %s.\n" % PROJECTNAME)
-    return out.getvalue()
+    return out.getvalue()    

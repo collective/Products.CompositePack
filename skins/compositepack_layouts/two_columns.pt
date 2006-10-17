@@ -5,10 +5,8 @@
 
 <tal:template_id metal:fill-slot="head_slot"
     define="request_url request/URL;
-            global template_id python:request_url.split('/')[-1]"
-    content="nothing">
-
-redefine template_id is needed to fix "design" tab highlight
+            global template_id python:request_url.split('/')[-1]" >
+    <tal:comment replace="nothing">redefine template_id is needed to fix "design" tab highlight</tal:comment>
 </tal:template_id>
 
 <metal:cssslot fill-slot="css_slot">
@@ -21,10 +19,20 @@ redefine template_id is needed to fix "design" tab highlight
 
   <div metal:fill-slot="main">
 
-
-      <div class="compo_column" tal:content="structure slot: first 'First slot'">
+    <div class="compo_column">
+    
+      <div class="compo_left_column" tal:content="structure slot: first 'First slot'">
        First slot elements here
       </div>
+
+      
+      <div class="compo_right_column" tal:content="structure slot: second 'Second slot'">
+      Second slot elements here
+      </div>
+
+      <div class="compo_clear" />
+      
+    </div>
 
   </div>    
 

@@ -11,12 +11,16 @@ $Id: CompositeGSTestCase.py 18879 2006-02-02 15:27:55Z jladage $
 """
 # Load fixture
 from Products.CompositePack.tests.CompositePackTestCase import *
+from Products.CompositePack.config import HAS_GS
 
 class CompositeGSTestCase(CompositePackTestCase):
 
     def installCompositePack(self):
-        self.loginAsPortalOwner()
-        self.gs = self.portal.portal_setup
-        self.gs.setImportContext('profile-CompositePack:default')
-        self.gs.runAllImportSteps()
+        if HAS_GS:
+            self.loginAsPortalOwner()
+            self.gs = self.portal.portal_setup
+            self.gs.setImportContext('profile-CompositePack:default')
+            self.gs.runAllImportSteps()
+        else:
+            CompositePackTestCase.installCompositePack(self)
 

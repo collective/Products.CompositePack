@@ -20,10 +20,14 @@ from Products.CompositePack.tests import CompositePackTestCase
 from Products.PloneTestCase import PloneTestCase
 from Testing.ZopeTestCase import ZopeDocFileSuite 
 
+from Products.PloneTestCase.layer import ZCMLLayer
+
 def test_suite():
    import unittest
    suite = unittest.TestSuite()
    suite.addTest(ZopeDocFileSuite('../doc/doc.txt', test_class=PloneTestCase.PloneTestCase))
+   suite.layer = ZCMLLayer
+
    return suite
 
 if __name__ == '__main__':

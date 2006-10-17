@@ -1,3 +1,10 @@
+* Fix bug in reinstall which removed the composables from kupu.
+  [ree]
+
+* Added compopack_template_azax layer to the skins which gets added in the
+  correct order, in case azax is installed.
+  [jslob]
+
 * Removed the ++resource++ code from the layout templates which were generating
   at least 4 404's per request.
   [jladage]

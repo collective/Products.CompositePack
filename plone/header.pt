@@ -3,3 +3,4 @@
 <script type="text/javascript"
   tal:attributes="src string:${url}/plone_edit_js"></script>
 </tal:block>
+

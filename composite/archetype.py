@@ -100,6 +100,11 @@ class Element(BaseContentMixin):
         """Returns a representation of this object as a string.
         """
         obj = self.dereference()
+        # First we check if the current user has View permission of this
+        # object. If not we return an empty string.
+        mtool = getToolByName(self, 'portal_membership')
+        if not mtool.checkPermission('View', obj):
+            return ''
         template = self.template()
         if template is not None:
             if obj is not None:

@@ -16,7 +16,7 @@ msgstr ""
 "Domain: compopack\n"
 
 msgid "Select viewlet"
-msgstr "Selecteer sjabloon"
+msgstr "Selecteer viewlet"
 
 msgid "Content"
 msgstr "Inhoud"

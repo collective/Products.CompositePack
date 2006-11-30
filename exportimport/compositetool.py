@@ -269,10 +269,13 @@ def importCompositeTool(context):
     logger = context.getLogger('composite tool properties')
     tool = getToolByName(site, 'composite_tool')
 
-    body = context.readDataFile('compositetool.xml')
+    body = context.readDataFile('composite_tool.xml')
     if body is None:
-        logger.info('Composite tool: Nothing to import.')
-        return
+        body = context.readDataFile('compositetool.xml')
+        if body is None:
+            logger.info('Composite tool: Nothing to import.')
+            return
+        logger.info('Composite tool: deprecation warning, please rename your profile to composite_tool.xml.')
 
     importer = zapi.queryMultiAdapter((tool, context), IBody)
     if importer is None:

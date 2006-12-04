@@ -63,7 +63,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
 
     def _extractCompositeConfiguration(self):
         """
-        Generate the compositetool.xml from the current configuration.
+        Generate the composite_tool.xml from the current configuration.
         """
         fragment = self._doc.createDocumentFragment()
         tool = self.context
@@ -254,6 +254,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         for child in _filterNodes(node.childNodes):
             if child.nodeName in ('composites', 'composables'):
                 top_nodes.get(child.nodeName)(child)
+        self.context.updateKupuLibraryTool()
 
 def _filterNodes(nodes):
     """

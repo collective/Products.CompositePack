@@ -1,3 +1,7 @@
+* At the end of _initObjects update the kupu library, so composables
+  are registered correctly there.
+  [jladage,maurits]
+
 * Added the topic view to the profile, since that was allready expected
   in the tests. All tests are passing again.
   [jladage]

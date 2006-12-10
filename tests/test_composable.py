@@ -25,8 +25,10 @@ from Products.CompositePack.config import PLONE21
 
 from cStringIO import StringIO
 from cPickle import load, dump
+from AccessControl import Unauthorized
 from Acquisition import aq_base, aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
+from Products.PloneTestCase.layer import ZCMLLayer
 
 def setup_local_tools(self, out):
     from Products.Archetypes.Extensions.utils import install_tools
@@ -196,12 +198,33 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
             pexpected = [pbefore[0]+10, pbefore[1]+4]
         pgot = [len(cat()) for cat in pcats]
         self.assertEquals(pgot, pexpected)
-
+    
+    def test_navigation_page_with_private_content(self):
+        self.portal.invokeFactory('Navigation Page', 'navpage')
+        navpage = self.portal.navpage
+        navpage.cp_container.setLayout('two_slots')
+        navpage.cp_container.generateSlots()
+        slots = navpage.cp_container.filled_slots
+        self.portal.invokeFactory('Document', 'page')
+        page = self.portal.page
+        slots.first.invokeFactory('CompositePack Element',
+                                  '0', target=[page.UID()])
+        self.setRoles(['Manager'])
+        wfTool = getToolByName(self.portal, 'portal_workflow')
+        wfTool.doActionFor(page,'hide')
+        self.logout()
+        # This should not give us any errors now:
+        try:
+            result = slots.first['0'].renderInline()
+        except Unauthorized, e:
+            self.fail("Unauthorized error: %s" % str(e))
+        # self.assertEqual(slots.first['0'].renderInline(),'')
 
 def test_suite():
     import unittest
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(ComposableTest))
+    suite.layer = ZCMLLayer
     return suite
 
 if __name__ == '__main__':

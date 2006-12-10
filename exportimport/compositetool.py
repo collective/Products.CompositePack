@@ -57,13 +57,13 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         # This should be using the tools api instead.
         # not tested yet.
         tool = self.context
-        for id in tool.objectIds():
-            ids =  tool['id'].objectIds()
-            tool['id'].delObjects(ids)
+        for id, subobj in tool.objectItems():
+            for sub_id in subobj.objectIds():
+                subobj._delObject(sub_id)
 
     def _extractCompositeConfiguration(self):
         """
-        Generate the compositetool.xml from the current configuration.
+        Generate the composite_tool.xml from the current configuration.
         """
         fragment = self._doc.createDocumentFragment()
         tool = self.context
@@ -254,6 +254,7 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         for child in _filterNodes(node.childNodes):
             if child.nodeName in ('composites', 'composables'):
                 top_nodes.get(child.nodeName)(child)
+        self.context.updateKupuLibraryTool()
 
 def _filterNodes(nodes):
     """

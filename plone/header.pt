@@ -12,5 +12,5 @@
     <script type="text/javascript" src="kupudrawers.js"
             tal:attributes="src string:${portal_url}/kupudrawers.js"> </script>
     <script type="text/javascript"
-            tal:attributes="src string:${url}/plone_edit_js"></script>
+            tal:attributes="src string:${url}/plone_edit.js"></script>
 </tal:block>

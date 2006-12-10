@@ -57,9 +57,9 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         # This should be using the tools api instead.
         # not tested yet.
         tool = self.context
-        for id in tool.objectIds():
-            ids =  tool['id'].objectIds()
-            tool['id'].delObjects(ids)
+        for id, subobj in tool.objectItems():
+            for sub_id in subobj.objectIds():
+                subobj._delObject(sub_id)
 
     def _extractCompositeConfiguration(self):
         """

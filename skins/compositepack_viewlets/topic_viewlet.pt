@@ -9,6 +9,8 @@
   <tal:topiccontents define="topicContents python:here.queryCatalog(batch=True);
                              batch topicContents;">
 
+  <metal:globals metal:use-macro="here/global_defines/macros/defines"></metal:globals>
+
   <tal:listing condition="topicContents">
     <tal:default condition="not:here/getCustomView|nothing"
                 define="folderContents topicContents">
@@ -112,3 +114,4 @@
     <metal:list metal:use-macro="here/base/macros/folderlisting"/>
   </tal:subtopics>
 </metal:body>
+

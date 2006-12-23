@@ -1,3 +1,10 @@
+* Added patches to CompositePage, so it will not suffer from templates
+  being cached by CacheFu. Instead of using a volatile variable to
+  decide whether we are on the design tab (and thus not allow caching)
+  we now add an attribute named 'composite_design' to the REQUEST
+  object. With many thanks to Reinout van Rees for this great idea.
+  [jladage]
+
 * At the end of _initObjects update the kupu library, so composables
   are registered correctly there.
   [jladage,maurits]

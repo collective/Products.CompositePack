@@ -27,7 +27,11 @@ from Products.Archetypes import listTypes
 from Products.CompositePage import tool as base_tool
 
 from Products.CompositePack.config import *
-from Products.CompositePack import design, patch
+from Products.CompositePack import design
+
+# Apply patched to CompositePage
+from Products.CompositePack import patch
+
 from Products.CompositePack.ConfigurationMethods import GeneralSetup
 
 try:

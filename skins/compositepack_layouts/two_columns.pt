@@ -30,7 +30,7 @@
       Second slot elements here
       </div>
 
-      <div class="compo_clear" />
+      <div class="compo_clear"><!-- --></div>
       
     </div>
 

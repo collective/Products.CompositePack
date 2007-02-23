@@ -11,7 +11,7 @@
 $Id$
 """
 from Acquisition import aq_base
-
+from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import BaseSchema
 
 from Products.CompositePack.config import PROJECTNAME
@@ -22,6 +22,7 @@ class NavigationPage(BaseContent):
     """A page composed of content selected manually."""
     meta_type = portal_type = 'Navigation Page'
     archetype_name = 'Navigation Page'
+    security = ClassSecurityInfo()
     
     typeDescription= 'A page composed of content selected manually.'
     typeDescMsgId  = 'description_edit_navigation_page'
@@ -50,5 +51,14 @@ class NavigationPage(BaseContent):
         		    texts.append(o.ContainerSearchableText())
 
         return " ".join(texts)
+
+    security.declareProtected('View', 'modified')
+    def modified(self):
+        """Last modified date for the nav page is last modified date for the catalog """
+        pc = self.portal_catalog
+        top = pc.searchResults(sort_on='modified', sort_order='reverse', sort_limit=1)
+        if len(top):
+            return top[0].modified
+        return BaseContent.modified(self)
 
 registerType(NavigationPage, PROJECTNAME)

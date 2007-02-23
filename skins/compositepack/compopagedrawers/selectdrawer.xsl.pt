@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 
 XSL transformation from Kupu Library XML to HTML for the select library
@@ -22,7 +22,7 @@ $Id$
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:i18n="http://xml.zope.org/namespaces/i18n"
   i18n:domain="kupu">
-
+  <tal:block define="x python:request.RESPONSE.setHeader('Content-Type', 'text/xml;;charset=UTF-8')" />
   <xsl:import
     href="drawer.xsl"
     tal:attributes="href context/kupudrawers/drawer.xsl/absolute_url"

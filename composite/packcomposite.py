@@ -402,19 +402,19 @@ def manage_afterAdd(self, item, container):
         self.cp_container.initializeArchetype()
     composite = getattr(self, 'cp_container')
     self.__cp_manage_afterAdd__(item, container)
-    composite.manage_afterAdd(composite, self)
+    composite.manage_afterAdd(item, container)
 manage_afterAdd.__cp_method__ = True
 
 def manage_beforeDelete(self, item, container):
     composite = getattr(self, 'cp_container')
-    composite.manage_beforeDelete(composite, self)
+    composite.manage_beforeDelete(item, container)
     self.__cp_manage_beforeDelete__(item, container)
 manage_beforeDelete.__cp_method__ = True
 
 def manage_afterClone(self, item):
     composite = getattr(self, 'cp_container')
     self.__cp_manage_afterClone__(item)
-    composite.manage_afterClone(composite)
+    composite.manage_afterClone(item)
 manage_afterClone.__cp_method__ = True
 
 def _notifyOfCopyTo(self, container, op=0):
@@ -422,7 +422,7 @@ def _notifyOfCopyTo(self, container, op=0):
     """
     self.__cp__notifyOfCopyTo__(container, op=op)
     composite = getattr(self, 'cp_container')
-    composite._notifyOfCopyTo(self, op=op)
+    composite._notifyOfCopyTo(container, op=op)
 _notifyOfCopyTo.__cp_method__ = True
 
 def design_view(self):

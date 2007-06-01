@@ -54,11 +54,13 @@ class NavigationPage(BaseContent):
 
     security.declareProtected('View', 'modified')
     def modified(self):
-        """Last modified date for the nav page is last modified date for the catalog """
+        """Last modified date for the nav page is most recent of our modification date and the
+        last modified date for the catalog """
+        myMod = BaseContent.modified(self)
         pc = self.portal_catalog
-        top = pc.searchResults(sort_on='modified', sort_order='reverse', sort_limit=1)
+        top = pc.searchResults(sort_on='modified', sort_order='reverse', sort_limit=1, Language='all')
         if len(top):
-            return top[0].modified
-        return BaseContent.modified(self)
+            return max(myMod, top[0].modified)
+        return myMod
 
 registerType(NavigationPage, PROJECTNAME)

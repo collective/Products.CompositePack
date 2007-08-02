@@ -13,6 +13,7 @@
 #archetypes-fieldname-content .formHelp {
  display:none;
 }
+#archetypes-fieldname-content .kupu-panels label { display: inline; }
 </style>
 </metal:topslot>
 

@@ -20,11 +20,32 @@ Plone versions supported
 
     2.5 
 
+    3.0 (need to patch CompositePage)
+
 Products required 
 ================= 
 
 CompositePage 0.2 
     http://hathawaymix.org/Software/CompositePage/CompositePage-0.2.tar.gz 
+
+If using CompositePack with Plone 3.0, CompositePage will need a small
+patch. This is because the tal library now passes the slot parameters
+to CompositePage as unicode strings and Zope really doesn't like it if
+you start creating objects with unicode ids:
+
+*** CompositePage/composite.py  2004-06-17 00:46:41.000000000 +0100
+--- Plone-3.0/zeocluster/Products/CompositePage/composite.py    2007-08-01 16:35:42.000000000 +0100
+***************
+*** 49,54 ****
+--- 49,56 ----
+         template.  Assigns attributes (class_name and title) to the
+         slot at the same time.
+         """
++         if isinstance(name, unicode):
++             name = name.encode('utf8')
+         composite = aq_parent(aq_inner(self))
+         composite._usingSlot(name, class_name, title)
+         slots = composite.filled_slots
 
 
 Design view 

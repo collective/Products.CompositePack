@@ -27,7 +27,6 @@ from Products.PageTemplates.ZopePageTemplate import manage_addPageTemplate
 
 from Products.PythonScripts.standard import url_quote
 
-from Products.CMFCore.CMFCorePermissions import ManagePortal
 from Products.CMFCore.utils import getToolByName
 
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
@@ -44,7 +43,7 @@ from Products.CompositePack.config import TOOL_ID, LAYOUTS
 from Products.CompositePack.config import VIEWLETS, LAYOUTS
 from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import zmi_dir
-from Products.CompositePack import CPpermissions
+from Products.CompositePack.CPpermissions import ManagePortal
 from Products.CompositePack.exceptions import CompositePackError
 from Products.CompositePack.LayoutRegistry import LayoutRegistry
 from Products.CompositePack.ViewletRegistry import ViewletRegistry

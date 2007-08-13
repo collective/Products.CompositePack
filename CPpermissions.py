@@ -9,7 +9,10 @@
 """
 $Id$
 """
-from Products.CMFCore.CMFCorePermissions import setDefaultRoles
+try:
+    from Products.CMFCore.permissions import ManagePortal, setDefaultRoles, View, AddPortalContent
+except ImportEror:
+    from Products.CMFCore.CMFCorePermissions import ManagePortal, setDefaultRoles, View, AddPortalContent
 
 DesignCompo = 'Design Composite Page'
 setDefaultRoles(DesignCompo, ('Manager',))

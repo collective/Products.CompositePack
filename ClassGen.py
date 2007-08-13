@@ -20,7 +20,6 @@ except ImportError:
 
 from Products.Archetypes.utils import insert_zmi_tab_after
 
-from Products.CMFCore import CMFCorePermissions
 from Products.CompositePack.composite import packcomposite
 from Products.CompositePack import CPpermissions
 
@@ -66,7 +65,7 @@ class ClassGenerator(ATClassGenerator):
                 setattr(klass, old_name, old_method)
             setattr(klass, name, method)
         security.declareProtected(CPpermissions.DesignCompo, 'design_view')
-        security.declareProtected(CMFCorePermissions.View, 'cp_view')
+        security.declareProtected(CPpermissions.View, 'cp_view')
 
     def addOptions(self, klass):
         klass.manage_options = insert_zmi_tab_after('Dublin Core', 

@@ -14,8 +14,8 @@ $Id$
 from Products.Archetypes.public import *
 from Products.CompositePack.config import PROJECTNAME
 from AccessControl import ClassSecurityInfo
-from Products.CMFCore import CMFCorePermissions
 from Products.CMFCore.utils import getToolByName
+from Products.CompositePack import CPpermissions
 
 # HTML Fragments should maintain reference information.
 try:
@@ -68,7 +68,7 @@ class Fragments(BaseContentMixin):
 
            )
 
-    security.declareProtected(CMFCorePermissions.View, 'getContent')
+    security.declareProtected(CPpermissions.View, 'getContent')
     def getContent(self, mimetype=None, **kw):
         """Content accessor:
             If mimetype is text/plain, return as is.

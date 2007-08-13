@@ -19,7 +19,7 @@ from Globals import InitializeClass
 from OFS.Folder import Folder
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import AddPortalContent, View
+from Products.CompositePack.CPpermissions import AddPortalContent, View
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 

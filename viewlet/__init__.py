@@ -22,10 +22,10 @@ from Products.Archetypes.public import *
 from Products.Archetypes.utils import insert_zmi_tab_before
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import ManagePortal
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
+from Products.CompositePack.CPpermissions import ManagePortal
 from Products.CompositePack.viewlet.interfaces import IViewlet
 from Products.CompositePack.viewlet.interfaces import ILayout
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID

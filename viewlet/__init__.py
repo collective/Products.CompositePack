@@ -244,6 +244,10 @@ class Layout(SkinMethod):
     _manage_registerTypes = PageTemplateFile('registerLayout.pt',
         zmi_dir)
 
+    # title and getId are always accessible
+    security.declarePublic('title')
+    security.declarePublic('getId')
+
     manage_options = insert_zmi_tab_before('Dublin Core',
                                    {'label':'Composites',
                                     'action':'manage_registerTypes'},

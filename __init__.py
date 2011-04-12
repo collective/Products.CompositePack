@@ -28,7 +28,7 @@ from Products.CompositePage import tool as base_tool
 
 from Products.CompositePack.config import *
 from Products.CompositePack import design, patch
-from Products.CompositePack.ConfigurationMethods import GeneralSetup
+#from Products.CompositePack.ConfigurationMethods import GeneralSetup
 
 try:
     from Products.GenericSetup import profile_registry
@@ -101,4 +101,4 @@ def initialize(context):
             profile_type=EXTENSION,
             for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
 
-    MigrationTool.registerSetupWidget(GeneralSetup)
+    #MigrationTool.registerSetupWidget(GeneralSetup)

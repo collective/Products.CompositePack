@@ -41,7 +41,7 @@ class GeneralSetup(SetupWidget):
 
     description = """This applies a function to the site. These functions are some of the basic
 set up features of a site. The chances are you will not want to apply these again. <b>Please note</b>
-these functions do not have a uninstall function."""
+these functions do not have an uninstall function."""
 
     functions = functions
 

@@ -12,7 +12,8 @@ $Id$
 """
 from Acquisition import aq_base
 from AccessControl import ClassSecurityInfo
-from Interface import Interface 
+from zope.interface import Interface 
+from zope.interface import implements
 
 from Products.Archetypes.public import BaseSchema
 
@@ -20,7 +21,8 @@ from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.composite import packcomposite
 from Products.CompositePack.public import BaseFolder, registerType
 
-from Products.CMFPlone.interfaces.NonStructuralFolder import INonStructuralFolder
+from Products.CMFPlone.interfaces.structure import INonStructuralFolder
+
 
 class INavigationPage(Interface):
     """ Marker interface
@@ -40,9 +42,7 @@ class NavigationPage(BaseFolder):
     # this type is technically a folder, it should be treated as a standard
     # content type. This ensures the user doesn't perceive a Navigation Page as
     # a folder.
-
-    __implements__ = BaseFolder.__implements__ + \
-                     (INavigationPage, INonStructuralFolder,)
+    implements((INavigationPage, INonStructuralFolder))
 
     security = ClassSecurityInfo()
     

@@ -18,6 +18,7 @@ from Products.CompositePack.exceptions import CompositePackError
 from Products.CMFCore.utils import getToolByName
 from DocumentTemplate.DT_Util import safe_callable
 from Acquisition import aq_base, aq_parent, aq_inner
+from zope.interface import implements
 
 TARGET = 'target'
 VIEWLET = 'viewlet'
@@ -27,7 +28,7 @@ class Portlet(BaseContentMixin):
     that uses references instead of path, and a dropdown
     for selecting templates
     """
-    __implements__ = BaseContentMixin.__implements__ + (ICompositeElement,)
+    implements(ICompositeElement)
     meta_type = portal_type = 'CompositePack Portlet'
     archetype_name = 'Portlet'
     global_allow = 0

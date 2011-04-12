@@ -19,14 +19,14 @@ from Globals import InitializeClass
 from OFS.Folder import Folder
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import AddPortalContent, View
+from Products.CMFCore.permissions import AddPortalContent, View
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.CompositePage.composite import Composite, SlotGenerator
 from Products.CompositePage.composite import SlotCollection
 from Products.CompositePage.slot import Slot, getIconURL, formatException, target_tag
-from Products.CompositePage import perm_names
+from Products.CompositePage.perm_names import view_perm
 from Products.CompositePage.interfaces import ICompositeElement
 
 from Products.CompositePack.config import zmi_dir
@@ -56,7 +56,7 @@ actions = ({'id': 'view',
 
 class PackSlot(Slot):
     """ """
-    __occams_gestalt__ = 1
+    __occams_gestalt__ = 1  # This is some kind of Gocept versioning flag.
     meta_type = 'Pack Slot'
     security = ClassSecurityInfo()
 
@@ -68,7 +68,7 @@ class PackSlot(Slot):
     security.declareProtected(AddPortalContent, 'invokeFactory')
     invokeFactory = BaseFolder.invokeFactory.im_func
 
-    security.declareProtected(perm_names.view, "renderGroups")
+    security.declareProtected(view_perm, "renderGroups")
     def renderGroups(self, group_size=2, allow_add=True):
         """Iterates over the items rendering one item for each group.
         Each group contains an iterator for group_size elements.
@@ -84,7 +84,7 @@ class PackSlot(Slot):
                     yield row + ('',) * (group_size - len(row))
                 break
 
-    security.declareProtected(perm_names.view, "renderIterator")
+    security.declareProtected(view_perm, "renderIterator")
     def renderIterator(self, allow_add=True):
         """Iterates over the items rendering one item for each element.
         
@@ -273,7 +273,7 @@ class PackComposite(Composite, BaseFolderMixin):
     manage_afterClone = BaseFolderMixin.manage_afterClone
     _notifyOfCopyTo = BaseFolderMixin._notifyOfCopyTo
 
-    security.declareProtected(perm_names.view, "parent")
+    security.declareProtected(view_perm, "parent")
     def parent(self):
         return aq_parent(aq_inner(self))
     parent = ComputedAttribute(parent, 1)
@@ -284,12 +284,12 @@ class PackComposite(Composite, BaseFolderMixin):
         new_id = ''.join(new_id.split('.'))
         return new_id
 
-    security.declareProtected(perm_names.view, "getPathFromPortalToParent")
+    security.declareProtected(view_perm, "getPathFromPortalToParent")
     def getPathFromPortalToParent(self):
         purl = getToolByName(self, 'portal_url')
         return purl.getRelativeContentURL(self.parent)
 
-    security.declareProtected(perm_names.view, "getTemplate")
+    security.declareProtected(view_perm, "getTemplate")
     def getTemplate(self):
         template_path = self.getTemplatePath()
         if not template_path:
@@ -314,7 +314,7 @@ class PackComposite(Composite, BaseFolderMixin):
                 self.setLayout(layout_id)
         return layout_id
 
-    security.declareProtected(perm_names.view, 'getDefaultLayout')
+    security.declareProtected(view_perm, 'getDefaultLayout')
     def getDefaultLayout(self):
         composite_tool = getToolByName(self, TOOL_ID)
         return composite_tool.getDefaultLayoutForType(self.parent.portal_type)
@@ -341,7 +341,7 @@ class PackComposite(Composite, BaseFolderMixin):
         dest = self.parent.absolute_url() + "/design_view"
         return self.REQUEST.RESPONSE.redirect(dest)
 
-    security.declareProtected(perm_names.view, 'getTemplatePath')
+    security.declareProtected(view_perm, 'getTemplatePath')
     def getTemplatePath(self):
         """Get the template path"""
         field = self.getField('template_path')
@@ -362,7 +362,7 @@ class PackComposite(Composite, BaseFolderMixin):
         field = self.getField('template_path')
         field.set(self, template_id)
 
-    security.declareProtected(perm_names.view, "haveAzax")
+    security.declareProtected(view_perm, "haveAzax")
     def haveAzax(self):
         return HAVEAZAX
 

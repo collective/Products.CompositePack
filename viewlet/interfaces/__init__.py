@@ -10,8 +10,8 @@
 
 $Id$
 """
-from Interface import Interface
-from Interface.Attribute import Attribute
+from zope.interface import Attribute
+from zope.interface import Interface
 
 class ILayout(Interface):
     """Interface of Layouts that can be applied to an object.

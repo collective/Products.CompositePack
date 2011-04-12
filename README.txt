@@ -228,18 +228,18 @@ This means CompositePack can be configure completely throught xml configuration 
 In the folder profiles/default you will find the base profile for the default
 configuration of the compositetool.
 
-- toolset.xml : Adds the composite_tool to the plone site when running all import
+- ``toolset.xml`` : Adds the composite_tool to the plone site when running all import
   steps.
 
-- types.xml : Adds the content types that come with CompositePack
+- ``types.xml`` : Adds the content types that come with CompositePack
 
-- types/*.xml : A config file for each type
+- ``types/*.xml`` : A config file for each type
 
-- import_steps.xml : This registers the import method 
+- ``import_steps.xml`` : This registers the import method 
 
-- export_steps.xml : This registers the export method.
+- ``export_steps.xml`` : This registers the export method.
 
-- compositetool.xml : This is the xml representation of all viewlets, layouts,
+- ``compositetool.xml`` : This is the xml representation of all viewlets, layouts,
   composables and composites.
 
 Customisation policy script

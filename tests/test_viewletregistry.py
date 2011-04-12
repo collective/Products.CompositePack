@@ -236,7 +236,9 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         folder = ct.viewlets
         ct.registerViewlet(ID1, 'Test', ID1)
 
-        get_transaction().commit(1) # Must do this to be allowed to rename.
+        import transaction
+        transaction.commit(1) # Must do this to be allowed to rename.
+
         folder.manage_renameObject(ID1, ID2)
         viewlet = folder[ID2]
         uid = viewlet.UID()

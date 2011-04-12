@@ -94,7 +94,8 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         self.assertEquals(slots.second['3'].dereference(), targets[3])
 
         # Do a subcommit so that rename works
-        get_transaction().commit(1)
+        import transaction
+        transaction.commit(1)
 
         # Rename and make sure references are still there
         self.portal.manage_renameObject('page', 'new_page')

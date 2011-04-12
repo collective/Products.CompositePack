@@ -22,7 +22,7 @@ from Products.Archetypes.public import *
 from Products.Archetypes.utils import insert_zmi_tab_before
 
 from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.CMFCorePermissions import ManagePortal
+from Products.CMFCore.permissions import ManagePortal
 
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
@@ -32,6 +32,8 @@ from Products.CompositePack.config import PROJECTNAME, TOOL_ID
 from Products.CompositePack.config import zmi_dir
 from Products.CompositePack.exceptions import CompositePackError
 from md5 import md5
+from zope.interface import implements
+
 
 class SkinMethod(BaseContentMixin, Item):
 
@@ -67,11 +69,11 @@ class SkinMethod(BaseContentMixin, Item):
         '''skin method is never catalogued'''
         pass
 
+
 class Viewlet(SkinMethod, PropertyManager.PropertyManager):
+    implements(IViewlet)
 
     _properties=({'id':'title', 'type': 'string','mode':'wd'},)
-
-    __implements__ = BaseContent.__implements__ + (IViewlet,)
 
     security = ClassSecurityInfo()
 
@@ -229,9 +231,9 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
         SkinMethod.manage_afterClone(self, item)
         self.setStableUID()
 
-class Layout(SkinMethod):
 
-    __implements__ = BaseContent.__implements__ + (ILayout,)
+class Layout(SkinMethod):
+    implements(ILayout)
 
     security = ClassSecurityInfo()
 

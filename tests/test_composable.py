@@ -30,14 +30,21 @@ from Acquisition import aq_base, aq_parent, aq_inner
 from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.layer import ZCMLLayer
 
-def setup_local_tools(self, out):
-    from Products.Archetypes.Extensions.utils import install_tools
-    from Products.Archetypes.Extensions.utils import install_referenceCatalog
-    public = self.public_website
+def setup_local_tools(portal, out):
+    from Products.Archetypes import ArchetypeTool
+    from Products.Archetypes.ReferenceEngine import ReferenceCatalog
+    from Products.Archetypes.UIDCatalog import UIDCatalog
+    from Products.Archetypes.setuphandlers import install_uidcatalog
+    from Products.Archetypes.setuphandlers import install_referenceCatalog
+    public = portal.public_website
     # Hack around acquisition so that tools get setup correctly
-    public = aq_base(public).__of__(aq_parent(self))
-    install_tools(public, out)
-    install_referenceCatalog(public, out)
+    public = aq_base(public).__of__(aq_parent(portal))
+    public.archetype_tool = ArchetypeTool()
+    public.reference_catalog = ReferenceCatalog(id='reference_catalog')
+    public.uid_catalog = UIDCatalog(id='uid_catalog')
+    install_uidcatalog(out, public)
+    install_referenceCatalog(out, public)
+
 
 class ComposableTest(CompositePackTestCase.CompositePackTestCase):
 
@@ -212,7 +219,8 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
                                   '0', target=[page.UID()])
         self.setRoles(['Manager'])
         wfTool = getToolByName(self.portal, 'portal_workflow')
-        wfTool.doActionFor(page,'hide')
+        wfTool.doActionFor(page, 'publish')
+        wfTool.doActionFor(page, 'retract')
         self.logout()
         # This should not give us any errors now:
         try:

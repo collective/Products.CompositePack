@@ -21,6 +21,9 @@ class CompositeGSTestCase(CompositePackTestCase):
             self.gs = self.portal.portal_setup
             self.gs.setImportContext('profile-CompositePack:default')
             self.gs.runAllImportSteps()
+            # Delete the GS logs to prevent conflicts.
+            for obj_id in self.gs.objectIds():
+                self.gs._delObject(obj_id)
         else:
             CompositePackTestCase.installCompositePack(self)
 

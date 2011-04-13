@@ -14,24 +14,9 @@ import os
 import Globals
 import warnings
 
-try:
-    from Products import ATContentTypes
-    HAS_ATCT = True
-except ImportError:
-    HAS_ATCT = False
-
-try:
-    from Products.CMFPlone.migrations.v2_1 import rcs
-except ImportError:
-    PLONE21 = False
-else:
-    PLONE21 = True
-try:
-    from Products.CMFPlone.migrations.v2_5 import rcs
-except ImportError:
-    PLONE25 = False
-else:
-    PLONE25 = True
+HAS_ATCT = True
+PLONE21 = True
+PLONE25 = True
 
 try:
     from Products import azax 

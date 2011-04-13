@@ -453,32 +453,18 @@ def objectIds(self, spec=None):
     return ids
 objectIds.__cp_method__ = True
 
-def objectValues(self, spec=None):
-    objs = self.__cp_objectValues__(spec)
-    if check_spec(spec) and shasattr(self, 'cp_container'):
-        objs = list(objs) + [self.cp_container]
-    return objs
-objectValues.__cp_method__ = True
-
-def objectItems(self, spec=None):
-    items = self.__cp_objectItems__(spec)
-    if check_spec(spec) and shasattr(self, 'cp_container'):
-        items = list(items) + [('cp_container', self.cp_container)]
-    return items
-objectItems.__cp_method__ = True
-
 manage_composite_contents = PageTemplateFile('compositeContents.pt',
         zmi_dir)
 manage_composite_contents.__cp_method__ = True
 
-methods = {'_setPortalTypeName':_setPortalTypeName,
-           'manage_afterAdd':manage_afterAdd,
-           'manage_beforeDelete':manage_beforeDelete,
-           'manage_afterClone':manage_afterClone,
-           'design_view':design_view,
-           'cp_view':cp_view,
-           'manage_composite_contents':manage_composite_contents,
-           '_notifyOfCopyTo':_notifyOfCopyTo,
-           'objectIds':objectIds,
-           'objectValues':objectValues,
-           'objectItems':objectItems}
+methods = {
+    '_setPortalTypeName':_setPortalTypeName,
+    'manage_afterAdd':manage_afterAdd,
+    'manage_beforeDelete':manage_beforeDelete,
+    'manage_afterClone':manage_afterClone,
+    'design_view':design_view,
+    'cp_view':cp_view,
+    'manage_composite_contents':manage_composite_contents,
+    '_notifyOfCopyTo':_notifyOfCopyTo,
+    'objectIds':objectIds,
+}

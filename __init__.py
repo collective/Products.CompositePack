@@ -27,15 +27,11 @@ from Products.Archetypes import listTypes
 from Products.CompositePage import tool as base_tool
 
 from Products.CompositePack.config import *
-from Products.CompositePack import design, patch
+from Products.CompositePack import design
 #from Products.CompositePack.ConfigurationMethods import GeneralSetup
 
-try:
-    from Products.GenericSetup import profile_registry
-    from Products.GenericSetup import EXTENSION
-    hasGenericSetup = True
-except ImportError:
-    hasGenericSetup = False
+from Products.GenericSetup import profile_registry
+from Products.GenericSetup import EXTENSION
 
 registerDirectory('skins', GLOBALS)
 try:
@@ -60,7 +56,6 @@ def initialize(context):
     # register archetypes content with the machinery
     content_types, constructors, ftis = process_types(listTypes(PROJECTNAME),
                                                       PROJECTNAME)
-
     tools = (tool.CompositeTool,)
 
     cmf_utils.ContentInit(
@@ -91,14 +86,13 @@ def initialize(context):
                        icon=TOOL_ICON
                    ).initialize(context)
 
-    if hasGenericSetup:
-        profile_registry.registerProfile(
-            name='default',
-            title='Composite Site',
-            description='Profile for Composite Pack',
-            path='profiles/default',
-            product='CompositePack',
-            profile_type=EXTENSION,
-            for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
+    profile_registry.registerProfile(
+        name='default',
+        title='Composite Site',
+        description='Profile for Composite Pack',
+        path='profiles/default',
+        product='CompositePack',
+        profile_type=EXTENSION,
+        for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
 
     #MigrationTool.registerSetupWidget(GeneralSetup)

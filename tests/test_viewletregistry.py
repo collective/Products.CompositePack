@@ -235,6 +235,8 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         ct = self.composite_tool
         folder = ct.viewlets
         ct.registerViewlet(ID1, 'Test', ID1)
+        v = folder['test_viewlet']
+        v.__factory_meta_type__ = v.meta_type
 
         import transaction
         transaction.commit(1) # Must do this to be allowed to rename.

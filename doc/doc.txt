@@ -17,8 +17,6 @@ when you install it, they get installed if they were not previously.
 True
 >>> qi.isProductInstalled('kupu')
 True
->>> qi.isProductInstalled('ATContentTypes')
-True
 
 CompositePack installs a layer :
 >>> ps = plone.portal_skins

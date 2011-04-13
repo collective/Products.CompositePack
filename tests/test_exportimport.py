@@ -26,10 +26,10 @@ from Products.CompositePack.config import HAS_GS
 class ComposableTest(CompositeGSTestCase):
 
     def afterSetUp(self):
+        """ After setup try to get the tool, without it we are helpless """
         CompositeGSTestCase.afterSetUp(self)
         # self.setRoles('Manager')
-        
-        """ After setup try to get the tool, without it we are helpless """
+
         self.ct = getToolByName(self.portal, 'composite_tool')
         self.failUnless(self.ct)
 
@@ -153,6 +153,11 @@ class ComposableTest(CompositeGSTestCase):
         self.ct.registerViewletForType(viewlet, "custom_composable_id")
         layout = self.ct.getLayoutById("custom_layout_id")
         self.ct.registerLayoutForType(layout, "custom_composite_id")
+
+        typetool = getToolByName(self.ct, 'portal_types')
+        from Products.CMFCore.TypesTool import FactoryTypeInformation
+        fti = FactoryTypeInformation(id="custom_composable_id")
+        typetool._setObject(fti.id, fti)
 
         # Now we use Generic Setup to import the default
         self.gs.setImportContext('profile-CompositePack:default')

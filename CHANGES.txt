@@ -1,5 +1,6 @@
 
 * Made compatible with Plone 3 and CompositePage from svn.zope.org.
+  Plone 3+ is now required.
   [hathawsh]
 
 * At the end of _initObjects update the kupu library, so composables

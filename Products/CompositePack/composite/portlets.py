@@ -58,8 +58,6 @@ class Portlet(BaseContentMixin):
         """ Return a list of tuples available portlets in the portal. This will scan
         for all page templates that define a macro called portlet.
         """
-        import pdb;pdb.set_trace()
-
         vocab = []
         skins = getToolByName(self, 'portal_skins')
         results = self.zopeFind(skins, obj_searchterm='metal:define-macro="portlet"', search_sub=1,)

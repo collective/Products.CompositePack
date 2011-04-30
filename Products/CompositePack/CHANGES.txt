@@ -1,7 +1,11 @@
 1.2 (2011-04-30)
 ----------------
 
-- Eggified.
+- Fixed code that triggered deprecation warnings. [tseaver]
+
+- Rearranged imports in packcomposite.py. [tseaver]
+
+- Eggified. [hathawsh]
 
 - Made compatible with Plone 3 and CompositePage from svn.zope.org.
   Plone 3+ is now required.

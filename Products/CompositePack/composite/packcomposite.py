@@ -10,34 +10,50 @@
 $Id$
 """
 from cgi import escape
+from itertools import islice
 
 from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_parent, aq_inner, aq_base
+from Acquisition import aq_base
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
 from Globals import InitializeClass
 from OFS.Folder import Folder
-
-from Products.CMFCore.utils import getToolByName
-from Products.CMFCore.permissions import AddPortalContent, View
-
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-from Products.CompositePage.composite import Composite, SlotGenerator
-from Products.CompositePage.composite import SlotCollection
-from Products.CompositePage.slot import Slot, getIconURL, formatException, target_tag
-from Products.CompositePage.perm_names import view_perm
-from Products.CompositePage.interfaces import ICompositeElement
+from Products.CMFCore.utils import getToolByName
 
-from Products.CompositePack.config import zmi_dir
-from Products.CompositePack.config import TOOL_ID, PROJECTNAME, HAVEAZAX
-from Products.CompositePack.design import _plone
-from Products.CompositePack import CPpermissions
-from Products.CompositePack.exceptions import CompositePackError
-from Products.Archetypes.public import *
+#from Products.Archetypes.public import *
+from Products.Archetypes.ArchetypeTool import registerType
+from Products.Archetypes.BaseFolder import BaseFolder
+from Products.Archetypes.BaseFolder import BaseFolderMixin
+from Products.Archetypes.BaseObject import MinimalSchema
+from Products.Archetypes.Field import StringField
+from Products.Archetypes.Schema import Schema
+from Products.Archetypes.Widget import SelectionWidget
+from Products.Archetypes.Widget import StringWidget
 from Products.Archetypes.utils import shasattr
 from Products.Archetypes import transaction_note
-from itertools import islice
+
+from Products.CompositePage.composite import Composite
+from Products.CompositePage.composite import SlotGenerator
+from Products.CompositePage.composite import SlotCollection
+from Products.CompositePage.interfaces import ICompositeElement
+from Products.CompositePage.slot import Slot
+from Products.CompositePage.slot import getIconURL
+from Products.CompositePage.slot import formatException
+from Products.CompositePage.slot import target_tag
+
+from Products.CompositePack.CPpermissions import AddPortalContent
+from Products.CompositePack.CPpermissions import DesignCompo
+from Products.CompositePack.CPpermissions import View
+from Products.CompositePack.config import HAVEAZAX
+from Products.CompositePack.config import PROJECTNAME
+from Products.CompositePack.config import TOOL_ID
+from Products.CompositePack.config import zmi_dir
+from Products.CompositePack.design import _plone
+from Products.CompositePack.exceptions import CompositePackError
 
 plone_edit_template = PageTemplateFile('edit_tag.pt', _plone)
 plone_add_target_template = PageTemplateFile('target_tag.pt', _plone)
@@ -50,7 +66,7 @@ actions = ({'id': 'view',
            {'id': 'design',
             'name': 'Design',
             'action': 'string:${object_url}/design_view',
-            'permissions': (CPpermissions.DesignCompo,)
+            'permissions': (DesignCompo,)
            },
            )
 
@@ -68,7 +84,7 @@ class PackSlot(Slot):
     security.declareProtected(AddPortalContent, 'invokeFactory')
     invokeFactory = BaseFolder.invokeFactory.im_func
 
-    security.declareProtected(view_perm, "renderGroups")
+    security.declareProtected(View, "renderGroups")
     def renderGroups(self, group_size=2, allow_add=True):
         """Iterates over the items rendering one item for each group.
         Each group contains an iterator for group_size elements.
@@ -84,7 +100,7 @@ class PackSlot(Slot):
                     yield row + ('',) * (group_size - len(row))
                 break
 
-    security.declareProtected(view_perm, "renderIterator")
+    security.declareProtected(View, "renderIterator")
     def renderIterator(self, allow_add=True):
         """Iterates over the items rendering one item for each element.
         
@@ -222,6 +238,20 @@ class PackSlotGenerator(SlotGenerator):
     _slot_class = PackSlot
 InitializeClass(PackSlotGenerator)
 
+pc_schema = MinimalSchema + Schema((
+    StringField('layout',
+                accessor='getLayout',
+                mutator='setLayout',
+                vocabulary='_availableLayouts',
+                enforceVocabulary=True,
+                widget=SelectionWidget(label='Layout')),
+    StringField('template_path',
+                accessor='getTemplatePath',
+                mutator='setTemplatePath',
+                write_permission=DesignCompo,
+                widget=StringWidget(label='Template Path'))
+))
+
 class PackComposite(Composite, BaseFolderMixin):
     """ """
 
@@ -232,20 +262,7 @@ class PackComposite(Composite, BaseFolderMixin):
     allowed_content_types = ('Pack Slot Collection', 'Pack Title Collection')
     global_allow = 0
 
-    schema = MinimalSchema + Schema((
-       StringField('layout',
-                   accessor='getLayout',
-                   mutator='setLayout',
-                   vocabulary='_availableLayouts',
-                   enforceVocabulary=True,
-                   widget=SelectionWidget(label='Layout')),
-       StringField('template_path',
-                   accessor='getTemplatePath',
-                   mutator='setTemplatePath',
-                   write_permission=CPpermissions.DesignCompo,
-                   widget=StringWidget(label='Template Path'))
-       ))
-
+    schema = pc_schema
 
     def __init__(self, id='cp_container'):
         BaseFolderMixin.__init__(self, id)
@@ -273,7 +290,7 @@ class PackComposite(Composite, BaseFolderMixin):
     manage_afterClone = BaseFolderMixin.manage_afterClone
     _notifyOfCopyTo = BaseFolderMixin._notifyOfCopyTo
 
-    security.declareProtected(view_perm, "parent")
+    security.declareProtected(View, "parent")
     def parent(self):
         return aq_parent(aq_inner(self))
     parent = ComputedAttribute(parent, 1)
@@ -284,12 +301,12 @@ class PackComposite(Composite, BaseFolderMixin):
         new_id = ''.join(new_id.split('.'))
         return new_id
 
-    security.declareProtected(view_perm, "getPathFromPortalToParent")
+    security.declareProtected(View, "getPathFromPortalToParent")
     def getPathFromPortalToParent(self):
         purl = getToolByName(self, 'portal_url')
         return purl.getRelativeContentURL(self.parent)
 
-    security.declareProtected(view_perm, "getTemplate")
+    security.declareProtected(View, "getTemplate")
     def getTemplate(self):
         template_path = self.getTemplatePath()
         if not template_path:
@@ -314,7 +331,7 @@ class PackComposite(Composite, BaseFolderMixin):
                 self.setLayout(layout_id)
         return layout_id
 
-    security.declareProtected(view_perm, 'getDefaultLayout')
+    security.declareProtected(View, 'getDefaultLayout')
     def getDefaultLayout(self):
         composite_tool = getToolByName(self, TOOL_ID)
         return composite_tool.getDefaultLayoutForType(self.parent.portal_type)
@@ -334,21 +351,21 @@ class PackComposite(Composite, BaseFolderMixin):
         field.set(self, layout_id)
         self.setTemplatePath()
 
-    security.declareProtected(CPpermissions.DesignCompo, 'changeLayout')
+    security.declareProtected(DesignCompo, 'changeLayout')
     def changeLayout(self, layout_id):
         """Change Layout"""
         self.setLayout(layout_id)
         dest = self.parent.absolute_url() + "/design_view"
         return self.REQUEST.RESPONSE.redirect(dest)
 
-    security.declareProtected(view_perm, 'getTemplatePath')
+    security.declareProtected(View, 'getTemplatePath')
     def getTemplatePath(self):
         """Get the template path"""
         field = self.getField('template_path')
         path = field.get(self)
         return path
 
-    security.declareProtected(CPpermissions.DesignCompo, 'setTemplatePath')
+    security.declareProtected(DesignCompo, 'setTemplatePath')
     def setTemplatePath(self, value=None):
         """Set the template path"""
         # Ignore passed in value. Get the template
@@ -362,7 +379,7 @@ class PackComposite(Composite, BaseFolderMixin):
         field = self.getField('template_path')
         field.set(self, template_id)
 
-    security.declareProtected(view_perm, "haveAzax")
+    security.declareProtected(View, "haveAzax")
     def haveAzax(self):
         return HAVEAZAX
 

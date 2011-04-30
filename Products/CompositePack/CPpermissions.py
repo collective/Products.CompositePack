@@ -9,11 +9,13 @@
 """
 $Id$
 """
+from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.permissions import setDefaultRoles
+from Products.CMFCore.permissions import View
+from Products.CMFCore.permissions import AddPortalContent
 
 DesignCompo = 'Design Composite Page'
 setDefaultRoles(DesignCompo, ('Manager',))
 
 ManageCompositePack = 'Manage Composite Pack'
 setDefaultRoles(ManageCompositePack, ('Manager',))
-

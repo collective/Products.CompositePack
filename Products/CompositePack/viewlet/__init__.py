@@ -14,6 +14,7 @@
 $Id$
 """
 from AccessControl import ClassSecurityInfo
+from AccessControl.Permissions import copy_or_move as permission_copy_or_move
 from OFS.ObjectManager import BeforeDeleteException
 from OFS import PropertyManager
 from OFS.SimpleItem import Item
@@ -35,12 +36,43 @@ from md5 import md5
 from zope.interface import implements
 
 
-class SkinMethod(BaseContentMixin, Item):
+base_schema = Schema((
+
+    StringField(
+        name='id',
+        required=1,
+        mode='rw',
+        permission=permission_copy_or_move,
+        accessor='getId',
+        mutator='setId',
+        default='',
+        widget=RequiredIdWidget(
+            ignore_visible_ids=True,  # Always show the widget
+        ),
+    ),
+
+    StringField(
+        name='title',
+        required=1,
+        searchable=1,
+        default='',
+        accessor='Title',
+        widget=StringWidget(
+            label_msgid='label_title',
+            visible={'view' : 'invisible'},
+            i18n_domain='plone',
+        ),
+    ),
+
+    ), marshall = RFC822Marshaller())
+
+
+class SkinMethod(BaseContentMixin):
 
     meta_type = portal_type = archetype_name = 'CompositePack Skin Method'
     global_allow = 0
 
-    schema = MinimalSchema + Schema((
+    schema = base_schema + Schema((
         StringField(
         'skin_method',
         accessor='getSkinMethod',
@@ -50,6 +82,11 @@ class SkinMethod(BaseContentMixin, Item):
                                          'the viewlet/layout.'))
         ),
         ))
+
+    def getId(self):
+        if getattr(self, '_at_is_fake_instance', False):
+            return ''
+        return super(SkinMethod, self).getId()
 
     def getTemplate(self):
         """ Return the template """

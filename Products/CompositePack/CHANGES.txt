@@ -1,5 +1,5 @@
-1.2 (2011-04-30)
-----------------
+1.2a1 (2011-04-30)
+------------------
 
 - Fixed code that triggered deprecation warnings. [tseaver]
 
@@ -15,7 +15,7 @@
   are registered correctly there.
   [jladage,maurits]
 
-- Added the topic view to the profile, since that was allready expected
+- Added the topic view to the profile, since that was already expected
   in the tests. All tests are passing again.
   [jladage]
 

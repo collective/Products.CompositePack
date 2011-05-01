@@ -1,6 +1,9 @@
 1.2a1 (2011-04-30)
 ------------------
 
+- Fixed adding and renaming of CompositePack Viewlets and Layouts
+  in the composite_tool. [hathawsh]
+
 - Fixed code that triggered deprecation warnings. [tseaver]
 
 - Rearranged imports in packcomposite.py. [tseaver]

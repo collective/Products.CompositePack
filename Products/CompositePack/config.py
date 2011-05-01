@@ -22,7 +22,7 @@ try:
     from Products import azax 
     from Products import Five
 except ImportError:
-    warnings.warn('CompositePack performance impaired: Five and Azax recommended', DeprecationWarning)
+    #warnings.warn('CompositePack performance impaired: Five and Azax recommended', DeprecationWarning)
     HAVEAZAX = False
 else:
     HAVEAZAX = True

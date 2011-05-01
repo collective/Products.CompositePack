@@ -33,13 +33,10 @@ from Products.CompositePack import design
 from Products.GenericSetup import profile_registry
 from Products.GenericSetup import EXTENSION
 
-registerDirectory('skins', GLOBALS)
-try:
-    del base_tool._uis['plone'] # So we can refresh the product :(
-except KeyError:
-    pass
 
+registerDirectory('skins', GLOBALS)
 base_tool.registerUI('plone', design.PloneUI())
+
 
 def initialize(context):
     from Products.CompositePack import tool, viewlet
@@ -82,7 +79,6 @@ def initialize(context):
 
     cmf_utils.ToolInit(TOOL_NAME,
                        tools = tools,
-                       product_name = PROJECTNAME,
                        icon=TOOL_ICON
                    ).initialize(context)
 
@@ -96,3 +92,21 @@ def initialize(context):
         for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
 
     #MigrationTool.registerSetupWidget(GeneralSetup)
+
+
+if True:
+    # Provide a custom factory dispatcher that makes it possible for
+    # the ZMI factory forms to use Archetypes fields.  (Otherwise, we get
+    # an error saying the aq_inner attribute is unauthorized because
+    # the container has no security assertions; the container is a
+    # __FactoryDispatcher__.)
+
+    from App.FactoryDispatcher import FactoryDispatcher
+    from AccessControl import ClassSecurityInfo
+    from Globals import InitializeClass
+
+    class __FactoryDispatcher__(FactoryDispatcher):
+        security = ClassSecurityInfo()
+        security.declareObjectPublic()
+
+    InitializeClass(__FactoryDispatcher__)

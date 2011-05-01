@@ -10,6 +10,7 @@
 
 $Id$
 """
+from OFS.CopySupport import CopyContainer
 from Products.Archetypes.public import *
 from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.viewlet.interfaces import IViewlet
@@ -45,6 +46,12 @@ class ViewletContainer(BaseFolderMixin, UniqueObject):
         '''viewlet container is never catalogued'''
         pass
 
+    def _verifyObjectPaste(self, object, validate_src=1):
+        # Objects in this container have an incorrect __factory_meta_type__.
+        # Use the implementation that uses meta_type instead.
+        return CopyContainer._verifyObjectPaste(self, object,
+            validate_src=validate_src)
+
 registerType(ViewletContainer, PROJECTNAME)
 
 class LayoutContainer(BaseFolderMixin, UniqueObject):
@@ -77,5 +84,11 @@ class LayoutContainer(BaseFolderMixin, UniqueObject):
     def unindexObject(self):
         '''layout container is never catalogued'''
         pass
+
+    def _verifyObjectPaste(self, object, validate_src=1):
+        # Objects in this container have an incorrect __factory_meta_type__.
+        # Use the implementation that uses meta_type instead.
+        return CopyContainer._verifyObjectPaste(self, object,
+            validate_src=validate_src)
 
 registerType(LayoutContainer, PROJECTNAME)

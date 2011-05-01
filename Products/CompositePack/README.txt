@@ -14,17 +14,13 @@ below how to register them).
 Plone versions supported
 ========================
 
-    2.1.1 (need to comment out or rename the configure.zcml)
-
-    2.1.2 (need to comment out or rename the configure.zcml)
-
-    2.5 
+    3.3
 
 Products required 
 ================= 
 
-CompositePage 0.2 
-    http://hathawaymix.org/Software/CompositePage/CompositePage-0.2.tar.gz 
+CompositePage 1.0
+    http://pypi.python.org/pypi/Products.CompositePage
 
 
 Design view 
@@ -219,7 +215,7 @@ Registering a layout
 GenericSetup extension profile 
 ===============================
 
-Plone-2.5 uses GenericSetup for site configuration. To learn more about GenericSetup
+Plone uses GenericSetup for site configuration. To learn more about GenericSetup
 please read the following documentation:
 
 - http://plone.org/documentation/tutorial/understanding-and-using-genericsetup-in-plone

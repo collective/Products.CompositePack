@@ -9,7 +9,7 @@
 """
 $Id: compositetool.py 18879 2006-02-02 15:27:55Z jladage $
 """
-from zope.app import zapi
+from zope.component import queryMultiAdapter
 from Products.CMFCore.utils import getToolByName
 from Products.GenericSetup.interfaces import IBody
 from Products.GenericSetup.utils import XMLAdapterBase
@@ -278,7 +278,7 @@ def importCompositeTool(context):
             return
         logger.info('Composite tool: deprecation warning, please rename your profile to composite_tool.xml.')
 
-    importer = zapi.queryMultiAdapter((tool, context), IBody)
+    importer = queryMultiAdapter((tool, context), IBody)
     if importer is None:
         logger.warning('Composite tool: Import adapter misssing.')
         return

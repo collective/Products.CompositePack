@@ -1,6 +1,9 @@
 Next Release
 ------------
 
+- Plone 4 compatibility:  Removed uses of long-deprecated 'zope.app.zapi'
+  module.
+
 - Plone 4 compatibility:  Removed long-deprecated 'five:traversable'
   ZCML directive.
 

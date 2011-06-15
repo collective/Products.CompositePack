@@ -1,7 +1,8 @@
 Next Release
 ------------
 
-- ...
+- Plone 4 compatibility:  Removed long-deprecated 'five:traversable'
+  ZCML directive.
 
 1.2a1 (2011-04-30)
 ------------------

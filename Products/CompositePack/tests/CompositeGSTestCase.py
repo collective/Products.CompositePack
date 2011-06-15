@@ -10,12 +10,14 @@
 $Id: CompositeGSTestCase.py 18879 2006-02-02 15:27:55Z jladage $
 """
 # Load fixture
-from Products.CompositePack.tests.CompositePackTestCase import *
-from Products.CompositePack.config import HAS_GS
+from Products.CompositePack.tests.CompositePackTestCase \
+    import CompositePackTestCase
+
 
 class CompositeGSTestCase(CompositePackTestCase):
 
     def installCompositePack(self):
+        from Products.CompositePack.config import HAS_GS
         if HAS_GS:
             self.loginAsPortalOwner()
             self.gs = self.portal.portal_setup
@@ -26,4 +28,3 @@ class CompositeGSTestCase(CompositePackTestCase):
                 self.gs._delObject(obj_id)
         else:
             CompositePackTestCase.installCompositePack(self)
-

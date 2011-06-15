@@ -12,6 +12,7 @@ $Id$
 # Load fixture
 from Products.PloneTestCase import PloneTestCase
 
+
 ## LinguaPlone addon?
 try:
     from Products.LinguaPlone.public import registerType
@@ -20,6 +21,7 @@ except ImportError:
 else:
     HAS_LINGUA_PLONE = True
     del registerType
+
 
 DEPENDENCIES = (
     'Archetypes',
@@ -41,16 +43,13 @@ if HAS_LINGUA_PLONE:
 
 PloneTestCase.setupPloneSite()
 
-from cStringIO import StringIO
-from cPickle import load, dump
-from Acquisition import aq_base, aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
-
-from Products.CompositePack.config import get_ATCT_TYPES, HAS_GS
 
 class CompositePackTestCase(PloneTestCase.PloneTestCase):
 
     def afterSetUp(self):
+        from Products.CMFCore.utils import getToolByName
+        from Products.CompositePack.config import get_ATCT_TYPES
+        from Products.CompositePack.config import HAS_GS
         super(PloneTestCase.PloneTestCase, self).afterSetUp()
         self.qi = getToolByName(self.portal, 'portal_quickinstaller')
         if HAS_GS:
@@ -74,4 +73,3 @@ class CompositePackTestCase(PloneTestCase.PloneTestCase):
         self.composite_tool.clearLayoutRegistry()
         self.composite_tool.clearViewletRegistry()
         super(PloneTestCase.PloneTestCase, self).beforeTearDown()
-

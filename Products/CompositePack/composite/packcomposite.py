@@ -34,7 +34,7 @@ from Products.Archetypes.Schema import Schema
 from Products.Archetypes.Widget import SelectionWidget
 from Products.Archetypes.Widget import StringWidget
 from Products.Archetypes.utils import shasattr
-from Products.Archetypes import transaction_note
+from Products.Archetypes.utils import transaction_note
 
 from Products.CompositePage.composite import Composite
 from Products.CompositePage.composite import SlotGenerator

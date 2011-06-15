@@ -1,3 +1,4 @@
+# coding=UTF-8
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.

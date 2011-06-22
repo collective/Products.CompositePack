@@ -1,14 +1,20 @@
 Next Release
 ------------
 
+- Fixed small issues and added some install/uninstall tests
+  [hvelarde, saibatizoku]
+
 - Plone 4 compatibility:  Import 'transaction_note' from new location
   ('Products.Archetypes.utils' rather than 'Products.Archetypes').
+  [tseaver]
 
 - Plone 4 compatibility:  Removed uses of long-deprecated 'zope.app.zapi'
   module.
+  [tseaver]
 
 - Plone 4 compatibility:  Removed long-deprecated 'five:traversable'
   ZCML directive.
+  [tseaver]
 
 1.2a1 (2011-04-30)
 ------------------
@@ -48,8 +54,8 @@ Next Release
   correct order, in case azax is installed.
   [jslob]
 
-- Removed the ++resource++ code from the layout templates which were generating
-  at least 4 404's per request.
+- Removed the ++resource++ code from the layout templates which were
+  generating at least 4 404's per request.
   [jladage]
 
 - Added ResourceRegistry config for all js and css. Moved the skins files
@@ -65,7 +71,7 @@ Next Release
   now import and export the entire configuration in XML.
   [jladage and jorisslob]
 
-- changed tool.py to handle multiple users messing with the same 
+- changed tool.py to handle multiple users messing with the same
   navigation page. Some sanity checks were added and neat error messages
   will be sent to users when things go wrong
   [jslob and maurits]
@@ -86,7 +92,7 @@ Next Release
 
 - setup portal factory and id calculated from title for Plone 2.1
   [gotcha]
- 
+
 - register cleanIndexes setup widget in portal_migration to remove wrongly
   indexed software.
   [gotcha]

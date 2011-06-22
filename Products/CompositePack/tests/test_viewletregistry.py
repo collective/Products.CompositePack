@@ -239,7 +239,7 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         v.__factory_meta_type__ = v.meta_type
 
         import transaction
-        transaction.commit(1) # Must do this to be allowed to rename.
+        transaction.commit() # Must do this to be allowed to rename.
 
         folder.manage_renameObject(ID1, ID2)
         viewlet = folder[ID2]

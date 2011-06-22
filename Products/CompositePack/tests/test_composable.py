@@ -103,7 +103,7 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
 
         # Do a subcommit so that rename works
         import transaction
-        transaction.commit(1)
+        transaction.commit()
 
         # Rename and make sure references are still there
         self.portal.manage_renameObject('page', 'new_page')

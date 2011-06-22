@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+
+"""
+$Id$
+"""
+
 import os
 from setuptools import setup
 from setuptools import find_packages
@@ -39,10 +45,15 @@ setup(name='Products.%s' % NAME,
       include_package_data=True,
       namespace_packages=['Products'],
       zip_safe=False,
-      install_requires=['setuptools',
-                       ],
+      install_requires=[
+            'setuptools',
+            'Plone',
+            'Products.CompositePage',
+            ],
       tests_require=[],
       test_suite="Products.%s.tests" % NAME,
       entry_points="""
+      [z3c.autoinclude.plugin]
+      target = plone
       """,
       )

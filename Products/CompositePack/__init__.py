@@ -82,15 +82,6 @@ def initialize(context):
                        icon=TOOL_ICON
                    ).initialize(context)
 
-    profile_registry.registerProfile(
-        name='default',
-        title='Composite Site',
-        description='Profile for Composite Pack',
-        path='profiles/default',
-        product='CompositePack',
-        profile_type=EXTENSION,
-        for_=Products.CMFPlone.interfaces.IPloneSiteRoot)
-
     #MigrationTool.registerSetupWidget(GeneralSetup)
 
 

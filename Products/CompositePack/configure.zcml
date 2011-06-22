@@ -1,9 +1,20 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:i18n="http://namespaces.zope.org/i18n"
     i18n_domain="compopack">
 
-  <include package=".exportimport" />
+    <include package=".exportimport" />
+
+    <!-- Register an extension profile to make the product installable -->
+    <genericsetup:registerProfile
+        name="default"
+        title="Composite Site"
+        directory="profiles/default"
+        description="Profile for Composite Pack"
+        provides="Products.GenericSetup.interfaces.EXTENSION"
+        />
 
 </configure>
 

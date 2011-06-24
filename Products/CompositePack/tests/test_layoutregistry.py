@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -6,27 +8,32 @@
 # License (ZPL) v2.1. See COPYING.txt for more information.
 #
 ##############################################################################
+
 """
 $Id$
 """
 
+import unittest
 
-import os, sys
+from Products.CMFCore.utils import getToolByName
+from Products.PloneTestCase.ptc import PloneTestCase
 
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
-from Testing import ZopeTestCase
-
-# Load fixture
-from Products.CompositePack.tests import CompositePackTestCase
-
+from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
+from Products.CompositePack.tests.layer import CompositePackLayer
 
-class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):
+
+class TestLayoutRegistry(PloneTestCase):
+
+    layer = CompositePackLayer
 
     def afterSetUp(self):
-        CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        # from CompositePackTestCase.py
+        self.composite_tool = getToolByName(self.portal, 'composite_tool')
+        self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
+        self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
+        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
+
         self.TEST_TYPE = self.FILE_TYPE
         self.TEST_TYPE_2 = self.EVENT_TYPE
         self.TEST_TYPES = (self.TEST_TYPE, self.TEST_TYPE_2)
@@ -39,27 +46,27 @@ class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):
         ct.registerAsComposite(self.TEST_TYPE)
         self.failUnless(ct.isComposite(self.TEST_TYPE))
         self.failUnless(self.TEST_TYPE in ct.getRegisteredComposites())
-    
+
     def testUnregisterType(self):
         ct = self.composite_tool
         ct.registerAsComposite(self.TEST_TYPE)
         ct.unregisterAsComposite(self.TEST_TYPE)
         self.failIf(ct.isComposite(self.TEST_TYPE))
-        
+
     def testRegisterTypes(self):
         ct = self.composite_tool
         ct.registerAsComposite(self.TEST_TYPES)
         for test_type in self.TEST_TYPES:
             self.failUnless(ct.isComposite(test_type))
             self.failUnless(test_type in ct.getRegisteredComposites())
-        
+
     def testUnregisterTypes(self):
         ct = self.composite_tool
         ct.registerAsComposite(self.TEST_TYPES)
         ct.unregisterAsComposite(self.TEST_TYPES)
         for test_type in self.TEST_TYPES:
             self.failIf(ct.isComposite(test_type))
-        
+
     def testRegisterTwice(self):
         ct = self.composite_tool
         ct.registerAsComposite(self.TEST_TYPE)
@@ -127,9 +134,10 @@ class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):
         layout.registerForType(self.TEST_TYPE)
         layout.setDefaultForType(self.TEST_TYPE)
         layout.clearDefaultForType(self.TEST_TYPE)
-        self.assertEquals(ct.getDefaultLayoutForType(self.TEST_TYPE).getId(), ct.getDefaultLayout())
+        self.assertEquals(ct.getDefaultLayoutForType(self.TEST_TYPE).getId(),
+                          ct.getDefaultLayout())
         self.failUnless(ct.noDefaultLayoutForType(self.TEST_TYPE))
-    
+
     def testForceUnRegisterDefaultLayout(self):
         ct = self.composite_tool
         ct.registerAsComposite(self.TEST_TYPE)
@@ -137,12 +145,14 @@ class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):
         layout.registerForType(self.TEST_TYPE)
         layout.setDefaultForType(self.TEST_TYPE)
         layout.unregisterForType(self.TEST_TYPE, force=True)
-        self.assertEquals(ct.getDefaultLayoutForType(self.TEST_TYPE).getId(), ct.getDefaultLayout())
+        self.assertEquals(ct.getDefaultLayoutForType(self.TEST_TYPE).getId(),
+                          ct.getDefaultLayout())
 
     def testDefaultLayoutNotRegistered(self):
         ct = self.composite_tool
         ct.registerAsComposite(self.TEST_TYPE)
-        self.assertEquals(ct.getDefaultLayoutForType(self.TEST_TYPE).getId(), ct.getDefaultLayout())
+        self.assertEquals(ct.getDefaultLayoutForType(self.TEST_TYPE).getId(),
+                          ct.getDefaultLayout())
 
     def testDefaultLayoutNotRegisteredUsesToolDefault(self):
         ct = self.composite_tool
@@ -155,16 +165,13 @@ class LayoutRegistryTest(CompositePackTestCase.CompositePackTestCase):
     def testLayoutsForTypeNotRegisteredReturnAll(self):
         ct = self.composite_tool
         layouts = ct.layouts.objectValues()
-        self.assertEquals(ct.getRegisteredLayoutsForType(self.TEST_TYPE), layouts)
+        self.assertEquals(ct.getRegisteredLayoutsForType(self.TEST_TYPE),
+                          layouts)
         layout = ct.registerLayout('test_layout', 'Test', 'test_layout')
         ct.registerLayoutForType(layout, self.TEST_TYPE)
-        self.assertEquals(ct.getRegisteredLayoutsForType(self.TEST_TYPE), [layout])
+        self.assertEquals(ct.getRegisteredLayoutsForType(self.TEST_TYPE),
+                          [layout])
+
 
 def test_suite():
-    import unittest
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(LayoutRegistryTest))
-    return suite
-
-if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

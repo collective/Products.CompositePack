@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -6,38 +8,43 @@
 # License (ZPL) v2.1. See COPYING.txt for more information.
 #
 ##############################################################################
+
 """
 $Id: test_composable.py 11303 2005-08-23 16:38:33Z godchap $
 """
 
-import os, sys
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
-# Load fixture
-from Testing import ZopeTestCase
-
-from Products.CompositePack.tests import CompositePackTestCase
+import unittest
 
 from Products.CMFCore.utils import getToolByName
+from Products.PloneTestCase.ptc import PloneTestCase
 
-class ComposableTest(CompositePackTestCase.CompositePackTestCase):
+from Products.CompositePack.config import get_ATCT_TYPES
+from Products.CompositePack.tests.layer import CompositePackLayer
+
+
+class TestIndexes(PloneTestCase):
+
+    layer = CompositePackLayer
 
     def afterSetUp(self):
-        CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        # from CompositePackTestCase.py
+        self.composite_tool = getToolByName(self.portal, 'composite_tool')
+        self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
+        self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
+        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
+
         self.setRoles('Manager')
         self.ct = getToolByName(self.portal, 'portal_catalog')
 
     def beforeTearDown(self):
-        CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
-
+        """"""
+        #CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
 
     def test_no_container_indexed(self):
         #check catalog works ok
         before = len(self.ct(portal_type=self.FILE_TYPE))
         self.folder.invokeFactory(self.FILE_TYPE, 'test_file')
-        self.assertEqual(before+1, len(self.ct(portal_type=self.FILE_TYPE)))
+        self.assertEqual(before + 1, len(self.ct(portal_type=self.FILE_TYPE)))
         #check none of the software (viewlets, layouts,...) has been indexed
         self.failIf(len(self.ct(portal_type="CompositePack Layout Container")))
         self.failIf(len(self.ct(portal_type="CompositePack Viewlet Container")))
@@ -47,7 +54,7 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         self.portal.invokeFactory('Navigation Page', 'page')
         page = self.portal._getOb('page')
         # 1 = page (no filled_slots or composite elements)
-        self.assertEquals(len(self.ct()), before+1)
+        self.assertEquals(len(self.ct()), before + 1)
 
     def test_index_layout(self):
         before = len(self.ct())
@@ -63,10 +70,4 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
 
 
 def test_suite():
-    import unittest
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(ComposableTest))
-    return suite
-
-if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

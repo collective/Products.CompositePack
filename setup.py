@@ -13,13 +13,14 @@ NAME = 'CompositePack'
 here = os.path.abspath(os.path.dirname(__file__))
 package = os.path.join(here, 'Products', NAME)
 
+
 def _package_doc(name):
     f = open(os.path.join(package, name))
     return f.read()
 
 _boundary = '\n' + ('-' * 60) + '\n\n'
 README = ( _package_doc('README.txt')
-         + _boundary 
+         + _boundary
          + _package_doc('CHANGES.txt')
          )
 
@@ -48,6 +49,7 @@ setup(name='Products.%s' % NAME,
       install_requires=[
             'setuptools',
             'Plone',
+            'Products.kupu',
             'Products.CompositePage',
             ],
       tests_require=[],

@@ -1,3 +1,7 @@
+- fix installer because right now it's a complete mess; we need to add one
+  step at a time, starting with content types and moving beyond.
+
+- fix tests setup to standarize the way we set them up.
 
 - setup of composable should happen in composite_tool rather than in
   kupu_library_tool

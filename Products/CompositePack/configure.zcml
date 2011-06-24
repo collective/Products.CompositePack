@@ -16,5 +16,15 @@
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />
 
-</configure>
+    <!-- Register the import step -->
+    <!-- genericsetup:importStep
+        name="Products.CompositePack"
+        title="Products.CompositePack special import handlers"
+        description=""
+        handler="Products.CompositePack.exportimport.compositetool.importCompositeTool">
+        <depends name="types"/>
+        <depends name="skins"/>
+        <depends name="composite_tool"/>
+     </genericsetup:importStep -->
 
+</configure>

@@ -9,6 +9,7 @@ import unittest
 from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID
+from Products.CompositePack.config import PRODUCT_DEPENDENCIES
 from Products.CompositePack.tests.layer import CompositePackLayer
 
 TYPES = (
@@ -56,6 +57,12 @@ class TestInstall(PloneTestCase):
 
     def afterSetUp(self):
         pass
+
+    def test_dependencies_installed(self):
+        portal_quickinstaller = self.portal.portal_quickinstaller
+        for p in PRODUCT_DEPENDENCIES:
+            self.failUnless(portal_quickinstaller.isProductInstalled(p),
+                            '%s not installed' % p)
 
     def test_types(self):
         portal_types = self.portal.portal_types

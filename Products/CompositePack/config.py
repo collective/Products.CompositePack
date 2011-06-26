@@ -60,7 +60,6 @@ def get_ATCT_TYPES(self):
         result["NewsItem"] = "News Item"
         result["Topic"] = "Topic"
         result["Link"] = "Link"
-        result["Favorite"] = "Favorite"
     elif HAS_ATCT and not isSwitchedToATCT(self):
         result["Document"] = "ATDocument"
         result["Image"] = "ATImage"
@@ -69,12 +68,10 @@ def get_ATCT_TYPES(self):
         result["NewsItem"] = "ATNewsItem"
         result["Topic"] = "ATTopic"
         result["Link"] = "ATLink"
-        result["Favorite"] = "ATFavorite"
     return result
 
 def get_COMPOSABLES_ATCT(self):
     result = get_ATCT_TYPES(self)
-    del result["Favorite"]
     return result.values()
 
 PROJECTNAME = 'CompositePack'

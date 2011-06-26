@@ -52,13 +52,10 @@ class TestTool(PloneTestCase):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
-        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
 
         self.TEST_TYPE_1 = self.EVENT_TYPE
         self.TEST_TYPE_2 = self.FILE_TYPE
-        self.TEST_TYPE_3 = self.FAVORITE_TYPE
         ct = self.composite_tool
-        ct.registerAsComposable(self.TEST_TYPE_3)
         self.v0 = ct.registerViewlet(V0, V0_TITLE, V0)
         self.v1 = ct.registerViewlet(V1, V1_TITLE, V1)
         self.v2 = ct.registerViewlet(V2, V2_TITLE, V2)
@@ -104,14 +101,12 @@ class TestTool(PloneTestCase):
 
         self.assertEquals(RES1, ct.getViewletsForType(self.TEST_TYPE_1))
         self.assertEquals(RES2, ct.getViewletsForType(self.TEST_TYPE_2))
-        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_3))
 
     def testRegisterForType2(self):
         ct = self.composite_tool
         ct.setDefaultViewlets([V0, V00, V0D], V0D)
         ct.setViewletsForType(self.TEST_TYPE_1, [V1, V11, V0D], DEFAULT)
         ct.setViewletsForType(self.TEST_TYPE_2, (DEFAULT,), V0D)
-        ct.setViewletsForType(self.TEST_TYPE_3, (DEFAULT,), DEFAULT)
         RES1 = {'default': {'id': V0D,
                             'title': V0D_TITLE,
                             'viewlet': self.v0d},
@@ -133,14 +128,12 @@ class TestTool(PloneTestCase):
 
         self.assertEquals(RES1, ct.getViewletsForType(self.TEST_TYPE_1))
         self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_2))
-        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_3))
 
     def testRegisterForType3(self):
         ct = self.composite_tool
         ct.setDefaultViewlets([V0, V0D], V0D)
         ct.setViewletsForType(self.TEST_TYPE_1, [V1, V11, V0D], DEFAULT)
         ct.setViewletsForType(self.TEST_TYPE_2, (DEFAULT,), V0D)
-        ct.setViewletsForType(self.TEST_TYPE_3, (DEFAULT,), DEFAULT)
         RES1 = {'default': {'id': V0D,
                             'title': V0D_TITLE,
                             'viewlet': self.v0d},
@@ -159,7 +152,6 @@ class TestTool(PloneTestCase):
 
         self.assertEquals(RES1, ct.getViewletsForType(self.TEST_TYPE_1))
         self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_2))
-        self.assertEquals(RES0, ct.getViewletsForType(self.TEST_TYPE_3))
 
         # check that changing default setup does propagate to types using
         # default setup
@@ -175,7 +167,6 @@ class TestTool(PloneTestCase):
                                    'viewlet': self.v00}]}
 
         self.assertEquals(RES0AFTER, ct.getViewletsForType(self.TEST_TYPE_2))
-        self.assertEquals(RES0AFTER, ct.getViewletsForType(self.TEST_TYPE_3))
 
     def testRegisterForType4(self):
         ct = self.composite_tool

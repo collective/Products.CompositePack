@@ -1,4 +1,5 @@
-# coding=UTF-8
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -7,20 +8,19 @@
 # License (ZPL) v2.1. See COPYING.txt for more information.
 #
 ##############################################################################
+
 """
 $Id$
 """
 
-import os, sys
+import unittest
 
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
+from Products.CMFCore.utils import getToolByName
+from Products.PloneTestCase.ptc import PloneTestCase
 
-# Load fixture
-from Testing import ZopeTestCase
+from Products.CompositePack.tests.layer import CompositePackLayer
 
-from Products.CompositePack.tests import CompositePackTestCase
-
+# TODO: remove this
 from Products.CompositePack.config import PLONE21
 
 
@@ -28,8 +28,7 @@ from cStringIO import StringIO
 from cPickle import load, dump
 from AccessControl import Unauthorized
 from Acquisition import aq_base, aq_parent, aq_inner
-from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.layer import ZCMLLayer
+
 
 def setup_local_tools(portal, out):
     from Products.Archetypes import ArchetypeTool
@@ -47,27 +46,30 @@ def setup_local_tools(portal, out):
     install_referenceCatalog(out, public)
 
 
-class ComposableTest(CompositePackTestCase.CompositePackTestCase):
+class TestComposable(PloneTestCase):
+
+    layer = CompositePackLayer
 
     def afterSetUp(self):
-        CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        #CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
         self.setRoles('Manager')
         self.portal._v_skindata = None
         self.portal.setupCurrentSkin()
         self.ct = getToolByName(self.portal, 'portal_catalog')
 
     def beforeTearDown(self):
-        CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
+        """"""
+        #CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
 
     def test_utf8SearchableText(self):
         # verify that change in SearchablText
         self.portal.invokeFactory('Navigation Page', 'nav')
         nav = self.portal.nav
         utf8Txt = 'UTF8 ÅÄÖ'
-        nav.setTitle( utf8Txt)
-        nav.setDescription( 'description' )
-        self.failUnlessEqual( nav.SearchableText(), utf8Txt+' description')
-        
+        nav.setTitle(utf8Txt)
+        nav.setDescription('description')
+        self.failUnlessEqual(nav.SearchableText(), utf8Txt + ' description')
+
     def test_navigation_page_rename(self):
         targets = []
         for i in range(0, 4):
@@ -118,7 +120,6 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         self.assertEquals(slots.second.objectIds(), ['2', '3'])
         self.assertEquals(slots.first['0'].dereference(), targets[0])
         self.assertEquals(slots.second['3'].dereference(), targets[3])
-
 
     def test_navigation_page_staging(self):
         self.loginAsPortalOwner()
@@ -177,7 +178,7 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
         # portal_catalog should get +0, uid+8, references+4
         # uid_catalog gets the four elements and the four references
         # reference_catalog gets the four references
-        expected = [before[0], before[1]+8, before[2]+4]
+        expected = [before[0], before[1] + 8, before[2] + 4]
         got = [len(cat()) for cat in cats]
         self.assertEquals(got, expected)
 
@@ -194,20 +195,20 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
 
         # Should have no change from previous counts
         # except for private and page
-        expected = [expected[0]+2, expected[1], expected[2]]
+        expected = [expected[0] + 2, expected[1], expected[2]]
         got = [len(cat()) for cat in cats]
         self.assertEquals(got, expected)
 
         # Finally, the public catalogs should have
         if PLONE21:
             # uid+11 (private has also a UID), references+4
-            pexpected = [pbefore[0]+11, pbefore[1]+4]
+            pexpected = [pbefore[0] + 11, pbefore[1] + 4]
         else:
             # uid+10, references+4
-            pexpected = [pbefore[0]+10, pbefore[1]+4]
+            pexpected = [pbefore[0] + 10, pbefore[1] + 4]
         pgot = [len(cat()) for cat in pcats]
         self.assertEquals(pgot, pexpected)
-    
+
     def test_navigation_page_with_private_content(self):
         self.portal.invokeFactory('Navigation Page', 'navpage')
         navpage = self.portal.navpage
@@ -230,12 +231,6 @@ class ComposableTest(CompositePackTestCase.CompositePackTestCase):
             self.fail("Unauthorized error: %s" % str(e))
         # self.assertEqual(slots.first['0'].renderInline(),'')
 
-def test_suite():
-    import unittest
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(ComposableTest))
-    suite.layer = ZCMLLayer
-    return suite
 
-if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
+def test_suite():
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

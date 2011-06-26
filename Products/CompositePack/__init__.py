@@ -11,10 +11,6 @@
 $Id$
 """
 
-# Kickstart Install to make sure it works
-from Products.CompositePack.Extensions import Install
-del Install
-
 from Products.CMFCore import utils as cmf_utils
 from Products.CMFCore.DirectoryView import registerDirectory
 

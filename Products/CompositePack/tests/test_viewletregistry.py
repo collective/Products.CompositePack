@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -6,33 +8,36 @@
 # License (ZPL) v2.1. See COPYING.txt for more information.
 #
 ##############################################################################
+
 """
 $Id$
 """
 
-import os, sys
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
-# Load fixture
-from Testing import ZopeTestCase
-
-from Products.CompositePack.tests import CompositePackTestCase
+import unittest
 
 from Products.CMFCore.utils import getToolByName
-
+from Products.PloneTestCase.ptc import PloneTestCase
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
+
+from Products.CompositePack.config import COMPOSABLE
+from Products.CompositePack.config import get_ATCT_TYPES
+from Products.CompositePack.exceptions import CompositePackError
+from Products.CompositePack.tests.layer import CompositePackLayer
 
 KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
-from Products.CompositePack.config import COMPOSABLE
-from Products.CompositePack.exceptions import CompositePackError
 
-class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
+class TestViewletRegistry(PloneTestCase):
+
+    layer = CompositePackLayer
 
     def afterSetUp(self):
-        CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        # from CompositePackTestCase.py
+        self.composite_tool = getToolByName(self.portal, 'composite_tool')
+        self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
+        self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
+        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
+
         self.TEST_TYPE = self.FILE_TYPE
         self.TEST_TYPE_2 = self.EVENT_TYPE
         self.TEST_TYPES = (self.TEST_TYPE, self.TEST_TYPE_2)
@@ -44,29 +49,30 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
     def testGetDefaultWhenNoDefault(self):
         ct = self.composite_tool
         ct.registerAsComposable(self.TEST_TYPE)
-        self.assertEquals(ct.getDefaultViewletForType(self.TEST_TYPE), ct.getDefaultViewletForDefaultSetup())
+        self.assertEquals(ct.getDefaultViewletForType(self.TEST_TYPE),
+                          ct.getDefaultViewletForDefaultSetup())
 
     def testRegisterType(self):
         ct = self.composite_tool
         ct.registerAsComposable(self.TEST_TYPE)
         self.failUnless(ct.isComposable(self.TEST_TYPE))
         self.failUnless(self.TEST_TYPE in ct.getRegisteredComposables())
-        self.failUnless(self.TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
+        self.failUnless(self.TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE))
 
     def testUnregisterType(self):
         ct = self.composite_tool
         ct.registerAsComposable(self.TEST_TYPE)
         ct.unregisterAsComposable(self.TEST_TYPE)
         self.failIf(ct.isComposable(self.TEST_TYPE))
-        self.failIf(self.TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
-        
+        self.failIf(self.TEST_TYPE in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE))
+
     def testRegisterTypes(self):
         ct = self.composite_tool
         ct.registerAsComposable(self.TEST_TYPES)
         for test_type in self.TEST_TYPES:
             self.failUnless(ct.isComposable(test_type))
             self.failUnless(test_type in ct.getRegisteredComposables())
-            self.failUnless(test_type in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
+            self.failUnless(test_type in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE))
 
     def testUnregisterTypes(self):
         ct = self.composite_tool
@@ -74,8 +80,8 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         ct.unregisterAsComposable(self.TEST_TYPES)
         for test_type in self.TEST_TYPES:
             self.failIf(ct.isComposable(test_type))
-            self.failIf(test_type in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE)) 
-        
+            self.failIf(test_type in self.kupu_tool.getPortalTypesForResourceType(COMPOSABLE))
+
     def testRegisterTypeTwice(self):
         ct = self.composite_tool
         ct.registerAsComposable(self.TEST_TYPE)
@@ -127,7 +133,8 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
         viewlet.registerForType(self.TEST_TYPE)
         viewlet.setDefaultForType(self.TEST_TYPE)
-        self.assertEquals(viewlet, ct.getDefaultViewletForType(self.TEST_TYPE))
+        self.assertEquals(viewlet,
+                          ct.getDefaultViewletForType(self.TEST_TYPE))
         self.failUnless(viewlet.isDefaultForType(self.TEST_TYPE))
 
     def testUnRegisterDefaultViewlet(self):
@@ -163,7 +170,8 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         viewlet = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
         viewlet.registerForDefaultSetup()
         viewlet.setDefaultForDefaultSetup()
-        self.assertEquals(ct.getDefaultViewletForType(self.TEST_TYPE), ct.getDefaultViewletForDefaultSetup())
+        self.assertEquals(ct.getDefaultViewletForType(self.TEST_TYPE),
+                          ct.getDefaultViewletForDefaultSetup())
 
     def testRegisterViewletForDefaultSetup(self):
         ct = self.composite_tool
@@ -239,7 +247,7 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         v.__factory_meta_type__ = v.meta_type
 
         import transaction
-        transaction.commit() # Must do this to be allowed to rename.
+        transaction.commit()  # Must do this to be allowed to rename.
 
         folder.manage_renameObject(ID1, ID2)
         viewlet = folder[ID2]
@@ -255,11 +263,6 @@ class ViewletRegistryTest(CompositePackTestCase.CompositePackTestCase):
         viewlet2.setStableUID()
         self.assertEquals(uid, viewlet2.UID())
 
-def test_suite():
-    import unittest
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(ViewletRegistryTest))
-    return suite
 
-if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
+def test_suite():
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

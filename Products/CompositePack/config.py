@@ -81,6 +81,9 @@ PROJECTNAME = 'CompositePack'
 ADD_CONTENT_PERMISSION = 'Add CompositePack content'
 GLOBALS = globals()
 
+# listing of Archetypes, ATContentTypes as dependencies is no longer needed
+PRODUCT_DEPENDENCIES = ('kupu', )
+
 TOOL_ID = 'composite_tool'
 TOOL_NAME = 'CompositePack Tool'
 TOOL_ICON = 'composite.gif'

@@ -32,7 +32,6 @@ class TestLayoutRegistry(PloneTestCase):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
-        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
 
         self.TEST_TYPE = self.FILE_TYPE
         self.TEST_TYPE_2 = self.EVENT_TYPE

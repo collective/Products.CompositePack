@@ -11,6 +11,7 @@ from Products.PloneTestCase.ptc import PloneTestCase
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID
 from Products.CompositePack.config import PRODUCT_DEPENDENCIES
 from Products.CompositePack.tests.layer import CompositePackLayer
+from Products.CompositePack.tests.layer import SimpleLayer
 
 TYPES = (
     'CompositePack Element',
@@ -33,7 +34,7 @@ SKINS = (
     'compositepack',
     'compositepack_design',
     'compositepack_layouts',
-    'compositepack_layouts_azax',
+    #'compositepack_layouts_azax',
     'compositepack_viewlets',
     )
 
@@ -53,10 +54,14 @@ JS = (
 class TestInstall(PloneTestCase):
     """ensure product is properly installed"""
 
-    layer = CompositePackLayer
+    layer = SimpleLayer
 
     def afterSetUp(self):
-        pass
+        #self.addProduct('CompositePack')
+        self.addProfile('Products.CompositePack:default')
+        portal_quickinstaller = self.portal.portal_quickinstaller
+        self.failUnless(portal_quickinstaller.isProductInstalled(PROJECTNAME),
+                            '%s not installed' % PROJECTNAME)
 
     def test_dependencies_installed(self):
         portal_quickinstaller = self.portal.portal_quickinstaller

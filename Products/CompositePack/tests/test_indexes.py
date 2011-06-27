@@ -31,7 +31,6 @@ class TestIndexes(PloneTestCase):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
-        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
 
         self.setRoles('Manager')
         self.ct = getToolByName(self.portal, 'portal_catalog')

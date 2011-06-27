@@ -64,7 +64,6 @@ class CompositePackTestCase(PloneTestCase.PloneTestCase):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
-        self.FAVORITE_TYPE = get_ATCT_TYPES(self.portal)['Favorite']
 
     def installCompositePack(self):
         self.qi.installProduct('CompositePack')

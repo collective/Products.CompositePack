@@ -160,8 +160,7 @@ class ComposableTest(CompositeGSTestCase):
         typetool._setObject(fti.id, fti)
 
         # Now we use Generic Setup to import the default
-        self.gs.setImportContext('profile-CompositePack:default')
-        self.gs.runAllImportSteps()
+        self.gs.runAllImportStepsFromProfile('profile-Products.CompositePack:default')
 
         # Let's get the Layouts
         layouts = self.ct.getAllLayouts()

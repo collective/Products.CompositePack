@@ -1,6 +1,9 @@
 Next Release
 ------------
 
+- Fixed installation of content types, CSS and JavaScript using Generic Setup.
+  [hvelarde]
+
 - Fixed small issues and added some install/uninstall tests
   [hvelarde, saibatizoku]
 

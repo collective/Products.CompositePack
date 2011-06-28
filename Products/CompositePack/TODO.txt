@@ -34,9 +34,4 @@ Plone 2.5 compatibility
 Plone 4.1 compatibility
 ======================
 
-  * [KNOWN BUG] Object properties for Types in profiles/default/types are not
-    being taken into consideration when installing, causing issues such as
-    the 'cp_view' not being registered as the default view for Navigation
-    Pages.
-
   * [KNOWN BUG] Kupu is hard-coded into the HTML Fragments editing view.

@@ -13,8 +13,10 @@
 $Id$
 """
 import os
-import Globals
+
 import warnings
+
+from App.Common import package_home
 
 HAS_ATCT = True
 PLONE21 = True
@@ -98,4 +100,4 @@ LAYOUTS = 'layouts'
 
 INSTALL_DEMO_TYPES = 0  # Install the demo types
 
-zmi_dir = os.path.join(Globals.package_home(globals()), 'www')
+zmi_dir = os.path.join(package_home(globals()), 'www')

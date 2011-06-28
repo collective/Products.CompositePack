@@ -12,15 +12,15 @@ $Id$
 from cgi import escape
 from itertools import islice
 
-from ZODB.POSException import ConflictError
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
-from Globals import InitializeClass
 from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from ZODB.POSException import ConflictError
 
 from Products.CMFCore.utils import getToolByName
 

@@ -14,45 +14,36 @@ $Id$
 """
 from types import TupleType, ListType
 
-import Globals
-from Globals import PersistentMapping
 from AccessControl import ClassSecurityInfo
+from AccessControl.class_init import InitializeClass
 from Acquisition import aq_base
-
-from OFS.ObjectManager import BeforeDeleteException
 from OFS.Folder import Folder
-
+from persistent.mapping import PersistentMapping
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
-from Products.PageTemplates.ZopePageTemplate import manage_addPageTemplate
-
 from Products.PythonScripts.standard import url_quote
+from zope.interface import implements
 
+from Products.Archetypes import listTypes
+from Products.Archetypes.interfaces.referenceable import IReferenceable
+from Products.Archetypes.utils import insert_zmi_tab_after
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.utils import getToolByName
-
+from Products.CompositePage.tool import CompositeTool as BaseTool
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
-KUPU_TOOL_ID = PloneKupuLibraryTool.id
-
-from Products.Archetypes.interfaces.referenceable import IReferenceable
-from Products import Archetypes
-from Products.Archetypes.utils import insert_zmi_tab_after
-
-from Products.CompositePage.tool import CompositeTool as BaseTool
-
-from Products.CompositePack.config import TOOL_ID, LAYOUTS
-from Products.CompositePack.config import VIEWLETS, LAYOUTS
+from Products.CompositePack.config import TOOL_ID
+from Products.CompositePack.config import LAYOUTS
+from Products.CompositePack.config import VIEWLETS
 from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import zmi_dir
-from Products.CompositePack import CPpermissions
 from Products.CompositePack.exceptions import CompositePackError
+from Products.CompositePack.interfaces import ICompositeTool
 from Products.CompositePack.LayoutRegistry import LayoutRegistry
 from Products.CompositePack.ViewletRegistry import ViewletRegistry
 from Products.CompositePack.ViewletRegistry import DEFAULT
 from Products.CompositePack.ViewletRegistry import ViewletsForType
-from Products.CompositePack.exceptions import CompositePackError
-from Products.CompositePack.interfaces import ICompositeTool
-from zope.interface import implements
+
+KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
 class CompositeTool(BaseTool, Folder):
     """ CompositePack Tool """
@@ -190,7 +181,7 @@ class CompositeTool(BaseTool, Folder):
     def getRegisteredCompositePortalTypes(self):
         meta_portal = self.getMapMetatypesPortalTypes()
         
-        arche_data = Archetypes.listTypes()
+        arche_data = listTypes()
         result = []
         for arche_type in arche_data:
             if hasattr(arche_type['klass'], 'cp_view'):
@@ -201,7 +192,7 @@ class CompositeTool(BaseTool, Folder):
     def getRegisteredArchePortalTypes(self):
         meta_portal = self.getMapMetatypesPortalTypes()
         
-        arche_data = Archetypes.listTypes()
+        arche_data = listTypes()
         result = []
         for arche_type in arche_data:
             result.extend(meta_portal.get(arche_type['meta_type'], []))
@@ -981,7 +972,7 @@ class CompositeTool(BaseTool, Folder):
         result.extend(templates)
         return templates
 
-Globals.InitializeClass(CompositeTool)
+InitializeClass(CompositeTool)
 
 def manage_addCompositeTool(dispatcher, REQUEST=None):
     """Adds a composite tool to a folder.

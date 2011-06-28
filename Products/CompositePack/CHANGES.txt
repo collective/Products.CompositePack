@@ -1,6 +1,9 @@
 Next Release
 ------------
 
+- Removed deprecated imports from ``Globals``.
+  [tseaver]
+
 - Fixed installation of content types, CSS and JavaScript using Generic Setup.
   [hvelarde]
 

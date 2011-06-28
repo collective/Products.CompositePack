@@ -12,19 +12,17 @@ $Id$
 """
 import os
 import re
-import Globals
 
 from AccessControl import ClassSecurityInfo
-from Acquisition import aq_base, aq_inner, aq_parent
-
+from AccessControl.class_init import InitializeClass
+from Acquisition import aq_inner
+from Acquisition import aq_parent
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-from Products.CMFCore.FSDTMLMethod import FSDTMLMethod
-
+from Products.CompositePack.config import PLONE21
 from Products.CompositePage.designuis import CommonUI
 from Products.CompositePage.rawfile import RawFile
 
-from Products.CompositePack.config import PLONE21
 
 _plone = os.path.join(os.path.dirname(__file__), 'plone')
 
@@ -84,4 +82,4 @@ class PloneUI(CommonUI):
             text = "%s%s%s" % (text[:index], fragments['contentmenu'], text[index:])
         return text
 
-Globals.InitializeClass(PloneUI)
+InitializeClass(PloneUI)

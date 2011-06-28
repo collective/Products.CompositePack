@@ -10,9 +10,9 @@
 $Id$
 """
 
-from Globals import PersistentMapping, Persistent
-
-from ZODB.PersistentList import PersistentList
+from persistent import Persistent
+from persistent.list import PersistentList
+from persistent.mapping import PersistentMapping
 
 from Products.CompositePack.exceptions import CompositePackError
 

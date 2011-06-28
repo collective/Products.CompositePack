@@ -16,8 +16,7 @@ $Id$
 import transaction
 
 from cStringIO import StringIO
-from Products.Archetypes.public import listTypes
-from Products.Archetypes.Extensions.utils import installTypes, install_subskin
+from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
 from Products.CompositePack.config import PRODUCT_DEPENDENCIES
 from Products.CompositePack.config import COMPOSABLE
@@ -289,20 +288,13 @@ def install(self, reinstall=False):
         elif not portal_quickinstaller.isProductInstalled(product):
             portal_quickinstaller.installProduct([product])
             transaction.savepoint()
-    #for extension_id in EXTENSION_PROFILES:
-    #    portal_setup.runAllImportStepsFromProfile(
-    #        'profile-%s' % extension_id, purge_old=False)
-    #    product_name = extension_id.split(':')[0]
-    #    portal_quickinstaller.notifyInstalled(product_name)
-    #    transaction.savepoint()
+    for extension_id in EXTENSION_PROFILES:
+        portal_setup.runAllImportStepsFromProfile(
+            'profile-%s' % extension_id, purge_old=False)
+        product_name = extension_id.split(':')[0]
+        portal_quickinstaller.notifyInstalled(product_name)
+        transaction.savepoint()
 
-    installTypes(self, out, listTypes(PROJECTNAME), PROJECTNAME)
-    archetype_tool = getToolByName(self, 'archetype_tool')
-    archetype_tool.setCatalogsByType('CompositePack Viewlet', ())
-    archetype_tool.setCatalogsByType('CompositePack Viewlet Container', ())
-    archetype_tool.setCatalogsByType('CompositePack Element', ())
-    archetype_tool.setCatalogsByType('CompositePack Layout', ())
-    archetype_tool.setCatalogsByType('CompositePack Layout Container', ())
     install_subskin(self, out, GLOBALS)
     # The skins need to be sorted differently depending on whether Azax
     # is available or not.

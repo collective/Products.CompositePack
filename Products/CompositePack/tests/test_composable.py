@@ -18,6 +18,7 @@ import unittest
 from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.ptc import PloneTestCase
 
+from Products.CompositePack.tests.base import CompositePackTestCase
 from Products.CompositePack.tests.layer import CompositePackLayer
 
 # TODO: remove this
@@ -46,20 +47,20 @@ def setup_local_tools(portal, out):
     install_referenceCatalog(out, public)
 
 
-class TestComposable(PloneTestCase):
+class TestComposable(CompositePackTestCase):
 
     layer = CompositePackLayer
 
     def afterSetUp(self):
-        #CompositePackTestCase.CompositePackTestCase.afterSetUp(self)
+        CompositePackTestCase.afterSetUp(self)
         self.setRoles('Manager')
         self.portal._v_skindata = None
         self.portal.setupCurrentSkin()
         self.ct = getToolByName(self.portal, 'portal_catalog')
 
-    def beforeTearDown(self):
-        """"""
-        #CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
+    #def beforeTearDown(self):
+    #    """"""
+    #    #CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
 
     def test_utf8SearchableText(self):
         # verify that change in SearchablText
@@ -71,6 +72,7 @@ class TestComposable(PloneTestCase):
         self.failUnlessEqual(nav.SearchableText(), utf8Txt + ' description')
 
     def test_navigation_page_rename(self):
+        self.loginAsPortalOwner()
         targets = []
         for i in range(0, 4):
             name = 'page%s' % i

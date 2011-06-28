@@ -19,7 +19,7 @@ if __name__ == '__main__':
 from Testing import ZopeTestCase
 
 from Products.CMFCore.utils import getToolByName
-from Products.CompositePack.tests.CompositeGSTestCase import CompositeGSTestCase
+from Products.CompositePack.tests.base import CompositeGSTestCase
 from Products.CompositePack.config import HAS_GS
 
 

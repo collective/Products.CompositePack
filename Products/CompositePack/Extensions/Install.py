@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -24,7 +26,6 @@ from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
 from Products.CompositePack.config import HAS_ATCT, HAVEAZAX
 from Products.CompositePack.config import PLONE21
-from Products.CompositePack.config import STYLESHEETS, JAVASCRIPTS
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
@@ -254,50 +255,6 @@ def addToDefaultPageTypes(self, out):
             print >>out, 'Added Navigation Page to the list of default page types'
 
 
-def registerResources(self, out, toolname, resources):
-    tool = getToolByName(self, toolname)
-    existing = tool.getResourceIds()
-    cook = False
-    for resource in resources:
-        if not resource['id'] in existing:
-            # register additional resource in the specified registry...
-            if toolname == "portal_css":
-                tool.registerStylesheet(**resource)
-            if toolname == "portal_javascripts":
-                tool.registerScript(**resource)
-            print >> out, "Added %s to %s." % (resource['id'], tool)
-        else:
-            # ...or update existing one
-            parameters = tool.getResource(resource['id'])._data
-            for key in [k for k in resource.keys() if k != 'id']:
-                originalkey = 'original_' + key
-                original = parameters.get(originalkey)
-                if not original:
-                    parameters[originalkey] = parameters[key]
-                parameters[key] = resource[key]
-                print >> out, "Updated %s in %s." % (resource['id'], tool)
-                cook = True
-    if cook:
-        tool.cookResources()
-    print >> out, "Successfuly Installed/Updated resources in %s." % tool
-
-
-def resetResources(self, out, toolname, resources):
-    # Revert resource customizations
-    tool = getToolByName(self, toolname)
-    for resource in [tool.getResource(r['id']) for r in resources]:
-        if resource == None:
-            continue
-        for key in resource._data.keys():
-            originalkey = 'original_' + key
-            if resource._data.has_key(originalkey):
-                try:  # <- BBB
-                    resource._data[key] = resource._data[originalkey]['value']
-                except TypeError:
-                    resource._data[key] = resource._data[originalkey]
-                del resource._data[originalkey]
-
-
 def sort_skins(self):
     STANDARD_SKINS = ('Plone Default', 'Plone Tableless')
     CP_LAYERS = ('compositepack_layouts', 'compositepack_layouts_azax')
@@ -352,8 +309,6 @@ def install(self, reinstall=False):
     sort_skins(self)
     install_tool(self, out)
     install_customisation(self, out)
-    registerResources(self, out, 'portal_css', STYLESHEETS)
-    registerResources(self, out, 'portal_javascripts', JAVASCRIPTS)
     install_fixuids(self, out)
     if PLONE21:
         setup_portal_factory(self, out)
@@ -368,7 +323,5 @@ def uninstall(self):
     out = StringIO()
     uninstall_tool(self, out)
     uninstall_kupu_resource(self, out)
-    resetResources(self, out, 'portal_css', STYLESHEETS)
-    resetResources(self, out, 'portal_javascripts', JAVASCRIPTS)
     out.write("Successfully uninstalled %s.\n" % PROJECTNAME)
     return out.getvalue()

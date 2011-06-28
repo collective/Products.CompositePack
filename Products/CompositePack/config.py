@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -19,7 +21,7 @@ PLONE21 = True
 PLONE25 = True
 
 try:
-    from Products import azax 
+    from Products import azax
     from Products import Five
 except ImportError:
     #warnings.warn('CompositePack performance impaired: Five and Azax recommended', DeprecationWarning)
@@ -34,6 +36,7 @@ if HAS_ATCT and not PLONE21:
         from Products.ATContentTypes.ATNewsItem import ATNewsItem
     except ImportError:
         from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
+
     def isSwitchedToATCT(portal):
         pt = getToolByName(portal, 'portal_types')
         news = pt.getTypeInfo('News Item')
@@ -49,6 +52,7 @@ except ImportError:
 else:
     HAS_GS = True
     del tool
+
 
 def get_ATCT_TYPES(self):
     result = {}
@@ -70,6 +74,7 @@ def get_ATCT_TYPES(self):
         result["Link"] = "ATLink"
     return result
 
+
 def get_COMPOSABLES_ATCT(self):
     result = get_ATCT_TYPES(self)
     return result.values()
@@ -90,54 +95,7 @@ COMPOSABLE = 'composable'
 VIEWLETS = 'viewlets'
 LAYOUTS = 'layouts'
 
-# CHANGE this tuple of python dictionnaries to list the stylesheets that
-#  will be registered with the portal_css tool.
-#  'id' (required):
-#    it must respect the name of the css or DTML file (case sensitive).
-#    '.dtml' suffixes must be ignored.
-#  'expression' (optional - default: ''): a tal condition.
-#  'media' (optional - default: ''): possible values: 'screen', 'print',
-#    'projection', 'handheld'...
-#  'rel' (optional - default: 'stylesheet')
-#  'title' (optional - default: '')
-#  'rendering' (optional - default: 'import'): 'import', 'link' or 'inline'.
-#  'enabled' (optional - default: True): boolean
-#  'cookable' (optional - default: True): boolean (aka 'merging allowed')
-#  'compression' (optional - default: 'save')
-#  See registerStylesheet() arguments in
-#  ResourceRegistries/tools/CSSRegistry.py
-#  for the latest list of all available keys and default values.
-EXPR_ISCOMPO = 'python:here.composite_tool.isComposite(here.portal_type)'
-EXPR_ISCOMPO_IN_DESIGN = EXPR_ISCOMPO + ' and here.cp_container.isEditing()'
-STYLESHEETS = (
-    {'id': 'compo.css', 'media': 'all',
-     'expression': EXPR_ISCOMPO},
-    {'id': 'editstyles.css', 'media': 'all',
-     'expression': EXPR_ISCOMPO_IN_DESIGN},
-    {'id': 'pdstyles.css', 'media': 'all',
-     'expression': EXPR_ISCOMPO_IN_DESIGN},
-    )
 
-# CHANGE this tuple of python dictionnaries to list the javascripts that
-#  will be registered with the portal_javascripts tool.
-#  'id' (required): same rules as for stylesheets.
-#  'expression' (optional - default: ''): a tal condition.
-#  'inline' (optional - default: False): boolean
-#  'enabled' (optional - default: True): boolean
-#  'cookable' (optional - default: True): boolean (aka 'merging allowed')
-#  'compression' (optional - default: 'save')
-#  See registerScript() arguments in ResourceRegistries/tools/JSRegistry.py
-#  for the latest list of all available keys and default values.
-JAVASCRIPTS = (
-    {'id': 'pdlib.js', 'cookable': False,
-     'expression': EXPR_ISCOMPO_IN_DESIGN},
-    {'id': 'plone_edit.js', 'cookable': False,
-     'expression': EXPR_ISCOMPO_IN_DESIGN},
-    {'id': 'compopagedrawer.js', 'cookable': False,
-     'expression': EXPR_ISCOMPO_IN_DESIGN},
-    )
+INSTALL_DEMO_TYPES = 0  # Install the demo types
 
-INSTALL_DEMO_TYPES = 0 ##Install the demo types
-
-zmi_dir = os.path.join(Globals.package_home(globals()),'www')
-
+zmi_dir = os.path.join(Globals.package_home(globals()), 'www')

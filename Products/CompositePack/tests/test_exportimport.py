@@ -21,9 +21,12 @@ from Testing import ZopeTestCase
 from Products.CMFCore.utils import getToolByName
 from Products.CompositePack.tests.base import CompositeGSTestCase
 from Products.CompositePack.config import HAS_GS
+from Products.CompositePack.tests.layer import SimpleLayer
 
 
 class ComposableTest(CompositeGSTestCase):
+
+    layer = SimpleLayer
 
     def afterSetUp(self):
         """ After setup try to get the tool, without it we are helpless """

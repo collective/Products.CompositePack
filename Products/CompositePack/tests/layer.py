@@ -50,7 +50,8 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
     def afterSetUp(self):
         # Install the CompositePack product
         self.addProduct('kupu')
-        self.addProduct('CompositePack')
+        #self.addProduct('CompositePack')
+        self.addProfile('Products.CompositePack:default')
 
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
@@ -59,6 +60,5 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
     #def beforeTearDown(self):
         #self.composite_tool.clearLayoutRegistry()
         #self.composite_tool.clearViewletRegistry()
-
 
 CompositePackLayer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])

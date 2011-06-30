@@ -31,7 +31,6 @@ class TestViewletRegistry(PloneTestCase):
     layer = CompositePackLayer
 
     def afterSetUp(self):
-        # from CompositePackTestCase.py
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']

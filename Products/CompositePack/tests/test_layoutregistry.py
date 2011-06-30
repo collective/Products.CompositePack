@@ -20,6 +20,7 @@ from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
+from Products.CompositePack.tests.base import CompositePackTestCase
 from Products.CompositePack.tests.layer import CompositePackLayer
 
 
@@ -28,7 +29,6 @@ class TestLayoutRegistry(PloneTestCase):
     layer = CompositePackLayer
 
     def afterSetUp(self):
-        # from CompositePackTestCase.py
         self.composite_tool = getToolByName(self.portal, 'composite_tool')
         self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
         self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']

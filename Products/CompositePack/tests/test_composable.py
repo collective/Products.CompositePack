@@ -57,6 +57,7 @@ class TestComposable(CompositePackTestCase):
         self.portal._v_skindata = None
         self.portal.setupCurrentSkin()
         self.ct = getToolByName(self.portal, 'portal_catalog')
+        self.loginAsPortalOwner()
 
     #def beforeTearDown(self):
     #    """"""

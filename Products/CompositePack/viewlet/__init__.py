@@ -13,27 +13,36 @@
 
 $Id$
 """
-from AccessControl import ClassSecurityInfo
-from AccessControl.Permissions import copy_or_move as permission_copy_or_move
-from OFS.ObjectManager import BeforeDeleteException
-from OFS import PropertyManager
-from OFS.SimpleItem import Item
+try:
+    from hashlib import md5
+except ImportError: # BBB for Python < 2.5
+    from md5 import md5
 
-from Products.Archetypes.public import *
-from Products.Archetypes.utils import insert_zmi_tab_before
+from zope.interface import implements
+from AccessControl import ClassSecurityInfo
+from App.class_init import InitializeClass
+from AccessControl.Permissions import copy_or_move
+from OFS.PropertyManager import PropertyManager
+from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
 from Products.CMFCore.utils import getToolByName
 from Products.CMFCore.permissions import ManagePortal
-
-from Products.PageTemplates.PageTemplateFile import PageTemplateFile
+from Products.Archetypes.ArchetypeTool import registerType
+from Products.Archetypes.BaseContent import BaseContent
+from Products.Archetypes.BaseContent import BaseContentMixin
+from Products.Archetypes.Field import StringField
+from Products.Archetypes.Marshall import RFC822Marshaller
+from Products.Archetypes.Schema import Schema
+from Products.Archetypes.Widget import RequiredIdWidget
+from Products.Archetypes.Widget import StringWidget
+from Products.Archetypes.utils import insert_zmi_tab_before
 
 from Products.CompositePack.viewlet.interfaces import IViewlet
 from Products.CompositePack.viewlet.interfaces import ILayout
-from Products.CompositePack.config import PROJECTNAME, TOOL_ID
+from Products.CompositePack.config import PROJECTNAME
+from Products.CompositePack.config import TOOL_ID
 from Products.CompositePack.config import zmi_dir
 from Products.CompositePack.exceptions import CompositePackError
-from md5 import md5
-from zope.interface import implements
 
 
 base_schema = Schema((
@@ -42,7 +51,7 @@ base_schema = Schema((
         name='id',
         required=1,
         mode='rw',
-        permission=permission_copy_or_move,
+        permission=copy_or_move,
         accessor='getId',
         mutator='setId',
         default='',
@@ -107,7 +116,7 @@ class SkinMethod(BaseContentMixin):
         pass
 
 
-class Viewlet(SkinMethod, PropertyManager.PropertyManager):
+class Viewlet(SkinMethod, PropertyManager):
     implements(IViewlet)
 
     _properties=({'id':'title', 'type': 'string','mode':'wd'},)
@@ -141,7 +150,8 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
             type_info['title'] = type
             type_info['default'] = self.isDefaultForType(type)
             type_info['nodefault'] = ct.noDefaultViewletForType(type)
-            if self.isRegisteredForType(type) and not ct.getTypeUseDefaultSetup(type):
+            if (self.isRegisteredForType(type) and
+                not ct.getTypeUseDefaultSetup(type)):
                 reg_types_info.append(type_info)
             else:
                 unreg_types_info.append(type_info)
@@ -150,7 +160,8 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
                                           unreg_types_info=unreg_types_info)
 
     security.declareProtected( ManagePortal, 'manage_addComposables' )
-    def manage_addComposables(self, REQUEST, manage_tabs_message=None, types=None):
+    def manage_addComposables(self, REQUEST,
+                              manage_tabs_message=None, types=None):
         '''
         register composables for viewlet
         '''
@@ -160,7 +171,8 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
         return self.REQUEST.RESPONSE.redirect('manage_registerTypes')
 
     security.declareProtected( ManagePortal, 'manage_unregisterComposable' )
-    def manage_unregisterComposable(self, REQUEST, manage_tabs_message=None, type=None):
+    def manage_unregisterComposable(self, REQUEST,
+                                    manage_tabs_message=None, type=None):
         '''
         unregister composable for viewlet
         '''
@@ -169,7 +181,8 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
         return self.REQUEST.RESPONSE.redirect('manage_registerTypes')
 
     security.declareProtected( ManagePortal, 'manage_defaultViewlets' )
-    def manage_defaultViewlets(self, REQUEST, manage_tabs_message=None, types=[]):
+    def manage_defaultViewlets(self, REQUEST,
+                               manage_tabs_message=None, types=[]):
         '''
         associate viewlet as default viewlet
         '''
@@ -255,8 +268,8 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
 
         uid = md5(self.meta_type + ' ' + '/'.join(path)).hexdigest()
         if uid != self.UID():
-            # XXX Archetypes bug: _setUID sometimes randomises UID unless we clear
-            # the copy flag
+            # XXX Archetypes bug: _setUID sometimes randomises UID unless
+            #                     we clear the copy flag
             self._v_is_cp = None
             self._setUID(uid)
 
@@ -267,6 +280,8 @@ class Viewlet(SkinMethod, PropertyManager.PropertyManager):
     def manage_afterClone(self, item):
         SkinMethod.manage_afterClone(self, item)
         self.setStableUID()
+
+InitializeClass(Viewlet)
 
 
 class Layout(SkinMethod):
@@ -310,7 +325,8 @@ class Layout(SkinMethod):
                                           unreg_types_info=unreg_types_info)
 
     security.declareProtected( ManagePortal, 'manage_addComposites' )
-    def manage_addComposites(self, REQUEST, manage_tabs_message=None, types=None):
+    def manage_addComposites(self, REQUEST,
+                             manage_tabs_message=None, types=None):
         '''
         register composites for layout
         '''
@@ -320,7 +336,8 @@ class Layout(SkinMethod):
         return self.REQUEST.RESPONSE.redirect('manage_registerTypes')
 
     security.declareProtected( ManagePortal, 'manage_unregisterComposite' )
-    def manage_unregisterComposite(self, REQUEST, manage_tabs_message=None, type=None):
+    def manage_unregisterComposite(self, REQUEST,
+                                   manage_tabs_message=None, type=None):
         '''
         unregister composite for layout
         '''
@@ -329,7 +346,8 @@ class Layout(SkinMethod):
         return self.REQUEST.RESPONSE.redirect('manage_registerTypes')
 
     security.declareProtected( ManagePortal, 'manage_defaultLayouts' )
-    def manage_defaultLayouts(self, REQUEST, manage_tabs_message=None, types=[]):
+    def manage_defaultLayouts(self, REQUEST,
+                              manage_tabs_message=None, types=[]):
         '''
         associate layout as default layout
         '''
@@ -378,9 +396,12 @@ class Layout(SkinMethod):
 # manage_beforeDelete!
 #     security.declarePrivate('manage_beforeDelete')
 #     def manage_beforeDelete(self, item, container):
+#         from OFS.ObjectManager import BeforeDeleteException
 #         ct = getToolByName(self, TOOL_ID)
 #         if ct.getDefaultLayout() == self.getId():
 #             raise BeforeDeleteException, 'cannot unregister default layout'
+
+InitializeClass(Layout)
 
 
 registerType(SkinMethod, PROJECTNAME)

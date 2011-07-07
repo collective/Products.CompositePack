@@ -218,7 +218,10 @@ def install_customisation(self, out):
     # Skins are cached during the request so we (in case new skin
     # folders have just been added) we need to force a refresh of the
     # skin.
-    self.changeSkin(None)
+    try:
+        self.changeSkin(None, None)
+    except TypeError: # CMF < 2.1???
+        self.changeSkin(None)
 
     scriptname = '%s-customisation-policy' % PROJECTNAME.lower()
     cpscript = getattr(self, scriptname, None)

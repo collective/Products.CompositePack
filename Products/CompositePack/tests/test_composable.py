@@ -12,26 +12,15 @@
 """
 $Id$
 """
-
 import unittest
-
-from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.tests.base import CompositePackTestCase
 from Products.CompositePack.tests.layer import CompositePackLayer
 
-# TODO: remove this
-from Products.CompositePack.config import PLONE21
-
-
-from cStringIO import StringIO
-from cPickle import load, dump
-from AccessControl import Unauthorized
-from Acquisition import aq_base, aq_parent, aq_inner
-
 
 def setup_local_tools(portal, out):
+    from Acquisition import aq_base
+    from Acquisition import aq_parent
     from Products.Archetypes import ArchetypeTool
     from Products.Archetypes.ReferenceEngine import ReferenceCatalog
     from Products.Archetypes.UIDCatalog import UIDCatalog
@@ -52,10 +41,17 @@ class TestComposable(CompositePackTestCase):
     layer = CompositePackLayer
 
     def afterSetUp(self):
+        from Products.CMFCore.utils import getToolByName
         CompositePackTestCase.afterSetUp(self)
         self.setRoles('Manager')
-        self.portal._v_skindata = None
-        self.portal.setupCurrentSkin()
+        try:
+            self._refreshSkinData()
+        except AttributeError:
+            self.portal._v_skindata = None
+            try:
+                self.portal.setupCurrentSkin(self.app.REQUEST)
+            except TypeError:
+                self.portal.setupCurrentSkin()
         self.ct = getToolByName(self.portal, 'portal_catalog')
         self.loginAsPortalOwner()
 
@@ -125,6 +121,10 @@ class TestComposable(CompositePackTestCase):
         self.assertEquals(slots.second['3'].dereference(), targets[3])
 
     def test_navigation_page_staging(self):
+        from cPickle import dump
+        from cPickle import load
+        from cStringIO import StringIO
+        from Acquisition import aq_base
         self.loginAsPortalOwner()
         # This is a test to demonstrate that CompositePack
         # will keep references on a staging environment using
@@ -203,16 +203,14 @@ class TestComposable(CompositePackTestCase):
         self.assertEquals(got, expected)
 
         # Finally, the public catalogs should have
-        if PLONE21:
-            # uid+11 (private has also a UID), references+4
-            pexpected = [pbefore[0] + 11, pbefore[1] + 4]
-        else:
-            # uid+10, references+4
-            pexpected = [pbefore[0] + 10, pbefore[1] + 4]
+        # uid+10, references+4
+        pexpected = [pbefore[0] + 10, pbefore[1] + 4]
         pgot = [len(cat()) for cat in pcats]
         self.assertEquals(pgot, pexpected)
 
     def test_navigation_page_with_private_content(self):
+        from AccessControl import Unauthorized
+        from Products.CMFCore.utils import getToolByName
         self.portal.invokeFactory('Navigation Page', 'navpage')
         navpage = self.portal.navpage
         navpage.cp_container.setLayout('two_slots')

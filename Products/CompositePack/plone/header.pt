@@ -1,6 +1,8 @@
 <!-- plone/header.pt -->
 <metal:defines use-macro="here/global_defines/macros/defines" />
-<tal:block tal:define="url options/ui/absolute_url">
+<tal:block tal:define="url options/ui/absolute_url;
+                       portal_state context/@@plone_portal_state;
+                       portal_url portal_state/portal_url">
     <script type="text/javascript"
             tal:attributes="src string:${portal_url}/sarissa.js"> </script>
     <script type="text/javascript"

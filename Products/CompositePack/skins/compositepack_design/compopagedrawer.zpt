@@ -1,16 +1,17 @@
 <html i18n:domain="plone">
 <div metal:use-macro="context/global_defines/macros/defines" />
-    <head>
+<head>
 
+</head>
 
-    </head>
-    
 <body>
-    
-    
+
 <h2>Drawer Test</h2>
 
 <div metal:define-macro="compopagedrawer">
+    <tal:block tal:define="portal_state context/@@plone_portal_state;
+                           portal_url portal_state/portal_url">
+
         <link href="#" tal:attributes="href
         string:${portal_url}/kupudrawerstyles.css"
               rel="stylesheet" type="text/css" />
@@ -39,7 +40,7 @@
         </div>
         </div>
 
-        <script type="text/javascript" 
+        <script type="text/javascript"
                 tal:define="compopage nocall:options/composite;
                             base compopage/aq_parent/absolute_url;
                             lib_prefix    string:${base}/kupulibraries.xml?resource_type=;
@@ -50,13 +51,12 @@
                             compo_page_path compopage/cp_container/getPathFromPortalToParent;"
                 tal:content="string:cp_initdrawer('$link_xsl_uri', '$link_libraries_uri',
                 '$search_links_uri', '$compo_page_path');">
-        </script>    
+        </script>
         <!--input type="submit" value="Open Drawer"
         onclick="javascript:draweropen('target_path');" /-->
+
+    </tal:block>
 </div>
 
-        
-        
-
-    </body>
+</body>
 </html>

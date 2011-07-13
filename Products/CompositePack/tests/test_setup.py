@@ -1,5 +1,14 @@
 # -*- coding: utf-8 -*-
 
+##############################################################################
+#
+# Copyright (c) 2004-2011 CompositePack Contributors. All rights reserved.
+#
+# This software is distributed under the terms of the Zope Public
+# License (ZPL) v2.1. See COPYING.txt for more information.
+#
+##############################################################################
+
 """
 $Id: test_setup.py 725 2011-06-21 02:44:41Z hvelarde $
 """
@@ -10,8 +19,8 @@ from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID
 from Products.CompositePack.config import PRODUCT_DEPENDENCIES
-from Products.CompositePack.tests.layer import CompositePackLayer
-from Products.CompositePack.tests.layer import SimpleLayer
+
+from Products.CompositePack.tests.layer import Layer
 
 TYPES = (
     'CompositePack Element',
@@ -54,14 +63,7 @@ JS = (
 class TestInstall(PloneTestCase):
     """ensure product is properly installed"""
 
-    layer = SimpleLayer
-
-    def afterSetUp(self):
-        #self.addProduct('CompositePack')
-        self.addProfile('Products.CompositePack:default')
-        portal_quickinstaller = self.portal.portal_quickinstaller
-        self.failUnless(portal_quickinstaller.isProductInstalled(PROJECTNAME),
-                            '%s not installed' % PROJECTNAME)
+    layer = Layer
 
     def test_dependencies_installed(self):
         portal_quickinstaller = self.portal.portal_quickinstaller
@@ -106,7 +108,7 @@ class TestInstall(PloneTestCase):
 class TestUninstall(PloneTestCase):
     """ensure product is properly uninstalled"""
 
-    layer = CompositePackLayer
+    layer = Layer
 
     def afterSetUp(self):
         self.loginAsPortalOwner()

@@ -20,13 +20,12 @@ from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
-from Products.CompositePack.tests.base import CompositePackTestCase
-from Products.CompositePack.tests.layer import CompositePackLayer
+from Products.CompositePack.tests.layer import Layer
 
 
 class TestLayoutRegistry(PloneTestCase):
 
-    layer = CompositePackLayer
+    layer = Layer
 
     def afterSetUp(self):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')

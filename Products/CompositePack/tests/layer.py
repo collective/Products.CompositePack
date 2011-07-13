@@ -1,48 +1,26 @@
 # -*- coding: utf-8 -*-
 
+##############################################################################
+#
+# Copyright (c) 2004-2011 CompositePack Contributors. All rights reserved.
+#
+# This software is distributed under the terms of the Zope Public
+# License (ZPL) v2.1. See COPYING.txt for more information.
+#
+##############################################################################
+
 """
 $Id: base.py 720 2011-06-20 19:23:35Z saiba $
 """
 
-from Testing import ZopeTestCase as ztc
-
 from Products.PloneTestCase import ptc
-from Products.PloneTestCase import layer
-from Products.Five import zcml
-from Products.Five import fiveconfigure
-from Products.CMFPlone.utils import getToolByName
-
-from Products.CompositePack.config import get_ATCT_TYPES
-
 import collective.testcaselayer.ptc
 
+from Products.CMFPlone.utils import getToolByName
+from Products.CompositePack.config import get_ATCT_TYPES
+
+
 ptc.setupPloneSite()
-
-
-class CompositePackLayerOLD(layer.PloneSite):
-    """Configure Products.CompositePack"""
-
-    @classmethod
-    def setUp(cls):
-        fiveconfigure.debug_mode = True
-        import Products.CompositePack
-        zcml.load_config('configure.zcml', Products.CompositePack)
-        fiveconfigure.debug_mode = False
-        ztc.installProduct('kupu')
-        ztc.installProduct('CompositePage')
-        ztc.installProduct('CompositePack')
-
-    @classmethod
-    def tearDown(cls):
-        pass
-
-
-class SimpleIntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
-
-    def afterSetUp(self):
-        self.addProduct('kupu')
-
-SimpleLayer = SimpleIntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])
 
 
 class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
@@ -61,4 +39,4 @@ class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
         #self.composite_tool.clearLayoutRegistry()
         #self.composite_tool.clearViewletRegistry()
 
-CompositePackLayer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])
+Layer = IntegrationTestLayer([collective.testcaselayer.ptc.ptc_layer])

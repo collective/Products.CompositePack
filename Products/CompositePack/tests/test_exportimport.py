@@ -1,43 +1,41 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
-# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2011 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
 #
 ##############################################################################
+
 """
 $Id: test_composable.py 18879 2006-02-02 15:27:55Z godchap $
 """
 
-import os, sys
-
-if __name__ == '__main__':
-    execfile(os.path.join(sys.path[0], 'framework.py'))
-
-# Load fixture
-from Testing import ZopeTestCase
+import unittest
 
 from Products.CMFCore.utils import getToolByName
-from Products.CompositePack.tests.base import CompositeGSTestCase
+from Products.PloneTestCase.ptc import PloneTestCase
+
 from Products.CompositePack.config import HAS_GS
-from Products.CompositePack.tests.layer import SimpleLayer
+from Products.CompositePack.tests.layer import Layer
 
 
-class ComposableTest(CompositeGSTestCase):
+class ComposableTest(PloneTestCase):
 
-    layer = SimpleLayer
+    layer = Layer
 
     def afterSetUp(self):
         """ After setup try to get the tool, without it we are helpless """
-        CompositeGSTestCase.afterSetUp(self)
+        #CompositeGSTestCase.afterSetUp(self)
         # self.setRoles('Manager')
 
         self.ct = getToolByName(self.portal, 'composite_tool')
         self.failUnless(self.ct)
 
-    def beforeTearDown(self):
-        CompositeGSTestCase.beforeTearDown(self)
+    #def beforeTearDown(self):
+        #CompositeGSTestCase.beforeTearDown(self)
 
     def test_Composites(self):
         """ Here we test if the Composites are set up correctly. We expect
@@ -49,11 +47,11 @@ class ComposableTest(CompositeGSTestCase):
         self.failUnless('Navigation Page' in composites)
 
         layouts = self.ct.getRegisteredLayoutsForType('Navigation Page')
-        self.failUnless(len(layouts) == 3 )
+        self.failUnless(len(layouts) == 3)
 
         layouts_names = [str(l) for l in layouts]
-        self.failUnless(layouts_names == ['<Layout at two_slots>', 
-                                          '<Layout at three_slots>', 
+        self.failUnless(layouts_names == ['<Layout at two_slots>',
+                                          '<Layout at three_slots>',
                                           '<Layout at two_columns>'])
 
         default = self.ct.getDefaultLayoutForType('Navigation Page')
@@ -76,7 +74,7 @@ class ComposableTest(CompositeGSTestCase):
                     '(Default Setup)':         '<Viewlet at title_description_with_link>',
                     'CompositePack Titles':    '<Viewlet at title_viewlet>',
                     'CompositePack Portlet':   '<Viewlet at title_description_with_link>',
-                    'CompositePack Fragments': '<Viewlet at fragment_viewlet>',}
+                    'CompositePack Fragments': '<Viewlet at fragment_viewlet>', }
 
         composables = self.ct.getRegisteredComposables()
         self.failUnless(len(composables) == 10)
@@ -89,14 +87,14 @@ class ComposableTest(CompositeGSTestCase):
         self.failUnless(len(viewlets) == 4)
 
         viewlets_names = [str(v) for v in viewlets]
-        self.failUnless(viewlets_names == ['<Viewlet at image_viewlet>', 
-                                           '<Viewlet at link_viewlet>', 
-                                           '<Viewlet at image_title_viewlet>', 
+        self.failUnless(viewlets_names == ['<Viewlet at image_viewlet>',
+                                           '<Viewlet at link_viewlet>',
+                                           '<Viewlet at image_title_viewlet>',
                                            '<Viewlet at image_caption_viewlet>'])
 
     def test_viewlets(self):
-        """ This tests the viewlets registered in this tool. Normally 9 
-            viewlets are created and we know what to expect as id, title and 
+        """ This tests the viewlets registered in this tool. Normally 9
+            viewlets are created and we know what to expect as id, title and
             skin_method for each one of them, so let's be thorough in testing.
         """
         expected = {'title_description_with_link': ['Title with description',
@@ -106,11 +104,11 @@ class ComposableTest(CompositeGSTestCase):
                     'fragment_viewlet': ['HTML Fragment', 'fragment_viewlet'],
                     'title_date_viewlet': ['Title and Date', 'title_date_viewlet'],
                     'image_viewlet': ['Image', 'image_viewlet'],
-                    'image_title_viewlet': ['Image with title', 
+                    'image_title_viewlet': ['Image with title',
                                             'image_title_viewlet'],
-                    'image_caption_viewlet': ['Image with caption', 
+                    'image_caption_viewlet': ['Image with caption',
                                               'image_caption_viewlet'],
-                    'topic_viewlet': ['Topic Listing','topic_viewlet']}
+                    'topic_viewlet': ['Topic Listing', 'topic_viewlet']}
 
         viewlets = self.ct.getAllViewlets()
         self.failUnless(len(viewlets) == 9)
@@ -126,7 +124,6 @@ class ComposableTest(CompositeGSTestCase):
         """ This tests the layouts registered in this tool. Normally 3
             layouts are created and we know what to expect as id, title and
             skin_method for each one of them, so let's be thorough in testing.
-  
         """
         expected = {'two_slots': ['Two slots', 'two_slots'],
                     'three_slots': ['Three slots', 'three_slots'],
@@ -179,10 +176,9 @@ class ComposableTest(CompositeGSTestCase):
         viewlets_for_custom = self.ct.getRegisteredViewletsForType("custom_composable_id")
         viewlets_for_custom_names = [str(lv) for lv in viewlets_for_custom]
 
-
         # Now, let us check if our customization still exists or if the import
         # replaced it all.
-        self.failUnless('<Layout at custom_layout_id>' in layouts_names, 
+        self.failUnless('<Layout at custom_layout_id>' in layouts_names,
                         "Custom layout was overwritten at import")
         self.failUnless('<Viewlet at custom_viewlet_id>' in viewlets_names,
                         "Custom viewlet was overwritten at import")
@@ -191,11 +187,6 @@ class ComposableTest(CompositeGSTestCase):
         self.failUnless('<Layout at custom_layout_id>' in layouts_for_custom_names,
                         "Custom layout for composite overwritten at import")
 
-def test_suite():
-    import unittest
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(ComposableTest))
-    return suite
 
-if __name__ == '__main__':
-    framework(descriptions=1, verbosity=1)
+def test_suite():
+    return unittest.defaultTestLoader.loadTestsFromName(__name__)

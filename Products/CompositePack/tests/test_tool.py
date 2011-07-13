@@ -2,7 +2,7 @@
 
 ##############################################################################
 #
-# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2011 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -20,7 +20,7 @@ from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
-from Products.CompositePack.tests.layer import CompositePackLayer
+from Products.CompositePack.tests.layer import Layer
 from Products.CompositePack.ViewletRegistry import DEFAULT
 
 V0D = 'V0D'
@@ -45,7 +45,7 @@ V22_TITLE = 'V22_TITLE'
 
 class TestTool(PloneTestCase):
 
-    layer = CompositePackLayer
+    layer = Layer
 
     def afterSetUp(self):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')

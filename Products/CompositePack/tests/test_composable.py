@@ -2,7 +2,7 @@
 
 ##############################################################################
 #
-# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2011 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -12,10 +12,12 @@
 """
 $Id$
 """
+
 import unittest
 
-from Products.CompositePack.tests.base import CompositePackTestCase
-from Products.CompositePack.tests.layer import CompositePackLayer
+from Products.PloneTestCase.ptc import PloneTestCase
+
+from Products.CompositePack.tests.layer import Layer
 
 
 def setup_local_tools(portal, out):
@@ -36,13 +38,13 @@ def setup_local_tools(portal, out):
     install_referenceCatalog(out, public)
 
 
-class TestComposable(CompositePackTestCase):
+class TestComposable(PloneTestCase):
 
-    layer = CompositePackLayer
+    layer = Layer
 
     def afterSetUp(self):
         from Products.CMFCore.utils import getToolByName
-        CompositePackTestCase.afterSetUp(self)
+        PloneTestCase.afterSetUp(self)
         self.setRoles('Manager')
         try:
             self._refreshSkinData()
@@ -57,7 +59,7 @@ class TestComposable(CompositePackTestCase):
 
     #def beforeTearDown(self):
     #    """"""
-    #    #CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
+    #    #PloneTestCase.PloneTestCase.beforeTearDown(self)
 
     def test_utf8SearchableText(self):
         # verify that change in SearchablText

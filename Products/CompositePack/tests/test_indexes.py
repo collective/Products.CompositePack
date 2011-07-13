@@ -2,7 +2,7 @@
 
 ##############################################################################
 #
-# Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
+# Copyright (c) 2004-2011 CompositePack Contributors. All rights reserved.
 #
 # This software is distributed under the terms of the Zope Public
 # License (ZPL) v2.1. See COPYING.txt for more information.
@@ -19,12 +19,12 @@ from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import get_ATCT_TYPES
-from Products.CompositePack.tests.layer import CompositePackLayer
+from Products.CompositePack.tests.layer import Layer
 
 
 class TestIndexes(PloneTestCase):
 
-    layer = CompositePackLayer
+    layer = Layer
 
     def afterSetUp(self):
         # from CompositePackTestCase.py
@@ -34,10 +34,6 @@ class TestIndexes(PloneTestCase):
 
         self.setRoles('Manager')
         self.ct = getToolByName(self.portal, 'portal_catalog')
-
-    def beforeTearDown(self):
-        """"""
-        #CompositePackTestCase.CompositePackTestCase.beforeTearDown(self)
 
     def test_no_container_indexed(self):
         #check catalog works ok

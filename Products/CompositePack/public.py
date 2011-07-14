@@ -9,6 +9,8 @@
 """
 $Id$
 """
+
+# TODO: get rid of this file
 try:
     from Products.CompositePack.ClassGen import registerType
 except ImportError:

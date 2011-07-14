@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
-<object name="Navigation Page" meta_type="Factory-based Type Information"
-   xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object name="Navigation Page"
+   meta_type="Factory-based Type Information with dynamic views"
+   i18n:domain="compopack" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  <property name="title">Navigation Page</property>
- <property
-    name="description">A page composed of content selected manually.</property>
+ <property name="description"
+    i18n:translate="description_edit_navigation_page">A page composed of content selected manually.</property>
  <property name="content_icon">composite.gif</property>
  <property name="content_meta_type">Navigation Page</property>
  <property name="product">CompositePack</property>

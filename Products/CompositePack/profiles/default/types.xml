@@ -1,23 +1,23 @@
 <?xml version="1.0"?>
 <object name="portal_types" meta_type="Plone Types Tool">
- <property
-    name="title">Controls the available content types in your portal</property>
- <object name="CompositePack Element"
+  <object name="CompositePack Element"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Fragments"
+  <object name="CompositePack Fragments"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Layout"
+  <object name="CompositePack Layout"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Layout Container"
+  <object name="CompositePack Layout Container"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Skin Method"
+  <object name="CompositePack Skin Method"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Titles"
+  <object name="CompositePack Titles"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Viewlet"
+  <object name="CompositePack Viewlet"
     meta_type="Factory-based Type Information"/>
- <object name="CompositePack Viewlet Container"
+  <object name="CompositePack Viewlet Container"
     meta_type="Factory-based Type Information"/>
- <object name="Navigation Page" meta_type="Factory-based Type Information"/>
- <object name="Pack Composite" meta_type="Factory-based Type Information"/>
+  <object name="Navigation Page"
+    meta_type="Factory-based Type Information with dynamic views"/>
+  <object name="Pack Composite"
+    meta_type="Factory-based Type Information"/>
 </object>

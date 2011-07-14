@@ -19,7 +19,6 @@ import warnings
 from App.Common import package_home
 
 HAS_ATCT = True
-PLONE25 = True
 
 try:
     from Products import azax
@@ -31,14 +30,6 @@ else:
     HAVEAZAX = True
 
 from Products.CMFCore.utils import getToolByName
-
-try:
-    from Products.GenericSetup import tool
-except ImportError:
-    HAS_GS = False
-else:
-    HAS_GS = True
-    del tool
 
 
 def get_ATCT_TYPES(self):

@@ -18,7 +18,6 @@ import unittest
 from Products.CMFCore.utils import getToolByName
 from Products.PloneTestCase.ptc import PloneTestCase
 
-from Products.CompositePack.config import HAS_GS
 from Products.CompositePack.tests.layer import Layer
 
 
@@ -144,8 +143,6 @@ class ComposableTest(PloneTestCase):
             When you make local changes, the import function should
             only add and not replace things
         """
-        if not HAS_GS:
-            return
         # We first make some custom Composite Pack modifications
         self.ct.registerLayout("custom_layout_id", "custom_layout_title", "custom_layout_skin_method")
         self.ct.registerViewlet("custom_viewlet_id", "custom_viewlet_title", "custom_viewlet_skin_method")

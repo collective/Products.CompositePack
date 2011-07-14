@@ -23,7 +23,7 @@ from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import get_COMPOSABLES_ATCT
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
-from Products.CompositePack.config import HAS_ATCT, HAVEAZAX
+from Products.CompositePack.config import HAVEAZAX
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
@@ -82,8 +82,7 @@ def install_tool(self, out):
         tool.registerAsComposite('Composable Document')
     tool.registerAsComposite('Navigation Page')
 
-    if HAS_ATCT:
-        tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
+    tool.registerAsComposable(get_COMPOSABLES_ATCT(self))
     tool.registerAsComposable('CompositePack Titles')
     tool.registerAsComposable('CompositePack Fragments')
 
@@ -140,15 +139,14 @@ def install_tool(self, out):
                             'title_viewlet')
     tool.setViewletsForType('CompositePack Fragments', ['fragment_viewlet'],
                             'fragment_viewlet')
-    if HAS_ATCT:
-        IMAGE_TYPE = get_ATCT_TYPES(self)['Image']
-        tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
-                                             'link_viewlet',
-                                             'image_title_viewlet',
-                                             'image_caption_viewlet'],
-                                             'image_viewlet')
-        TOPIC_TYPE = get_ATCT_TYPES(self)['Topic']
-        tool.setViewletsForType(TOPIC_TYPE, ['topic_viewlet'], 'topic_viewlet')
+    IMAGE_TYPE = get_ATCT_TYPES(self)['Image']
+    tool.setViewletsForType(IMAGE_TYPE, ['image_viewlet',
+                                         'link_viewlet',
+                                         'image_title_viewlet',
+                                         'image_caption_viewlet'],
+                                         'image_viewlet')
+    TOPIC_TYPE = get_ATCT_TYPES(self)['Topic']
+    tool.setViewletsForType(TOPIC_TYPE, ['topic_viewlet'], 'topic_viewlet')
     out.write("CompositePack Tool Installed\n")
 
 

@@ -18,8 +18,6 @@ import warnings
 
 from App.Common import package_home
 
-HAS_ATCT = True
-
 try:
     from Products import azax
     from Products import Five
@@ -29,19 +27,16 @@ except ImportError:
 else:
     HAVEAZAX = True
 
-from Products.CMFCore.utils import getToolByName
-
 
 def get_ATCT_TYPES(self):
     result = {}
-    if HAS_ATCT:
-        result["Document"] = "Document"
-        result["Image"] = "Image"
-        result["File"] = "File"
-        result["Event"] = "Event"
-        result["NewsItem"] = "News Item"
-        result["Topic"] = "Topic"
-        result["Link"] = "Link"
+    result["Document"] = "Document"
+    result["Image"] = "Image"
+    result["File"] = "File"
+    result["Event"] = "Event"
+    result["NewsItem"] = "News Item"
+    result["Topic"] = "Topic"
+    result["Link"] = "Link"
     return result
 
 

@@ -24,6 +24,7 @@ from Products.ATContentTypes.content.schemata import finalizeATCTSchema
 
 from Products.CompositePack.config import PROJECTNAME
 from Products.CompositePack.composite import packcomposite
+from Products.CompositePack.ClassGen import registerType
 
 from Products.CMFPlone.interfaces.structure import INonStructuralFolder
 
@@ -39,6 +40,7 @@ schema = atapi.BaseSchema.copy()
 
 schema['title'].storage = atapi.AnnotationStorage()
 schema['description'].storage = atapi.AnnotationStorage()
+schema['description'].schemata = 'default'
 
 #finalizeATCTSchema(schema, folderish=True, moveDiscussion=False)
 
@@ -60,7 +62,7 @@ class NavigationPage(atapi.BaseFolder):
     title = atapi.ATFieldProperty('title')
     description = atapi.ATFieldProperty('description')
 
-    # What's this for?
+    # monkeypatched actions?
     actions = packcomposite.actions
 
     def SearchableText(self):
@@ -69,13 +71,12 @@ class NavigationPage(atapi.BaseFolder):
         # Fragments are converted from HTML to plain text.
         texts = [self.Title(), self.Description()]
 
-        # FIXME: cp_container is not a valid attribute at this time
-        #if getattr(aq_base(self.cp_container), 'titles', None) is not None:
-        #    titles = self.cp_container.titles.objectValues()
-        #    for o in titles:
-        #        if hasattr(o, 'ContainerSearchableText'):
-        #            texts.append(o.ContainerSearchableText())
+        if getattr(aq_base(self.cp_container), 'titles', None) is not None:
+            titles = self.cp_container.titles.objectValues()
+            for o in titles:
+                if hasattr(o, 'ContainerSearchableText'):
+                    texts.append(o.ContainerSearchableText())
 
         return " ".join(texts)
 
-atapi.registerType(NavigationPage, PROJECTNAME)
+registerType(NavigationPage, PROJECTNAME)

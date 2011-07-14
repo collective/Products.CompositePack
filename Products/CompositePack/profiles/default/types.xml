@@ -17,7 +17,7 @@
   <object name="CompositePack Viewlet Container"
     meta_type="Factory-based Type Information"/>
   <object name="Navigation Page"
-    meta_type="Factory-based Type Information with dynamic views"/>
+    meta_type="Factory-based Type Information"/>
   <object name="Pack Composite"
     meta_type="Factory-based Type Information"/>
 </object>

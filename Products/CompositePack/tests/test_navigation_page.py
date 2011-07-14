@@ -49,6 +49,15 @@ class NavigationPageTest(PloneTestCase):
         self.obj.setDescription(u'Description')
         self.assertEqual(self.obj.Description(), u'Description')
 
+    def test_schemata(self):
+        schema = self.obj.Schema()
+        field = schema.getField('description')
+        self.assertEqual(field.schemata, 'default')
+
+    def test_actions(self):
+        self.assertTrue(hasattr(self.obj, 'cp_view'))
+        self.assertTrue(hasattr(self.obj, 'design_view'))
+
 
 def test_suite():
     return unittest.defaultTestLoader.loadTestsFromName(__name__)

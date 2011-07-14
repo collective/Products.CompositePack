@@ -14,15 +14,17 @@ $Id$
 """
 
 import unittest
+import doctest
 
 from Products.PloneTestCase import PloneTestCase
-from Products.PloneTestCase.layer import ZCMLLayer
-from Testing.ZopeTestCase import ZopeDocFileSuite
+from Testing import ZopeTestCase as ztc
 
 
 def test_suite():
-    suite = unittest.TestSuite()
-    suite.addTest(ZopeDocFileSuite('../doc/doc.txt',
-                  test_class=PloneTestCase.PloneTestCase))
-    suite.layer = ZCMLLayer
-    return suite
+    return unittest.TestSuite([
+        ztc.ZopeDocFileSuite(
+            'doc/doc.txt', package='Products.CompositePack',
+            test_class=PloneTestCase.FunctionalTestCase,
+            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE |
+                        doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
+        ])

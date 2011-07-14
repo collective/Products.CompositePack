@@ -13,22 +13,46 @@
 $Id: base.py 720 2011-06-20 19:23:35Z saiba $
 """
 
+from Testing import ZopeTestCase as ztc
+
+from Products.Five import zcml
+from Products.Five import fiveconfigure
+
 from Products.PloneTestCase import ptc
+from Products.PloneTestCase.layer import onsetup
+
 import collective.testcaselayer.ptc
 
 from Products.CMFPlone.utils import getToolByName
-from Products.CompositePack.config import get_ATCT_TYPES
+from Products.CompositePack.config import PROJECTNAME, get_ATCT_TYPES
 
 
-ptc.setupPloneSite()
+@onsetup
+def setup_product():
+    """Set up the package and its dependencies.
+
+    The @onsetup decorator causes the execution of this body to be
+    deferred until the setup of the Plone site testing layer. We could
+    have created our own layer, but this is the easiest way for Plone
+    integration tests.
+    """
+    fiveconfigure.debug_mode = True
+    import Products.CompositePack
+    zcml.load_config('configure.zcml', Products.CompositePack)
+    fiveconfigure.debug_mode = False
+
+# initialize products outside of the deferred (@onsetup) method
+ztc.installProduct(PROJECTNAME)
+
+setup_product()
+# TODO: kupu must be installed automatically as a dependency
+ptc.setupPloneSite(products=['kupu'])
 
 
 class IntegrationTestLayer(collective.testcaselayer.ptc.BasePTCLayer):
 
     def afterSetUp(self):
         # Install the CompositePack product
-        self.addProduct('kupu')
-        #self.addProduct('CompositePack')
         self.addProfile('Products.CompositePack:default')
 
         self.composite_tool = getToolByName(self.portal, 'composite_tool')

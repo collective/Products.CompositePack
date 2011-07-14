@@ -1,6 +1,9 @@
 Next Release
 ------------
 
+- Refactoring of Navigation Page content type
+  [hvelarde]
+
 - Removed deprecated imports from ``Globals``.
   [tseaver]
 

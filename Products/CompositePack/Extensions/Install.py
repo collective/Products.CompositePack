@@ -24,7 +24,6 @@ from Products.CompositePack.config import get_COMPOSABLES_ATCT
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.config import INSTALL_DEMO_TYPES
 from Products.CompositePack.config import HAS_ATCT, HAVEAZAX
-from Products.CompositePack.config import PLONE21
 from Products.CMFCore.utils import getToolByName
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
@@ -170,6 +169,7 @@ def setup_portal_factory(self, out):
         factory.manage_setPortalFactoryTypes(listOfTypeIds=types)
 
 
+# TODO: tool must be removed on uninstall
 def uninstall_tool(self, out):
     if hasattr(self, TOOL_ID):
         out.write("CompositePack Tool not removed\n")
@@ -220,7 +220,7 @@ def install_customisation(self, out):
     # skin.
     try:
         self.changeSkin(None, None)
-    except TypeError: # CMF < 2.1???
+    except TypeError:  # CMF < 2.1???
         self.changeSkin(None)
 
     scriptname = '%s-customisation-policy' % PROJECTNAME.lower()
@@ -243,18 +243,6 @@ def install_fixuids(self, out):
         viewlet.setStableUID()
         if uid != viewlet.UID():
             out.write("Migrated UID for viewlet %s\n" % id)
-
-
-def addToDefaultPageTypes(self, out):
-    # We want a Navigation Page to be selectable as default page in Plone.
-    site_props = self.portal_properties.site_properties
-    if site_props.hasProperty('default_page_types'):
-        dptypes = site_props.getProperty('default_page_types')
-        if not 'Navigation Page' in dptypes:
-            dptypes = list(dptypes)
-            dptypes.append('Navigation Page')
-            site_props._updateProperty('default_page_types', dptypes)
-            print >>out, 'Added Navigation Page to the list of default page types'
 
 
 def sort_skins(self):
@@ -305,9 +293,7 @@ def install(self, reinstall=False):
     install_tool(self, out)
     install_customisation(self, out)
     install_fixuids(self, out)
-    if PLONE21:
-        setup_portal_factory(self, out)
-        addToDefaultPageTypes(self, out)
+    setup_portal_factory(self, out)
     install_kupu_resource(self, out)
 
     out.write("Successfully installed %s.\n" % PROJECTNAME)
@@ -317,6 +303,7 @@ def install(self, reinstall=False):
 def uninstall(self):
     out = StringIO()
     uninstall_tool(self, out)
+    # TODO: uninstall Navigation Page from default_page_types
     uninstall_kupu_resource(self, out)
     out.write("Successfully uninstalled %s.\n" % PROJECTNAME)
     return out.getvalue()

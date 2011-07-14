@@ -83,6 +83,10 @@ class TestInstall(PloneTestCase):
             self.failUnless(t in portal_factory.getFactoryTypes().keys(),
                             '%s content type not factory-enabled' % t)
 
+    def test_default_page_types(self):
+        properties = self.portal.portal_properties.site_properties
+        self.failUnless('Navigation Page' in properties.getProperty('default_page_types'))
+
     def test_tool(self):
         self.failUnless(hasattr(self.portal, TOOL_ID), 'Tool not installed')
 

@@ -19,7 +19,6 @@ import warnings
 from App.Common import package_home
 
 HAS_ATCT = True
-PLONE21 = True
 PLONE25 = True
 
 try:
@@ -33,20 +32,6 @@ else:
 
 from Products.CMFCore.utils import getToolByName
 
-if HAS_ATCT and not PLONE21:
-    try:
-        from Products.ATContentTypes.ATNewsItem import ATNewsItem
-    except ImportError:
-        from Products.ATContentTypes.types.ATNewsItem import ATNewsItem
-
-    def isSwitchedToATCT(portal):
-        pt = getToolByName(portal, 'portal_types')
-        news = pt.getTypeInfo('News Item')
-        if news.Metatype() == ATNewsItem.meta_type:
-            return 1
-        else:
-            return 0
-
 try:
     from Products.GenericSetup import tool
 except ImportError:
@@ -58,7 +43,7 @@ else:
 
 def get_ATCT_TYPES(self):
     result = {}
-    if PLONE21 or (HAS_ATCT and isSwitchedToATCT(self)):
+    if HAS_ATCT:
         result["Document"] = "Document"
         result["Image"] = "Image"
         result["File"] = "File"
@@ -66,14 +51,6 @@ def get_ATCT_TYPES(self):
         result["NewsItem"] = "News Item"
         result["Topic"] = "Topic"
         result["Link"] = "Link"
-    elif HAS_ATCT and not isSwitchedToATCT(self):
-        result["Document"] = "ATDocument"
-        result["Image"] = "ATImage"
-        result["File"] = "ATFile"
-        result["Event"] = "ATEvent"
-        result["NewsItem"] = "ATNewsItem"
-        result["Topic"] = "ATTopic"
-        result["Link"] = "ATLink"
     return result
 
 

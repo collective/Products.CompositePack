@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 ##############################################################################
 #
 # Copyright (c) 2004-2006 CompositePack Contributors. All rights reserved.
@@ -6,10 +8,12 @@
 # License (ZPL) v2.1. See COPYING.txt for more information.
 #
 ##############################################################################
+
 """Plone UI for Composite Page design view.
 
 $Id$
 """
+
 import os
 import re
 
@@ -19,17 +23,14 @@ from Acquisition import aq_inner
 from Acquisition import aq_parent
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 
-from Products.CompositePack.config import PLONE21
 from Products.CompositePage.designuis import CommonUI
 from Products.CompositePage.rawfile import RawFile
 
 
 _plone = os.path.join(os.path.dirname(__file__), 'plone')
 
-if PLONE21:
-    start_of_contentmenu_search = re.compile("(<li>[^<]*<dl[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
-else:
-    start_of_contentmenu_search = re.compile("(<li[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
+start_of_contentmenu_search = re.compile("(<li>[^<]*<dl[^>]*(>[^>]*){0,2}action(Plural|Singular|Menu)[^>]*)", re.IGNORECASE).search
+
 
 class PloneUI(CommonUI):
     """Page design UI meant to fit Plone.
@@ -49,10 +50,8 @@ class PloneUI(CommonUI):
     top_templates = CommonUI.top_templates + (
         PageTemplateFile('top.pt', _plone),)
     bottom_templates = (PageTemplateFile('bottom.pt', _plone),)
-    if not PLONE21:
-        contentmenu_templates = (PageTemplateFile('contentmenu_plone20.pt', _plone),)
-    else:
-        contentmenu_templates = (PageTemplateFile('contentmenu.pt', _plone),)
+
+    contentmenu_templates = (PageTemplateFile('contentmenu.pt', _plone),)
 
     security.declarePublic("getFragments")
     def getFragments(self, composite):

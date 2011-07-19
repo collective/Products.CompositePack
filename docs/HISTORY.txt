@@ -1,5 +1,8 @@
-Next Release
-------------
+Changelog
+=========
+
+2.0dev (unreleased)
+-------------------
 
 - Refactoring of Navigation Page content type
   [hvelarde]

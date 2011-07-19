@@ -4,9 +4,7 @@
 $Id$
 """
 
-import unittest
-
-from Products.PloneTestCase.ptc import PloneTestCase
+import unittest2 as unittest
 
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
@@ -15,13 +13,13 @@ from Products.CMFPlone.utils import _createObjectByType
 
 from Products.CompositePack.composite.navigationpage import NavigationPage
 from Products.CompositePack.composite.navigationpage import INavigationPage
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 
 
-class NavigationPageTest(PloneTestCase):
+class NavigationPageTest(unittest.TestCase):
     """ensure content type implementation"""
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         self.ctype = 'Navigation Page'

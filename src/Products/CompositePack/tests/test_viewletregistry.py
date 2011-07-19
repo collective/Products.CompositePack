@@ -13,23 +13,22 @@
 $Id$
 """
 
-import unittest
+import unittest2 as unittest
 
 from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.ptc import PloneTestCase
 from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
 from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 
 KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
 
-class TestViewletRegistry(PloneTestCase):
+class TestViewletRegistry(unittest.TestCase):
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')

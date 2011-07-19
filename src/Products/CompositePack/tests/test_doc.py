@@ -13,7 +13,7 @@
 $Id$
 """
 
-import unittest
+import unittest2 as unittest
 import doctest
 
 from Products.PloneTestCase import PloneTestCase

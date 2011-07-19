@@ -13,17 +13,16 @@
 $Id: test_composable.py 18879 2006-02-02 15:27:55Z godchap $
 """
 
-import unittest
+import unittest2 as unittest
 
 from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.ptc import PloneTestCase
 
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 
 
-class ComposableTest(PloneTestCase):
+class ComposableTest(unittest.TestCase):
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         """ After setup try to get the tool, without it we are helpless """

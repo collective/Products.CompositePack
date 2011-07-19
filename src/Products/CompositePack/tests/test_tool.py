@@ -13,14 +13,13 @@
 $Id$
 """
 
-import unittest
+import unittest2 as unittest
 
 from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 from Products.CompositePack.ViewletRegistry import DEFAULT
 
 V0D = 'V0D'
@@ -43,9 +42,9 @@ V22 = 'V22'
 V22_TITLE = 'V22_TITLE'
 
 
-class TestTool(PloneTestCase):
+class TestTool(unittest.TestCase):
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         self.composite_tool = getToolByName(self.portal, 'composite_tool')

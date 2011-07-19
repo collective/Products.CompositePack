@@ -13,14 +13,12 @@
 $Id: test_setup.py 725 2011-06-21 02:44:41Z hvelarde $
 """
 
-import unittest
-
-from Products.PloneTestCase.ptc import PloneTestCase
+import unittest2 as unittest
 
 from Products.CompositePack.config import PROJECTNAME, TOOL_ID
 from Products.CompositePack.config import PRODUCT_DEPENDENCIES
 
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 
 TYPES = (
     'CompositePack Element',
@@ -60,10 +58,10 @@ JS = (
     )
 
 
-class TestInstall(PloneTestCase):
+class TestInstall(unittest.TestCase):
     """ensure product is properly installed"""
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def test_dependencies_installed(self):
         portal_quickinstaller = self.portal.portal_quickinstaller
@@ -109,10 +107,10 @@ class TestInstall(PloneTestCase):
                             '%s javascript not installed' % js)
 
 
-class TestUninstall(PloneTestCase):
+class TestUninstall(unittest.TestCase):
     """ensure product is properly uninstalled"""
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         self.loginAsPortalOwner()

@@ -10,21 +10,20 @@
 ##############################################################################
 
 """
-$Id: test_composable.py 11303 2005-08-23 16:38:33Z godchap $
+$Id$
 """
 
-import unittest
+import unittest2 as unittest
 
 from Products.CMFCore.utils import getToolByName
-from Products.PloneTestCase.ptc import PloneTestCase
 
 from Products.CompositePack.config import get_ATCT_TYPES
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 
 
-class TestIndexes(PloneTestCase):
+class TestIndexes(unittest.TestCase):
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         # from CompositePackTestCase.py

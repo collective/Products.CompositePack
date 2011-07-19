@@ -13,11 +13,9 @@
 $Id$
 """
 
-import unittest
+import unittest2 as unittest
 
-from Products.PloneTestCase.ptc import PloneTestCase
-
-from Products.CompositePack.tests.layer import Layer
+from Products.CompositePack.testing import INTEGRATION_TESTING
 
 
 def setup_local_tools(portal, out):
@@ -38,13 +36,12 @@ def setup_local_tools(portal, out):
     install_referenceCatalog(out, public)
 
 
-class TestComposable(PloneTestCase):
+class TestComposable(unittest.TestCase):
 
-    layer = Layer
+    layer = INTEGRATION_TESTING
 
     def afterSetUp(self):
         from Products.CMFCore.utils import getToolByName
-        PloneTestCase.afterSetUp(self)
         self.setRoles('Manager')
         try:
             self._refreshSkinData()
@@ -56,10 +53,6 @@ class TestComposable(PloneTestCase):
                 self.portal.setupCurrentSkin()
         self.ct = getToolByName(self.portal, 'portal_catalog')
         self.loginAsPortalOwner()
-
-    #def beforeTearDown(self):
-    #    """"""
-    #    #PloneTestCase.PloneTestCase.beforeTearDown(self)
 
     def test_utf8SearchableText(self):
         # verify that change in SearchablText

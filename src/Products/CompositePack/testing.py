@@ -21,6 +21,7 @@ class Fixture(PloneSandboxLayer):
         self.loadZCML(package=Products.CompositePack)
 
         # Install product and call its initialize() function
+        z2.installProduct(app, 'Products.kupu')
         z2.installProduct(app, 'Products.CompositePack')
 
     def setUpPloneSite(self, portal):

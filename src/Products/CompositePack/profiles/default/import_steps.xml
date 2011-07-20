@@ -1,5 +1,11 @@
 <?xml version="1.0"?>
 <import-steps>
+ <import-step id="CompositePack-various" version="20110720-01"
+              handler="Products.CompositePack.setuphandlers.importVarious"
+              title="Additional CompositePack policy setup">
+  <dependency step="rolemap" />
+  CompositePack policy
+ </import-step>
   <!-- import-step id="compositetool"
     version="20060825-01"
     handler="Products.CompositePack.exportimport.compositetool.importCompositeTool"

@@ -18,7 +18,6 @@ import transaction
 from cStringIO import StringIO
 from Products.Archetypes.Extensions.utils import install_subskin
 from Products.CompositePack.config import PROJECTNAME, GLOBALS, TOOL_ID
-from Products.CompositePack.config import PRODUCT_DEPENDENCIES
 from Products.CompositePack.config import COMPOSABLE
 from Products.CompositePack.config import get_COMPOSABLES_ATCT
 from Products.CompositePack.config import get_ATCT_TYPES
@@ -268,13 +267,6 @@ def install(self, reinstall=False):
 
     portal_quickinstaller = getToolByName(self, 'portal_quickinstaller')
     portal_setup = getToolByName(self, 'portal_setup')
-    for product in PRODUCT_DEPENDENCIES:
-        if reinstall and portal_quickinstaller.isProductInstalled(product):
-            portal_quickinstaller.reinstallProduct(product)
-            transaction.savepoint()
-        elif not portal_quickinstaller.isProductInstalled(product):
-            portal_quickinstaller.installProduct(product)
-            transaction.savepoint()
 
     install_subskin(self, out, GLOBALS)
     # The skins need to be sorted differently depending on whether Azax

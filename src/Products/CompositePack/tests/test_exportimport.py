@@ -24,16 +24,10 @@ class ComposableTest(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        """ After setup try to get the tool, without it we are helpless """
-        #CompositeGSTestCase.afterSetUp(self)
-        # self.setRoles('Manager')
-
+    def setUp(self):
+        self.portal = self.layer['portal']
         self.ct = getToolByName(self.portal, 'composite_tool')
         self.failUnless(self.ct)
-
-    #def beforeTearDown(self):
-        #CompositeGSTestCase.beforeTearDown(self)
 
     def test_Composites(self):
         """ Here we test if the Composites are set up correctly. We expect

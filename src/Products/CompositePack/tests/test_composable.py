@@ -15,6 +15,12 @@ $Id$
 
 import unittest2 as unittest
 
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import logout
+from plone.app.testing import setRoles
+
+from Products.CMFCore.utils import getToolByName
+
 from Products.CompositePack.testing import INTEGRATION_TESTING
 
 
@@ -40,19 +46,22 @@ class TestComposable(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        from Products.CMFCore.utils import getToolByName
-        self.setRoles('Manager')
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
         try:
             self._refreshSkinData()
         except AttributeError:
             self.portal._v_skindata = None
             try:
-                self.portal.setupCurrentSkin(self.app.REQUEST)
+                # FIXME: what's self.app?
+                #self.portal.setupCurrentSkin(self.app.REQUEST)
+                self.portal.setupCurrentSkin()
             except TypeError:
                 self.portal.setupCurrentSkin()
+
         self.ct = getToolByName(self.portal, 'portal_catalog')
-        self.loginAsPortalOwner()
 
     def test_utf8SearchableText(self):
         # verify that change in SearchablText
@@ -64,7 +73,6 @@ class TestComposable(unittest.TestCase):
         self.failUnlessEqual(nav.SearchableText(), utf8Txt + ' description')
 
     def test_navigation_page_rename(self):
-        self.loginAsPortalOwner()
         targets = []
         for i in range(0, 4):
             name = 'page%s' % i
@@ -120,7 +128,7 @@ class TestComposable(unittest.TestCase):
         from cPickle import load
         from cStringIO import StringIO
         from Acquisition import aq_base
-        self.loginAsPortalOwner()
+
         # This is a test to demonstrate that CompositePack
         # will keep references on a staging environment using
         # ZopeVersionControl and CMFStaging. They don't use
@@ -205,7 +213,6 @@ class TestComposable(unittest.TestCase):
 
     def test_navigation_page_with_private_content(self):
         from AccessControl import Unauthorized
-        from Products.CMFCore.utils import getToolByName
         self.portal.invokeFactory('Navigation Page', 'navpage')
         navpage = self.portal.navpage
         navpage.cp_container.setLayout('two_slots')
@@ -215,11 +222,12 @@ class TestComposable(unittest.TestCase):
         page = self.portal.page
         slots.first.invokeFactory('CompositePack Element',
                                   '0', target=[page.UID()])
-        self.setRoles(['Manager'])
+
         wfTool = getToolByName(self.portal, 'portal_workflow')
         wfTool.doActionFor(page, 'publish')
         wfTool.doActionFor(page, 'retract')
-        self.logout()
+
+        logout()
         # This should not give us any errors now:
         try:
             result = slots.first['0'].renderInline()

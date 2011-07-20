@@ -15,9 +15,11 @@ $Id$
 
 import unittest2 as unittest
 
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+
 from Products.CMFCore.utils import getToolByName
 
-from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.testing import INTEGRATION_TESTING
 
 
@@ -25,42 +27,42 @@ class TestIndexes(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        # from CompositePackTestCase.py
-        self.composite_tool = getToolByName(self.portal, 'composite_tool')
-        self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
-        self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory('Folder', 'test-folder')
+        self.folder = self.portal['test-folder']
 
-        self.setRoles('Manager')
-        self.ct = getToolByName(self.portal, 'portal_catalog')
+        self.composite_tool = getToolByName(self.portal, 'composite_tool')
+        self.catalog = getToolByName(self.portal, 'portal_catalog')
 
     def test_no_container_indexed(self):
         #check catalog works ok
-        before = len(self.ct(portal_type=self.FILE_TYPE))
-        self.folder.invokeFactory(self.FILE_TYPE, 'test_file')
-        self.assertEqual(before + 1, len(self.ct(portal_type=self.FILE_TYPE)))
+        before = len(self.catalog(portal_type='File'))
+        self.folder.invokeFactory('File', 'test_file')
+        self.assertEqual(before + 1, len(self.catalog(portal_type='File')))
         #check none of the software (viewlets, layouts,...) has been indexed
-        self.failIf(len(self.ct(portal_type="CompositePack Layout Container")))
-        self.failIf(len(self.ct(portal_type="CompositePack Viewlet Container")))
+        self.failIf(len(self.catalog(portal_type="CompositePack Layout Container")))
+        self.failIf(len(self.catalog(portal_type="CompositePack Viewlet Container")))
 
     def test_index_navigation_page(self):
-        before = len(self.ct())
+        before = len(self.catalog())
         self.portal.invokeFactory('Navigation Page', 'page')
         page = self.portal._getOb('page')
         # 1 = page (no filled_slots or composite elements)
-        self.assertEquals(len(self.ct()), before + 1)
+        self.assertEquals(len(self.catalog()), before + 1)
 
     def test_index_layout(self):
-        before = len(self.ct())
+        before = len(self.catalog())
         ct = self.composite_tool
         layout = ct.registerLayout('test_layout', 'Test', 'test_layout')
-        self.assertEquals(len(self.ct()), before)
+        self.assertEquals(len(self.catalog()), before)
 
     def test_index_viewlet(self):
-        before = len(self.ct())
+        before = len(self.catalog())
         ct = self.composite_tool
         layout = ct.registerViewlet('test_viewlet', 'Test', 'test_viewlet')
-        self.assertEquals(len(self.ct()), before)
+        self.assertEquals(len(self.catalog()), before)
 
 
 def test_suite():

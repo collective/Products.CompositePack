@@ -13,18 +13,18 @@
 $Id$
 """
 
-import unittest2 as unittest
 import doctest
+import unittest
 
-from Products.PloneTestCase import PloneTestCase
-from Testing import ZopeTestCase as ztc
+from plone.testing import layered
+
+from Products.CompositePack.testing import FUNCTIONAL_TESTING
 
 
 def test_suite():
-    return unittest.TestSuite([
-        ztc.ZopeDocFileSuite(
-            'doc/doc.txt', package='Products.CompositePack',
-            test_class=PloneTestCase.FunctionalTestCase,
-            optionflags=doctest.REPORT_ONLY_FIRST_FAILURE |
-                        doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS),
-        ])
+    suite = unittest.TestSuite()
+    suite.addTests([
+        layered(doctest.DocFileSuite('../doc/doc.txt'), layer=FUNCTIONAL_TESTING),
+        doctest.DocTestSuite(module='Products.CompositePack'),
+    ])
+    return suite

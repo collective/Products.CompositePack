@@ -17,7 +17,6 @@ import unittest2 as unittest
 
 from Products.CMFCore.utils import getToolByName
 
-from Products.CompositePack.config import get_ATCT_TYPES
 from Products.CompositePack.exceptions import CompositePackError
 from Products.CompositePack.testing import INTEGRATION_TESTING
 
@@ -26,13 +25,13 @@ class TestLayoutRegistry(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        self.composite_tool = getToolByName(self.portal, 'composite_tool')
-        self.FILE_TYPE = get_ATCT_TYPES(self.portal)['File']
-        self.EVENT_TYPE = get_ATCT_TYPES(self.portal)['Event']
+    def setUp(self):
+        self.portal = self.layer['portal']
 
-        self.TEST_TYPE = self.FILE_TYPE
-        self.TEST_TYPE_2 = self.EVENT_TYPE
+        self.composite_tool = getToolByName(self.portal, 'composite_tool')
+
+        self.TEST_TYPE = 'File'
+        self.TEST_TYPE_2 = 'Event'
         self.TEST_TYPES = (self.TEST_TYPE, self.TEST_TYPE_2)
         ct = self.composite_tool
         ct.unregisterAsComposite(self.TEST_TYPE)

@@ -15,9 +15,12 @@ $Id: test_setup.py 725 2011-06-21 02:44:41Z hvelarde $
 
 import unittest2 as unittest
 
-from Products.CompositePack.config import PROJECTNAME, TOOL_ID
-from Products.CompositePack.config import PRODUCT_DEPENDENCIES
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import TEST_USER_NAME
+from plone.app.testing import login
+from plone.app.testing import setRoles
 
+from Products.CompositePack import config
 from Products.CompositePack.testing import INTEGRATION_TESTING
 
 TYPES = (
@@ -63,11 +66,14 @@ class TestInstall(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
+    def setUp(self):
+        self.portal = self.layer['portal']
+
     def test_dependencies_installed(self):
-        portal_quickinstaller = self.portal.portal_quickinstaller
-        for p in PRODUCT_DEPENDENCIES:
-            self.failUnless(portal_quickinstaller.isProductInstalled(p),
-                            '%s not installed' % p)
+        portal_qi = self.portal.portal_quickinstaller
+        for p in config.PRODUCT_DEPENDENCIES:
+            self.failUnless(portal_qi.isProductInstalled(p),
+                            '%s is not installed' % p)
 
     def test_types(self):
         portal_types = self.portal.portal_types
@@ -86,7 +92,8 @@ class TestInstall(unittest.TestCase):
         self.failUnless('Navigation Page' in properties.getProperty('default_page_types'))
 
     def test_tool(self):
-        self.failUnless(hasattr(self.portal, TOOL_ID), 'Tool not installed')
+        self.failUnless(hasattr(self.portal, config.TOOL_ID),
+                        'Tool not installed')
 
     def test_skins(self):
         portal_skins = self.portal.portal_skins
@@ -112,16 +119,19 @@ class TestUninstall(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
-        self.loginAsPortalOwner()
-        self.qi = getattr(self.portal, 'portal_quickinstaller')
-        self.qi.uninstallProducts(products=[PROJECTNAME])
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        login(self.portal, TEST_USER_NAME)
+        self.portal_qi = getattr(self.portal, 'portal_quickinstaller')
+        self.portal_qi.uninstallProducts(products=[config.PROJECTNAME])
 
     def test_product_uninstalled(self):
-        self.failIf(self.qi.isProductInstalled(PROJECTNAME))
+        self.failIf(self.portal_qi.isProductInstalled(config.PROJECTNAME))
 
     def test_tool_uninstalled(self):
-        self.failIf(hasattr(self.portal, TOOL_ID), 'Tool not uninstalled')
+        self.failIf(hasattr(self.portal, config.TOOL_ID),
+                    'Tool not uninstalled')
 
     def test_types(self):
         portal_types = self.portal.portal_types

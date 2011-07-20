@@ -6,10 +6,11 @@ $Id$
 
 import unittest2 as unittest
 
+from plone.app.testing import TEST_USER_ID
+from plone.app.testing import setRoles
+
 from zope.interface.verify import verifyClass
 from zope.interface.verify import verifyObject
-
-from Products.CMFPlone.utils import _createObjectByType
 
 from Products.CompositePack.composite.navigationpage import NavigationPage
 from Products.CompositePack.composite.navigationpage import INavigationPage
@@ -21,13 +22,19 @@ class NavigationPageTest(unittest.TestCase):
 
     layer = INTEGRATION_TESTING
 
-    def afterSetUp(self):
+    def setUp(self):
+        self.portal = self.layer['portal']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+        self.portal.invokeFactory('Folder', 'test-folder')
+        self.folder = self.portal['test-folder']
+
         self.ctype = 'Navigation Page'
         self.interface = INavigationPage
         self.klass = NavigationPage
-
-        _createObjectByType(self.ctype, self.folder, 'obj')
+        self.portal.invokeFactory(self.ctype, 'obj')
         self.obj = getattr(self.folder, 'obj')
+
+        setRoles(self.portal, TEST_USER_ID, ['Member'])
 
     def test_created(self):
         self.failUnless('obj' in self.folder.objectIds())
@@ -52,6 +59,7 @@ class NavigationPageTest(unittest.TestCase):
         field = schema.getField('description')
         self.assertEqual(field.schemata, 'default')
 
+    # TODO: fix this because it's probably wrong
     def test_actions(self):
         self.assertTrue(hasattr(self.obj, 'cp_view'))
         self.assertTrue(hasattr(self.obj, 'design_view'))

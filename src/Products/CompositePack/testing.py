@@ -8,6 +8,7 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import FunctionalTesting
+from plone.testing import z2
 
 
 class Fixture(PloneSandboxLayer):
@@ -19,9 +20,20 @@ class Fixture(PloneSandboxLayer):
         import Products.CompositePack
         self.loadZCML(package=Products.CompositePack)
 
+        # Install product and call its initialize() function
+        z2.installProduct(app, 'Products.CompositePack')
+
     def setUpPloneSite(self, portal):
         # Install into Plone site using portal_setup
         self.applyProfile(portal, 'Products.CompositePack:default')
+
+    def tearDownZope(self, app):
+        # Uninstall product
+        z2.uninstallProduct(app, 'Products.CompositePack')
+
+    #def beforeTearDown(self):
+        #self.composite_tool.clearLayoutRegistry()
+        #self.composite_tool.clearViewletRegistry()
 
 
 FIXTURE = Fixture()

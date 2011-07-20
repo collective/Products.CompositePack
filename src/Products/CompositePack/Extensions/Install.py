@@ -74,8 +74,6 @@ class toolWrapper:
 
 
 def install_tool(self, out):
-    if not hasattr(self, TOOL_ID):
-        self.manage_addProduct['CompositePack'].manage_addCompositeTool()
     tool = toolWrapper(getattr(self, TOOL_ID))
 
     if INSTALL_DEMO_TYPES:
@@ -272,11 +270,20 @@ def install(self, reinstall=False):
     portal_setup = getToolByName(self, 'portal_setup')
     for product in PRODUCT_DEPENDENCIES:
         if reinstall and portal_quickinstaller.isProductInstalled(product):
-            portal_quickinstaller.reinstallProduct([product])
+            portal_quickinstaller.reinstallProduct(product)
             transaction.savepoint()
         elif not portal_quickinstaller.isProductInstalled(product):
-            portal_quickinstaller.installProduct([product])
+            portal_quickinstaller.installProduct(product)
             transaction.savepoint()
+
+    install_subskin(self, out, GLOBALS)
+    # The skins need to be sorted differently depending on whether Azax
+    # is available or not.
+    sort_skins(self)
+
+    if not hasattr(self, TOOL_ID):
+        from Products.CompositePack.tool import manage_addCompositeTool
+        manage_addCompositeTool(self)
     for extension_id in EXTENSION_PROFILES:
         portal_setup.runAllImportStepsFromProfile(
             'profile-%s' % extension_id, purge_old=False)
@@ -284,10 +291,6 @@ def install(self, reinstall=False):
         portal_quickinstaller.notifyInstalled(product_name)
         transaction.savepoint()
 
-    install_subskin(self, out, GLOBALS)
-    # The skins need to be sorted differently depending on whether Azax
-    # is available or not.
-    sort_skins(self)
     install_tool(self, out)
     install_customisation(self, out)
     install_fixuids(self, out)

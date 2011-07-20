@@ -147,23 +147,6 @@ def install_tool(self, out):
     out.write("CompositePack Tool Installed\n")
 
 
-def setup_portal_factory(self, out):
-    factory = getToolByName(self, 'portal_factory')
-    types = factory.getFactoryTypes().keys()
-    if 'Navigation Page' not in types:
-        out.write('Navigation Page setup in portal_factory\n')
-        types.append('Navigation Page')
-        factory.manage_setPortalFactoryTypes(listOfTypeIds=types)
-    if 'Navigation Titles' not in types:
-        out.write('Navigation Titles setup in portal_factory\n')
-        types.append('Navigation Titles')
-        factory.manage_setPortalFactoryTypes(listOfTypeIds=types)
-    if 'Navigation Page HTML' not in types:
-        out.write('Navigation Page HTML setup in portal_factory\n')
-        types.append('Navigation Page HTML')
-        factory.manage_setPortalFactoryTypes(listOfTypeIds=types)
-
-
 # TODO: tool must be removed on uninstall
 def uninstall_tool(self, out):
     if hasattr(self, TOOL_ID):
@@ -276,6 +259,7 @@ def install(self, reinstall=False):
     if not hasattr(self, TOOL_ID):
         from Products.CompositePack.tool import manage_addCompositeTool
         manage_addCompositeTool(self)
+
     for extension_id in EXTENSION_PROFILES:
         portal_setup.runAllImportStepsFromProfile(
             'profile-%s' % extension_id, purge_old=False)
@@ -286,7 +270,6 @@ def install(self, reinstall=False):
     install_tool(self, out)
     install_customisation(self, out)
     install_fixuids(self, out)
-    setup_portal_factory(self, out)
     install_kupu_resource(self, out)
 
     out.write("Successfully installed %s.\n" % PROJECTNAME)

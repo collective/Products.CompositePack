@@ -9,6 +9,8 @@
 """
 $Id$
 """
+import Products
+
 from cgi import escape
 from itertools import islice
 
@@ -75,6 +77,15 @@ class PackSlot(Slot):
     __occams_gestalt__ = 1  # This is some kind of Gocept versioning flag.
     meta_type = 'Pack Slot'
     security = ClassSecurityInfo()
+    _product_meta_types = [{
+        'action': 'manage_addProduct/CompositePack/manage_addContentForm',
+        'container_filter': None,
+        'instance': None,
+        'interfaces': (ICompositeElement,),
+        'name': 'CompositePack Element',
+        'permission': 'Add CompositePack content',
+        'product': 'CompositePack',
+        'visibility': 'Global'}]
 
     def _getPortalTypeName(self):
         # Overriden so we can call invokeFactory from inside here.
@@ -259,7 +270,7 @@ class PackComposite(Composite, BaseFolderMixin):
     security = ClassSecurityInfo()
     meta_type = portal_type = archetype_name = 'Pack Composite'
     filter_content_types  = 1
-    allowed_content_types = ('Pack Slot Collection', 'Pack Title Collection')
+    allowed_content_types = ('Pack Slot Collection', 'Pack Title Collection', 'CompositePack Titles', 'CompositePack Fragments')
     global_allow = 0
 
     schema = pc_schema

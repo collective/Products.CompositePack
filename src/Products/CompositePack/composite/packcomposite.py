@@ -419,7 +419,11 @@ registerType(PackComposite, PROJECTNAME)
 
 def _setPortalTypeName(self, pt):
     ret = self.__cp__setPortalTypeName__(pt)
-    self.cp_container.initializeSlots()
+    try:
+        self.cp_container.initializeSlots()
+    except:
+        # XXX log something?
+        pass
     return ret
 _setPortalTypeName.__cp_method__ = True
 

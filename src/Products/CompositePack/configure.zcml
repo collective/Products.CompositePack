@@ -22,7 +22,7 @@
         title="Products.CompositePack special import handlers"
         description=""
         handler="Products.CompositePack.exportimport.compositetool.importCompositeTool">
-        <depends name="types"/>
+        <depends name="typeinfo"/>
         <depends name="skins"/>
         <depends name="composite_tool"/>
      </genericsetup:importStep -->

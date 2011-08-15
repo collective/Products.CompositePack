@@ -268,7 +268,11 @@ def importCompositeTool(context):
     """
     site = context.getSite()
     logger = context.getLogger('composite tool properties')
-    tool = getToolByName(site, 'composite_tool')
+    tool = getToolByName(site, 'composite_tool', None)
+
+    if tool is None:
+        logger.info('Composite tool: No tool present.')
+        return
 
     body = context.readDataFile('composite_tool.xml')
     if body is None:

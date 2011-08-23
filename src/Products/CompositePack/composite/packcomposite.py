@@ -479,8 +479,12 @@ def check_spec(spec=None):
         return True
     return False
 
-def objectIds(self, spec=None):
-    ids = self.__cp_objectIds__(spec)
+_marker = object()
+def objectIds(self, spec=None, ordered=_marker):
+    if ordered is _marker:
+        ids = self.__cp_objectIds__(spec)
+    else:
+        ids = self.__cp_objectIds__(spec, ordered)
     if check_spec(spec) and shasattr(self, 'cp_container'):
         ids = list(ids) + ['cp_container']
     return ids

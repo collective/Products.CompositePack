@@ -17,11 +17,9 @@ from AccessControl import ClassSecurityInfo
 from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 
-# HTML Fragments should maintain reference information.
-try:
-    from Products.kupu.plone.ReftextField import ReftextField as TextField
-except:
-    pass
+# HTML Fragments should maintain reference information?
+# See if we need something like reftextfield
+
 COMPOSITE = 'composite'
 
 class Fragments(BaseContentMixin):

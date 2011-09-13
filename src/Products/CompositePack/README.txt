@@ -38,8 +38,7 @@ from your Plone site. You choose 'Title' or 'HTML' to add decorating content
 specific to the instance (see details below). 
 
 When choosing 'Content', you get a popup window wherein you can select the
-piece of content that you want to add to this slot.  This window is a kupu
-drawer. It only shows instance of "composable" portal types (see below for
+piece of content that you want to add to this slot. It only shows instance of "composable" portal types (see below for
 setting up composables).  You browse your site until you have found the piece
 of content you want to display.  When you click the 'ok' button, the composite
 element is added to the composite page.  It is displayed through its default
@@ -134,9 +133,6 @@ Setting up composables
   clicking),
 
 - Click Select button,
-
-- Refresh your browser cache before to get the new javascript needed by the
-  kupu drawers.
 
 Registering a viewlet
 =====================

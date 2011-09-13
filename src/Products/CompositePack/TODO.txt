@@ -5,9 +5,6 @@
 
 - remove all code related with Plone 2.1.
 
-- setup of composable should happen in composite_tool rather than in
-  kupu_library_tool
-
 - viewlets should use macros (to structure a bit the HTML included), named
   "portlet" (to be able to reuse portlets as well).
 
@@ -34,4 +31,3 @@ Plone 2.5 compatibility
 Plone 4.1 compatibility
 ======================
 
-  * [KNOWN BUG] Kupu is hard-coded into the HTML Fragments editing view.

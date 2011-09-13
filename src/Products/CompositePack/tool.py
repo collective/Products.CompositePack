@@ -29,7 +29,6 @@ from Products.Archetypes.utils import insert_zmi_tab_after
 from Products.CMFCore.permissions import ManagePortal
 from Products.CMFCore.utils import getToolByName
 from Products.CompositePage.tool import CompositeTool as BaseTool
-from Products.kupu.plone.plonelibrarytool import PloneKupuLibraryTool
 
 from Products.CompositePack.config import TOOL_ID
 from Products.CompositePack.config import LAYOUTS
@@ -42,8 +41,6 @@ from Products.CompositePack.LayoutRegistry import LayoutRegistry
 from Products.CompositePack.ViewletRegistry import ViewletRegistry
 from Products.CompositePack.ViewletRegistry import DEFAULT
 from Products.CompositePack.ViewletRegistry import ViewletsForType
-
-KUPU_TOOL_ID = PloneKupuLibraryTool.id
 
 class CompositeTool(BaseTool, Folder):
     """ CompositePack Tool """
@@ -441,30 +438,18 @@ class CompositeTool(BaseTool, Folder):
             items = (items, )
         for item in items:
             self._viewlet_registry.registerContentType(item)
-        self.updateKupuLibraryTool()
 
     def unregisterAsComposable(self, items):
         if type(items) not in (TupleType, ListType):
             items = (items, )
         for item in items:
             self._viewlet_registry.unregisterContentType(item)
-        self.updateKupuLibraryTool()
 
     def getRegisteredComposables(self):
         return self._viewlet_registry.getContentTypes()
 
     def isComposable(self, type):
         return self._viewlet_registry.isContentTypeRegistered(type)
-
-    def updateKupuLibraryTool(self):
-        try:
-            kt = getToolByName(self, KUPU_TOOL_ID)
-        except AttributeError:
-            raise CompositePackError, 'cannot find kupu library tool'
-        resource_list = [resource 
-           for resource in self.getRegisteredComposables()    
-           if not resource == DEFAULT]
-        kt.addResourceType(COMPOSABLE, resource_list) 
 
     def clearViewletRegistry(self):
         self._viewlet_registry.clear()

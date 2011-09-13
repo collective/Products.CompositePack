@@ -7,19 +7,6 @@ $Id$
 from cStringIO import StringIO
 
 from Products.CMFCore.utils import getToolByName
-from Products.CompositePack import config
-
-
-def install_dependencies(site, out):
-    """Install required products
-    """
-    qi = getToolByName(site, 'portal_quickinstaller')
-    for product in config.PRODUCT_DEPENDENCIES:
-        if not qi.isProductInstalled(product):
-            if qi.isProductInstallable(product):
-                qi.installProduct(product)
-            else:
-                raise "Product %s not installable" % product
 
 
 def setup_portal_factory(site, out):
@@ -48,8 +35,5 @@ def importVarious(context):
 
     out = StringIO()
     site = context.getSite()
-
-    install_dependencies(site, out)
     setup_portal_factory(site, out)
-
     return out.getvalue()

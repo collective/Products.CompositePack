@@ -460,7 +460,7 @@ class CompositeTool(BaseTool, Folder):
         try:
             kt = getToolByName(self, KUPU_TOOL_ID)
         except AttributeError:
-            raise CompositePackError, 'cannot find kupu library tool'
+            return
         resource_list = [resource 
            for resource in self.getRegisteredComposables()    
            if not resource == DEFAULT]

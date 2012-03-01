@@ -20,11 +20,11 @@ from Acquisition import aq_base
 from Acquisition import aq_inner
 from Acquisition import aq_parent
 from ComputedAttribute import ComputedAttribute
-from OFS.Folder import Folder
 from Products.PageTemplates.PageTemplateFile import PageTemplateFile
 from ZODB.POSException import ConflictError
 
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.PortalFolder import PortalFolderBase
 
 #from Products.Archetypes.public import *
 from Products.Archetypes.ArchetypeTool import registerType
@@ -241,7 +241,7 @@ class PackSlotCollection(SlotCollection):
 
 InitializeClass(PackSlotCollection)
 
-class PackTitleCollection(Folder):
+class PackTitleCollection(PortalFolderBase):
     """ """
     meta_type = 'Pack Title Collection'
 InitializeClass(PackTitleCollection)

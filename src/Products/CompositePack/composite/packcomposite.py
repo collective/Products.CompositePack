@@ -93,6 +93,10 @@ class PackSlot(Slot):
         # XXX Maybe subclass PloneFolder?
         return None
 
+    def Title(self):
+        ''' Just in case we get indexed anyway.'''
+        return ''
+
     security.declareProtected(AddPortalContent, 'invokeFactory')
     invokeFactory = BaseFolder.invokeFactory.im_func
 
@@ -239,15 +243,27 @@ class PackSlotCollection(SlotCollection):
     """ """
     meta_type = 'Pack Slot Collection'
 
+    def Title(self):
+        ''' Just in case we get indexed anyway.'''
+        return ''
+
 InitializeClass(PackSlotCollection)
 
 class PackTitleCollection(PortalFolderBase):
     """ """
     meta_type = 'Pack Title Collection'
+
+    def Title(self):
+        ''' Just in case we get indexed anyway.'''
+        return ''
 InitializeClass(PackTitleCollection)
 
 class PackSlotGenerator(SlotGenerator):
     _slot_class = PackSlot
+
+    def Title(self):
+        ''' Just in case we get indexed anyway.'''
+        return ''
 InitializeClass(PackSlotGenerator)
 
 pc_schema = MinimalSchema + Schema((
@@ -401,6 +417,10 @@ class PackComposite(Composite, BaseFolderMixin):
         layouts = [(o.Title(), o.getId())
                    for o in composite_tool.layouts.objectValues()]
         return DisplayList(layouts)
+
+    def Title(self):
+        ''' Just in case we get indexed anyway.'''
+        return ''
 
     def indexObject(self):
         '''composite container is never catalogued'''

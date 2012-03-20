@@ -68,6 +68,11 @@ class Fragments(BaseContentMixin):
 
            )
 
+    security.declareProtected(permissions.View, 'Title')
+    def Title(self):
+        '''Just in case we get indexed anyway.'''
+        return ''
+
     security.declareProtected(permissions.View, 'getContent')
     def getContent(self, mimetype=None, **kw):
         """Content accessor:

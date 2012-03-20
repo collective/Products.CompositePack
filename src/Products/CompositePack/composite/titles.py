@@ -59,6 +59,10 @@ class Titles(BaseContentMixin):
         '''Titles shouldn't be indexed in their own right'''
         return None
 
+    def Title(self):
+        '''Just in case we get indexed anyway.'''
+        return ''
+
     def ContainerSearchableText(self):
         """Get text for indexing. Ignore the real mimetype, we want to do the
         conversion from HTML to plain text.

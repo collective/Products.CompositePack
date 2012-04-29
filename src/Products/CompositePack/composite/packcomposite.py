@@ -297,7 +297,10 @@ class PackComposite(Composite, BaseFolderMixin):
 
     def _setPortalTypeName(self, pt):
         ret = BaseFolderMixin._setPortalTypeName(self, pt)
-        self.initializeSlots()
+        # During content import, we may not have a request, in which
+        # case 'generateSlots' will fail.
+        if getattr(self, 'REQUEST', None) is not None:
+            self.initializeSlots()
         return ret
 
     def initializeSlots(self):

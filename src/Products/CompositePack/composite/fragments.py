@@ -73,6 +73,11 @@ class Fragments(BaseContentMixin):
         '''Just in case we get indexed anyway.'''
         return ''
 
+    security.declareProtected(permissions.View, 'viewletTitle')
+    def viewletTitle(self):
+        '''Use this one for rendering viewlets.'''
+        return self.title
+
     security.declareProtected(permissions.View, 'getContent')
     def getContent(self, mimetype=None, **kw):
         """Content accessor:

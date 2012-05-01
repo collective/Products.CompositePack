@@ -1,5 +1,6 @@
 <div class="viewlet title">
-  <a tal:attributes="href context/absolute_url" tal:content="context/Title" />
+  <a tal:attributes="href context/absolute_url"
+     tal:content="context/viewletTitle | context/Title" />
 </div>
 <div class="viewlet description"
      tal:condition="context/Description|nothing"

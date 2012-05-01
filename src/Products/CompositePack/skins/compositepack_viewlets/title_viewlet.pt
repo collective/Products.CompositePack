@@ -1,5 +1,5 @@
 <div class="viewlet title"
-     tal:content="context/Title">
+     tal:content="context/viewletTitle | context/Title">
   Title
 </div>
 <div class="viewlet description"

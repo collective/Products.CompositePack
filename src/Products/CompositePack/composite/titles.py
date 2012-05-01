@@ -63,6 +63,11 @@ class Titles(BaseContentMixin):
         '''Just in case we get indexed anyway.'''
         return ''
 
+    security.declareProtected(permissions.View, 'viewletTitle')
+    def viewletTitle(self):
+        '''Use this one for rendering viewlets.'''
+        return self.title
+
     def SearchableText(self):
         '''Titles shouldn't be indexed in their own right'''
         return None

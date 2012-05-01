@@ -1,6 +1,6 @@
 <tal:block define="len_text python:len(getattr(here, 'text', ''));">
   <h1 tal:content="context/title_or_id" class="documentFirstHeading">
-    Title or id
+    TITLE OR ID
   </h1>
 
   <div tal:replace="nocall:here" />

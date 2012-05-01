@@ -11,14 +11,17 @@
 
 $Id$
 """
+from AccessControl import ClassSecurityInfo
 from Products.Archetypes.public import *
 from Products.CompositePack.config import PROJECTNAME
+from Products.CMFCore import permissions
 from Products.CMFCore.utils import getToolByName
 
 COMPOSITE = 'composite'
 
 class Titles(BaseContentMixin):
 
+    security = ClassSecurityInfo()
     meta_type = portal_type = 'CompositePack Titles'
     archetype_name = 'Navigation Titles'
     global_allow = 0
@@ -55,13 +58,14 @@ class Titles(BaseContentMixin):
 
            )
 
-    def SearchableText(self):
-        '''Titles shouldn't be indexed in their own right'''
-        return None
-
+    security.declareProtected(permissions.View, 'Title')
     def Title(self):
         '''Just in case we get indexed anyway.'''
         return ''
+
+    def SearchableText(self):
+        '''Titles shouldn't be indexed in their own right'''
+        return None
 
     def ContainerSearchableText(self):
         """Get text for indexing. Ignore the real mimetype, we want to do the

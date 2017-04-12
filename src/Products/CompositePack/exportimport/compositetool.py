@@ -41,7 +41,6 @@ class CompositeToolXMLAdapter(XMLAdapterBase, ObjectManagerHelpers):
         """
         Import the object from the DOM node.
         """
-        import pdb; pdb.set_trace()
         purge = self.environ.shouldPurge()
         if node.getAttribute('purge'):
             purge = self._convertToBoolean(node.getAttribute('purge'))
